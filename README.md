@@ -9,8 +9,8 @@
 c4k-nextcloud provides a k8s deployment for nextcloud containing:
 * adjusted nextcloud docker image
 * nextcloud
-??? * ingress having a letsencrypt managed certificate
-??? * postgres database
+* ingress having a letsencrypt managed certificate
+* postgres database
 
 The package aims to a low load sceanrio.
 
@@ -23,7 +23,7 @@ This is under development.
 1) Scale Nextcloud deployment down:
 kubectl scale deployment nextcloud --replicas=0
 
-2)apply backup and restore pod:
+2) apply backup and restore pod:
 kubectl apply -f src/main/resources/backup/backup-restore.yaml
 
 3) exec into pod and execute restore pod
