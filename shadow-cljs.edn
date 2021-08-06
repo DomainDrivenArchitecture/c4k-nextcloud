@@ -1,0 +1,15 @@
+{:source-paths ["src/main/cljc"
+                "src/main/cljs"
+                "src/main/resources"
+                "src/test/cljc"
+                "src/test/cljs"
+                "src/test/resources"]
+ :dependencies [[org.domaindrivenarchitecture/c4k-common-cljs "0.2.8"]]
+ :builds {:frontend {:target :browser
+                     :modules {:main {:init-fn dda.c4k-cloud.browser/init}}
+                     :release {}
+                     :compiler-options {:optimizations :advanced}}
+          :test {:target :node-test
+                 :output-to "target/node-tests.js"
+                 :autorun   true
+                 :repl-pprint  true}}}

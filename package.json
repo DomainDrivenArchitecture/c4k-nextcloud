@@ -1,0 +1,33 @@
+{
+  "name": "c4k-cloud",
+  "description": "Generate c4k yaml for a nextcloud deployment.",
+  "author": "meissa GmbH",
+  "version": "0.1.3-SNAPSHOT",
+  "homepage": "https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud#readme",
+  "repository": "https://www.npmjs.com/package/c4k-nextcloud",
+  "license": "APACHE2",
+  "main": "c4k-cloud.js",
+  "bin": {
+    "c4k-cloud": "./c4k-cloud.js"
+  },
+  "keywords": [
+    "cljs",
+    "cloud",
+    "k8s",
+    "c4k",
+    "deployment",
+    "yaml",
+    "convention4kubernetes"
+  ],
+  "bugs": {
+    "url": "https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud/issues"
+  },
+  "dependencies": {
+    "js-base64": "^3.6.1",
+    "js-yaml": "^4.0.0"
+  },
+  "devDependencies": {
+    "shadow-cljs": "^2.11.18",
+    "source-map-support": "^0.5.19"
+  }
+}

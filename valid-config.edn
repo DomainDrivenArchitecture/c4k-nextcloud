@@ -1,0 +1,4 @@
+{:fqdn "cloud-neu.prod.meissa-gmbh.de"
+ :cloud-data-volume-path "/var/cloud"
+ :postgres-data-volume-path "/var/postgres"
+ :restic-repository "restic-repository"}

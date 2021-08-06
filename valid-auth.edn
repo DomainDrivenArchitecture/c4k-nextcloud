@@ -1,0 +1,5 @@
+{:postgres-db-user "cloud"
+ :postgres-db-password "cloud-db-password"
+ :aws-access-key-id "aws-id"
+ :aws-secret-access-key "aws-secret"
+ :restic-password "restic-password"}

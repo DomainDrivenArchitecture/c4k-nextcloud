@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud
+spec:
+  selector:
+    matchLabels:
+      app: cloud
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: cloud
+    spec:
+      containers:
+        - image: domaindrivenarchitecture/c4k-cloud
+          name: cloud-app
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_USERNAME_FILE
+              value: /var/run/secrets/postgres-secret/postgres-user
+            - name: DB_PASSWORD_FILE
+              value: /var/run/secrets/postgres-secret/postgres-password
+            - name: FQDN
+              value: fqdn
+          command: ["/app/entrypoint.sh"]
+          volumeMounts:
+            - mountPath: /var/cloud
+              name: cloud-data-volume
+            - name: postgres-secret-volume
+              mountPath: /var/run/secrets/postgres-secret
+              readOnly: true
+      volumes:
+        - name: cloud-data-volume
+          persistentVolumeClaim:
+            claimName: cloud-pvc
+        - name: postgres-secret-volume
+          secret:
+            secretName: postgres-secret

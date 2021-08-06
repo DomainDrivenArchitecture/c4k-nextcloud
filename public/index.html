@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>c4k-keycloak</title>
+  <link href="https://domaindrivenarchitecture.org/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://domaindrivenarchitecture.org/css/fonts/fontawesome/fontawesome.css" rel="stylesheet"
+    type="text/css" />
+  <link href="https://domaindrivenarchitecture.org/css/custom.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="container jumbotron">
+    <form class="needs-validation" id="form">
+      <label for="fqdn" class="form-label">Your fqdn:</label>
+      <input class="form-control" type="text" name="fqdn" id="fqdn" value="cloud-neu.prod.meissa-gmbh.de">
+      <div class="invalid-feedback">
+        <pre id="fqdn-validation"></pre>
+      </div>
+      <label for="cloud-data-volume-path" class="form-label">(Optional) Your cloud-data-volume-path:</label>
+      <input class="form-control" type="text" name="cloud-data-volume-path" id="cloud-data-volume-path" value="/var/cloud">
+      <div class="invalid-feedback">
+        <pre id="cloud-data-volume-path-validation"></pre>
+      </div>
+      <label for="postgres-data-volume-path" class="form-label">(Optional) Your postgres-data-volume-path:</label>
+      <input class="form-control" type="text" name="postgres-data-volume-path" id="postgres-data-volume-path" value="/var/postgres">
+      <div class="invalid-feedback">
+        <pre id="postgres-data-volume-path"></pre>
+      </div>
+      <label for="restic-repository" class="form-label">(Optional) Your restic-repository:</label>
+      <input class="form-control" type="text" name="restic-repository" id="restic-repository" value="restic-repository">
+      <div class="invalid-feedback">
+        <pre id="restic-repository"></pre>
+      </div>
+      <br>
+      <label for="issuer" class="form-label">(Optional) Your issuer prod/staging:</label>
+      <input class="form-control" type="text" name="issuer" id="issuer" value="">
+      <div class="invalid-feedback">
+        <pre id="issuer-validation"></pre>
+      </div>
+      <br><br>
+      <label for="auth" class="form-label">Your auth.edn:</label>
+      <textarea name="auth" id="auth" class="form-control" rows="5">
+        {:postgres-db-user "cloud"
+         :postgres-db-password "cloud-db-password"
+         :aws-access-key-id "aws-id"
+         :aws-secret-access-key "aws-secret"
+         :restic-password "restic-password"}
+      </textarea>
+      <div class="invalid-feedback">
+        <pre id="auth-validation"></pre>
+      </div>
+      <br><br>
+      <button type="button" id="generate-button" class="btn btn-primary">
+        Generate c4k yaml
+      </button>
+    </form><br><br>
+    <div id="c4k-keycloak-output">
+      <label for="output" class="form-label">Your c4k deployment.yaml:</label>
+      <textarea name="output" id="output" class="form-control" rows="25">
+      </textarea>
+    </div>
+
+  </div>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
