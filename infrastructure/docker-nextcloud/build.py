@@ -3,7 +3,7 @@ from pybuilder.core import task, init
 from ddadevops import *
 import logging
 
-name = 'meissa-cloud-backup'
+name = 'meissa-cloud-app'
 MODULE = 'docker'
 PROJECT_ROOT_PATH = '../..'
 

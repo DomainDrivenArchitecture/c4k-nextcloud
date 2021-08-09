@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cloud-pvc
+  labels:
+    app: cloud
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{storage-size}}Gi   #??? 30Gi?
+  selector:
+    matchLabels:
+      app: cloud

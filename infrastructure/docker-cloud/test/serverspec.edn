@@ -1,3 +1,0 @@
-{:file [{:path "/app/entrypoint.sh"}
-        {:path "/var/cloud"}
-        {:path "/opt/atlassian-cloud-software-standalone"}]}

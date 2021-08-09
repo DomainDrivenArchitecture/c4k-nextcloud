@@ -1,0 +1,15 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: cloud-pv-volume
+  labels:
+    type: local
+    app: cloud
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: {{storage-size}}Gi   #???  30Gi?
+  hostPath:
+    path: "/var/cloud"
