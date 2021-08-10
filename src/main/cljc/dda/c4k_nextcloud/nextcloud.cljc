@@ -49,7 +49,8 @@
     (-> 
      (yaml/from-string (yaml/load-resource "nextcloud/persistent-volume.yaml"))
      (assoc-in [:spec :hostPath :path] nextcloud-data-volume-path)
-     (assoc-in [:spec :capacity :storage] (str storage-size "Gi")))))
+     ;(assoc-in [:spec :capacity :storage] (str storage-size "Gi"))
+     )))
 
 (defn generate-pvc []
   (yaml/from-string (yaml/load-resource "nextcloud/pvc.yaml")))
