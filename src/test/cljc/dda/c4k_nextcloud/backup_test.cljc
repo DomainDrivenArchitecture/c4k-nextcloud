@@ -10,7 +10,7 @@
           :kind "Secret"
           :metadata {:name "backup-secret"}
           :type "Opaque"
-          :data
+          :stringData
           {:aws-access-key-id "YXdzLWlk", :aws-secret-access-key "YXdzLXNlY3JldA==", :restic-password "cmVzdGljLXB3"}}
          (cut/generate-secret {:aws-access-key-id "aws-id" :aws-secret-access-key "aws-secret" :restic-password "restic-pw"}))))
 
@@ -27,7 +27,7 @@
 (deftest should-generate-cron
   (is (= {:apiVersion "batch/v1beta1"
           :kind "CronJob"
-          :metadata {:name "nextcloud-backup"
+          :metadata {:name "cloud-backup"
                      :labels {:app.kubernetes.part-of "cloud"}}
           :spec {:schedule "10 23 * * *"
                  :successfulJobsHistoryLimit 1
@@ -85,7 +85,7 @@
                      :volumes
                      [{:name "nextcloud-data-volume"
                        :persistentVolumeClaim
-                       {:claimName "nextcloud-pvc"}}
+                       {:claimName "cloud-pvc"}}
                       {:name "backup-secret-volume"
                        :secret
                        {:secretName "backup-secret"}}]

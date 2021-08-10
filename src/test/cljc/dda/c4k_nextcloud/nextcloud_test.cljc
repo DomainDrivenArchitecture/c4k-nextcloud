@@ -32,14 +32,14 @@
             :nginx.ingress.kubernetes.io/proxy-read-timeout "300"}
            :namespace "default"}
           :spec
-          {:tls [{:hosts ["xx"], :secretName "nextcloud-secret"}]
+          {:tls [{:hosts ["xx"], :secretName "cloud-secret"}]
            :rules
            [{:host "xx"
              :http
              {:paths
               [{:path "/"
                 :backend
-                {:serviceName "nextcloud-service", :servicePort 80}}]}}]}}
+                {:serviceName "cloud-service", :servicePort 80}}]}}]}}
          (cut/generate-ingress {:fqdn "xx"}))))
 
 (deftest should-generate-persistent-volume
