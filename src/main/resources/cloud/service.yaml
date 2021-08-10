@@ -4,6 +4,6 @@ metadata:
   name: cloud-service
 spec:
   selector:
-    app: cloud
+    app.kubernetes.io/name: cloud   #???
   ports:
-    - port: 8080
+    - port: 80

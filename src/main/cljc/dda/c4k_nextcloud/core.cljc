@@ -1,4 +1,4 @@
-(ns dda.c4k-cloud.core
+(ns dda.c4k-nextcloud.core
  (:require
   [clojure.string :as cs]
   [clojure.spec.alpha :as s]
@@ -6,13 +6,13 @@
      :cljs [orchestra.core :refer-macros [defn-spec]])
   [dda.c4k-common.yaml :as yaml]
   [dda.c4k-common.postgres :as postgres]
-  [dda.c4k-cloud.cloud :as cloud]
-  [dda.c4k-cloud.backup :as backup]))
+  [dda.c4k-nextcloud.nextcloud :as nextcloud]
+  [dda.c4k-nextcloud.backup :as backup]))
 
 (def config-defaults {:issuer :staging})
 
-(def config? (s/keys :req-un [::cloud/fqdn]
-                     :opt-un [::cloud/issuer ::cloud/cloud-data-volume-path
+(def config? (s/keys :req-un [::nextcloud/fqdn]
+                     :opt-un [::nextcloud/issuer ::nextcloud/nextcloud-data-volume-path
                               ::postgres/postgres-data-volume-path ::restic-repository]))
 
 (def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
@@ -29,14 +29,14 @@
            [(yaml/to-string (postgres/generate-pvc))
             (yaml/to-string (postgres/generate-deployment))
             (yaml/to-string (postgres/generate-service))]
-           (when (contains? config :cloud-data-volume-path)
-             [(yaml/to-string (cloud/generate-persistent-volume config))])
-           [(yaml/to-string (cloud/generate-pvc))
-            (yaml/to-string (cloud/generate-deployment config))
-            (yaml/to-string (cloud/generate-service))
-            (yaml/to-string (cloud/generate-certificate config))
-            (yaml/to-string (cloud/generate-ingress config))
-            (yaml/to-string (cloud/generate-service))]
+           (when (contains? config :nextcloud-data-volume-path)
+             [(yaml/to-string (nextcloud/generate-persistent-volume config))])
+           [(yaml/to-string (nextcloud/generate-pvc))
+            (yaml/to-string (nextcloud/generate-deployment config))
+            (yaml/to-string (nextcloud/generate-service))
+            (yaml/to-string (nextcloud/generate-certificate config))
+            (yaml/to-string (nextcloud/generate-ingress config))
+            (yaml/to-string (nextcloud/generate-service))]
            (when (contains? config :restic-repository)
              [(yaml/to-string (backup/generate-config config))
               (yaml/to-string (backup/generate-secret config))

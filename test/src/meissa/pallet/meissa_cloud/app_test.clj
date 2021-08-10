@@ -1,8 +1,8 @@
-(ns meissa.pallet.meissa-cloud.app-test
+(ns meissa.pallet.meissa-nextcloud.app-test
   (:require
    [clojure.test :refer :all]
    [schema.core :as s]
-   [meissa.pallet.meissa-cloud.app :as sut]))
+   [meissa.pallet.meissa-nextcloud.app :as sut]))
 
 (s/set-fn-validation! true)
 
@@ -15,7 +15,7 @@
    :admin-user "root"
    :admin-password "test1234"
    :storage-size 50
-   :restic-repository "cloud"
+   :restic-repository "nextcloud"
    :aws-access-key-id "10"
    :aws-secret-access-key "secret"
    :restic-password "test4321"})
@@ -28,4 +28,4 @@
 (deftest plan-def
   (testing
    "test plan-def"
-    (is (map? sut/with-cloud))))
+    (is (map? sut/with-nextcloud))))

@@ -6,33 +6,24 @@ metadata:
     app.kubernetes.part-of: cloud
 spec:
   schedule: "10 23 * * *"
-  successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: backup-app
-            image: domaindrivenarchitecture/c4k-cloud-backup
+            image: domaindrivenarchitecture/meissa-cloud-backup
             imagePullPolicy: IfNotPresent
             command: ["/entrypoint.sh"]
             env:
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: postgres-user
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: postgres-password
-            - name: POSTGRES_DB
-              valueFrom:
-                configMapKeyRef:
-                  name: postgres-config
-                  key: postgres-db
+            - name: POSTGRES_USER_FILE
+              value: /var/run/secrets/cloud-secrets/postgres-user
+            - name: POSTGRES_DB_FILE
+              value: /var/run/secrets/cloud-secrets/postgres-db
+            - name: POSTGRES_PASSWORD_FILE
+              value: /var/run/secrets/cloud-secrets/postgres-password
             - name: POSTGRES_HOST
               value: "postgresql-service:5432"
             - name: POSTGRES_SERVICE
@@ -58,10 +49,16 @@ spec:
             - name: backup-secret-volume
               mountPath: /var/run/secrets/backup-secrets
               readOnly: true
+            - name: cloud-secret-volume
+              mountPath: /var/run/secrets/cloud-secrets
+              readOnly: true
           volumes:
           - name: cloud-data-volume
             persistentVolumeClaim:
               claimName: cloud-pvc
+          - name: cloud-secret-volume
+            secret:
+              secretName: cloud-secret
           - name: backup-secret-volume
             secret:
               secretName: backup-secret

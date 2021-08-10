@@ -1,19 +1,20 @@
-(ns dda.c4k-cloud.browser
+(ns dda.c4k-nextcloud.browser
   (:require
    [clojure.tools.reader.edn :as edn]
-   [dda.c4k-cloud.core :as core]
-   [dda.c4k-cloud.cloud :as cloud]
-   [dda.c4k-common.browser :as br]))
+   [dda.c4k-nextcloud.core :as core]
+   [dda.c4k-nextcloud.nextcloud :as nextcloud]
+   [dda.c4k-common.browser :as br]
+   [dda.c4k-common.postgres :as pgc]))
 
 (defn config-from-document []
-  (let [cloud-data-volume-path (br/get-content-from-element "cloud-data-volume-path" :optional true :deserializer keyword)
-        postgres-data-volume-path (br/get-content-from-element "postgres-data-volume-path" :optional true :deserializer keyword)
-        restic-repository (br/get-content-from-element "restic-repository" :optional true :deserializer keyword)
+  (let [nextcloud-data-volume-path (br/get-content-from-element "nextcloud-data-volume-path" :optional true)
+        postgres-data-volume-path (br/get-content-from-element "postgres-data-volume-path" :optional true)
+        restic-repository (br/get-content-from-element "restic-repository" :optional true)
         issuer (br/get-content-from-element "issuer" :optional true :deserializer keyword)]
     (merge
      {:fqdn (br/get-content-from-element "fqdn")}
-     (when (some? cloud-data-volume-path)
-       {:cloud-data-volume-path cloud-data-volume-path})
+     (when (some? nextcloud-data-volume-path)
+       {:nextcloud-data-volume-path nextcloud-data-volume-path})
      (when (some? postgres-data-volume-path)
        {:postgres-data-volume-path postgres-data-volume-path})
      (when (some? restic-repository)
@@ -23,11 +24,11 @@
      )))
 
 (defn validate-all! []
-  (br/validate! "fqdn" ::cloud/fqdn)
-  (br/validate! "cloud-data-volume-path" ::cloud/cloud-data-volume-path :optional true :deserializer keyword)
-  (br/validate! "postgres-data-volume-path" ::cloud/cloud-data-volume-path :optional true :deserializer keyword)
-  (br/validate! "restic-repository" ::cloud/restic-repository :optional true :deserializer keyword)
-  (br/validate! "issuer" ::cloud/issuer :optional true :deserializer keyword)
+  (br/validate! "fqdn" ::nextcloud/fqdn)
+  (br/validate! "nextcloud-data-volume-path" ::nextcloud/nextcloud-data-volume-path :optional true)
+  (br/validate! "postgres-data-volume-path" ::pgc/postgres-data-volume-path :optional true)
+  (br/validate! "restic-repository" ::nextcloud/restic-repository :optional true)
+  (br/validate! "issuer" ::nextcloud/issuer :optional true :deserializer keyword)
   (br/validate! "auth" core/auth? :deserializer edn/read-string)
   (br/set-validated!))
 
@@ -43,7 +44,7 @@
   (-> (br/get-element-by-id "fqdn")
       (.addEventListener "blur"
                          #(do (validate-all!))))
-  (-> (br/get-element-by-id "cloud-data-volume-path")
+  (-> (br/get-element-by-id "nextcloud-data-volume-path")
       (.addEventListener "blur"
                          #(do (validate-all!))))
   (-> (br/get-element-by-id "postgres-data-volume-path")

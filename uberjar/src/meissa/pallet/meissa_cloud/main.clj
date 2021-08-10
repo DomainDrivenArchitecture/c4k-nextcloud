@@ -1,11 +1,11 @@
-(ns meissa.pallet.meissa-cloud.main
+(ns meissa.pallet.meissa-nextcloud.main
   (:gen-class)
   (:require
    [clojure.string :as str]
    [clojure.tools.cli :as cli]
    [dda.pallet.core.main-helper :as mh]
    [dda.pallet.core.app :as core-app]
-   [meissa.pallet.meissa-cloud.app :as app]))
+   [meissa.pallet.meissa-nextcloud.app :as app]))
 
 (def cli-options
   [["-h" "--help"]
@@ -17,16 +17,16 @@
 (defn usage [options-summary]
   (str/join
    \newline
-   ["meissa-cloud installs & configures a single host kubernetes cluster with Cloud installed"
+   ["meissa-nextcloud installs & configures a single host kubernetes cluster with nextcloud installed"
     ""
-    "Usage: java -jar meissa-cloud-standalone.jar [options] cloud.edn"
+    "Usage: java -jar meissa-nextcloud-standalone.jar [options] nextcloud.edn"
     ""
     "Options:"
     options-summary
     ""
-    "cloud.edn"
+    "nextcloud.edn"
     "  - follows the edn format."
-    "  - has to be a valid CloudConventionConfig"
+    "  - has to be a valid nextcloudConventionConfig"
     ""]))
 
 (defn -main [& args]

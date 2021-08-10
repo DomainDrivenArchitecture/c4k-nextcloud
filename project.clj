@@ -38,8 +38,8 @@
              :uberjar {:source-paths ["uberjar/src"]
                        :resource-paths ["uberjar/resources"]
                        :aot :all
-                       :main meissa.pallet.meissa-cloud.main
-                       :uberjar-name "meissa-cloud-standalone.jar"
+                       :main dda.c4k-nextcloud.uberjar
+                       :uberjar-name "c4k-nextcloud-standalone.jar"
                        :dependencies [[org.clojure/tools.cli "1.0.194"]
                                       [ch.qos.logback/logback-classic "1.3.0-alpha5"]
                                       [org.slf4j/jcl-over-slf4j "2.0.0-alpha1"]]}}

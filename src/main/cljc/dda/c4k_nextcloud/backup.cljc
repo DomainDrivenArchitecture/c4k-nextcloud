@@ -1,4 +1,4 @@
-(ns dda.c4k-cloud.backup
+(ns dda.c4k-nextcloud.backup
  (:require
   [clojure.spec.alpha :as s]
   #?(:cljs [shadow.resource :as rc])

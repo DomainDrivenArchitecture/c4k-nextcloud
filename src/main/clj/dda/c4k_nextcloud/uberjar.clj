@@ -1,16 +1,16 @@
-(ns dda.c4k-cloud.uberjar
+(ns dda.c4k-nextcloud.uberjar
   (:gen-class)
   (:require
    [clojure.spec.alpha :as s]
    [clojure.string :as cs]
    [clojure.tools.reader.edn :as edn]
    [expound.alpha :as expound]
-   [dda.c4k-cloud.core :as core]))
+   [dda.c4k-nextcloud.core :as core]))
 
 (def usage
   "usage:
   
-  c4k-cloud {your configuraton file} {your authorization file}")
+  c4k-nextcloud {your configuraton file} {your authorization file}")
 
 (s/def ::options (s/* #{"-h"}))
 (s/def ::filename (s/and string?

@@ -10,4 +10,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 30Gi
+      storage: {{storage-size}}Gi   #??? 30Gi?
+  selector:
+    matchLabels:
+      app: cloud
