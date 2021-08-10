@@ -1,15 +1,15 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgres-pv-volume
+  name: cloud-pv-volume
   labels:
     type: local
-    app: postgresql
+    app: cloud
 spec:
   storageClassName: manual
   accessModes:
     - ReadWriteOnce
   capacity:
-    storage: 10Gi
+    storage: 200Gi
   hostPath:
-    path: "/var/postgres"
+    path: "/var/cloud"

@@ -13,7 +13,8 @@
 
 (def config? (s/keys :req-un [::nextcloud/fqdn]
                      :opt-un [::nextcloud/issuer ::nextcloud/nextcloud-data-volume-path
-                              ::postgres/postgres-data-volume-path ::restic-repository]))
+                              ::postgres/postgres-data-volume-path ::restic-repository
+                              ::nextcloud/storage-size]))
 
 (def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
                             ::aws-access-key-id ::aws-secret-access-key

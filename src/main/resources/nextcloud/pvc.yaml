@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-claim
+  name: cloud-pvc
   labels:
-    app: postgresql
+    app: cloud
 spec:
   storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 200Gi
   selector:
     matchLabels:
-      app: postgresql
+      app: cloud

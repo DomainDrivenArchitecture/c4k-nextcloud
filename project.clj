@@ -1,4 +1,4 @@
-(defproject meissa/meissa-cloud "1.0.2-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/c4k-nextcloud "1.0.2-SNAPSHOT"
   :description "nextcloud c4k-installation package"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
@@ -35,7 +35,7 @@
                       "native-image"
                       "--report-unsupported-elements-at-runtime"
                       "--initialize-at-build-time"
-                      "-jar" "target/uberjar/c4k-jira-standalone.jar"
+                      "-jar" "target/uberjar/c4k-nextcloud-standalone.jar"
                       "-H:ResourceConfigurationFiles=graalvm-resource-config.json"
                       "-H:Log=registerResource"
                       "-H:Name=target/graalvm/${:name}"]})

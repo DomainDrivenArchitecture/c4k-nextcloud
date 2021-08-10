@@ -6,7 +6,7 @@
                 "src/test/resources"]
  :dependencies [[org.domaindrivenarchitecture/c4k-common-cljs "0.2.8"]]
  :builds {:frontend {:target :browser
-                     :modules {:main {:init-fn dda.c4k-cloud.browser/init}}
+                     :modules {:main {:init-fn dda.c4k-nextcloud.browser/init}}
                      :release {}
                      :compiler-options {:optimizations :advanced}}
           :test {:target :node-test

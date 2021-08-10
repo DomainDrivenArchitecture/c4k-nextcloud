@@ -14,24 +14,24 @@
   <div class="container jumbotron">
     <form class="needs-validation" id="form">
       <label for="fqdn" class="form-label">Your fqdn:</label>
-      <input class="form-control" type="text" name="fqdn" id="fqdn" value="cloud-neu.prod.meissa-gmbh.de">
+      <input class="form-control" type="text" name="fqdn" id="fqdn" value="jira-neu.prod.meissa-gmbh.de">
       <div class="invalid-feedback">
         <pre id="fqdn-validation"></pre>
       </div>
-      <label for="cloud-data-volume-path" class="form-label">(Optional) Your cloud-data-volume-path:</label>
-      <input class="form-control" type="text" name="cloud-data-volume-path" id="cloud-data-volume-path" value="/var/cloud">
+      <label for="jira-data-volume-path" class="form-label">(Optional) Your jira-data-volume-path:</label>
+      <input class="form-control" type="text" name="jira-data-volume-path" id="jira-data-volume-path" value="/var/jira">
       <div class="invalid-feedback">
-        <pre id="cloud-data-volume-path-validation"></pre>
+        <pre id="jira-data-volume-path-validation"></pre>
       </div>
       <label for="postgres-data-volume-path" class="form-label">(Optional) Your postgres-data-volume-path:</label>
       <input class="form-control" type="text" name="postgres-data-volume-path" id="postgres-data-volume-path" value="/var/postgres">
       <div class="invalid-feedback">
-        <pre id="postgres-data-volume-path"></pre>
+        <pre id="postgres-data-volume-path-validation"></pre>
       </div>
       <label for="restic-repository" class="form-label">(Optional) Your restic-repository:</label>
       <input class="form-control" type="text" name="restic-repository" id="restic-repository" value="restic-repository">
       <div class="invalid-feedback">
-        <pre id="restic-repository"></pre>
+        <pre id="restic-repository-validation"></pre>
       </div>
       <br>
       <label for="issuer" class="form-label">(Optional) Your issuer prod/staging:</label>
@@ -42,8 +42,8 @@
       <br><br>
       <label for="auth" class="form-label">Your auth.edn:</label>
       <textarea name="auth" id="auth" class="form-control" rows="5">
-        {:postgres-db-user "cloud"
-         :postgres-db-password "cloud-db-password"
+        {:postgres-db-user "jira"
+         :postgres-db-password "jira-db-password"
          :aws-access-key-id "aws-id"
          :aws-secret-access-key "aws-secret"
          :restic-password "restic-password"}

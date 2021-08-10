@@ -1,18 +1,18 @@
 {
-  "name": "c4k-cloud",
+  "name": "c4k-nextcloud",
   "description": "Generate c4k yaml for a nextcloud deployment.",
   "author": "meissa GmbH",
   "version": "0.1.3-SNAPSHOT",
   "homepage": "https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud#readme",
   "repository": "https://www.npmjs.com/package/c4k-nextcloud",
   "license": "APACHE2",
-  "main": "c4k-cloud.js",
+  "main": "c4k-nextcloud.js",
   "bin": {
-    "c4k-cloud": "./c4k-cloud.js"
+    "c4k-nextcloud": "./c4k-nextcloud.js"
   },
   "keywords": [
     "cljs",
-    "cloud",
+    "nextcloud",
     "k8s",
     "c4k",
     "deployment",

@@ -33,7 +33,7 @@
 (defn generate-deployment [config]
   (let [{:keys [fqdn]} config]
     (-> (yaml/from-string (yaml/load-resource "nextcloud/deployment.yaml"))
-        (cm/replace-named-value "FQDN" fqdn))))
+        (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
 
 (defn generate-ingress [config]
   (let [{:keys [fqdn issuer]
@@ -45,10 +45,11 @@
      (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
 
 (defn generate-persistent-volume [config]
-  (let [{:keys [nextcloud-data-volume-path]} config]
+  (let [{:keys [nextcloud-data-volume-path storage-size]} config]
     (-> 
      (yaml/from-string (yaml/load-resource "nextcloud/persistent-volume.yaml"))
-     (assoc-in [:spec :hostPath :path] nextcloud-data-volume-path))))
+     (assoc-in [:spec :hostPath :path] nextcloud-data-volume-path)
+     (assoc-in [:spec :capacity :storage] (str storage-size "Gi")))))
 
 (defn generate-pvc []
   (yaml/from-string (yaml/load-resource "nextcloud/pvc.yaml")))
