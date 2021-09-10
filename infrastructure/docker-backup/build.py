@@ -13,7 +13,7 @@ class MyBuild(DevopsDockerBuild):
 
 @init
 def initialize(project):
-    project.build_depends_on('ddadevops>=0.6.1')
+    project.build_depends_on('ddadevops>=0.12.4')
     stage = 'notused'
     dockerhub_user = environ.get('DOCKERHUB_USER')
     if not dockerhub_user:
