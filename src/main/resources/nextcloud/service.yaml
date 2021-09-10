@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-service
+spec:
+  selector:
+    app.kubernetes.io/name: cloud
+  ports:
+    - port: 80
