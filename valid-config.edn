@@ -1,5 +1,5 @@
 {:fqdn "cloud-neu.prod.meissa-gmbh.de"
- :nextcloud-data-volume-path "/var/nextcloud"
+ :issuer :staging
+ :nextcloud-data-volume-path "/var/cloud"
  :postgres-data-volume-path "/var/postgres"
- ;:storage-size 300
- :restic-repository "restic-repository"}
+ :restic-repository "s3:s3.amazonaws.com/your-bucket/your-folder"}
