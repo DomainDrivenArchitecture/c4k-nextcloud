@@ -3,7 +3,7 @@ from pybuilder.core import task, init
 from ddadevops import *
 import logging
 
-name = 'meissa-cloud-app'
+name = 'c4k-cloud'
 MODULE = 'docker'
 PROJECT_ROOT_PATH = '../..'
 
@@ -13,7 +13,7 @@ class MyBuild(DevopsDockerBuild):
 
 @init
 def initialize(project):
-    project.build_depends_on('ddadevops>=0.6.1')
+    project.build_depends_on('ddadevops>=0.12.7')
     stage = 'notused'
     dockerhub_user = environ.get('DOCKERHUB_USER')
     if not dockerhub_user:
