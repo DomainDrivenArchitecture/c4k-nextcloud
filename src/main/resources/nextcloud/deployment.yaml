@@ -14,7 +14,7 @@ spec:
         app: cloud
     spec:
       containers:
-        - image: domaindrivenarchitecture/meissa-cloud-app
+        - image: domaindrivenarchitecture/c4k-cloud-app
           name: cloud-app
           imagePullPolicy: IfNotPresent
           ports:
@@ -27,11 +27,11 @@ spec:
             - name: NEXTCLOUD_TRUSTED_DOMAINS
               value: fqdn
             - name: POSTGRES_USER_FILE
-              value: /var/run/secrets/cloud-secrets/postgres-user
+              value: /var/run/secrets/postgres-secret/postgres-user
             - name: POSTGRES_PASSWORD_FILE
-              value: /var/run/secrets/cloud-secrets/postgres-password
+              value: /var/run/secrets/postgres-secret/postgres-password
             - name: POSTGRES_DB_FILE
-              value: /var/run/secrets/cloud-secrets/postgres-db
+              value: /var/run/configs/postgres-config/postgres-db
             - name: POSTGRES_HOST
               value: "postgresql-service:5432"
           volumeMounts:
@@ -40,6 +40,12 @@ spec:
             - name: cloud-secret-volume
               mountPath: /var/run/secrets/cloud-secrets
               readOnly: true
+            - name: postgres-secret-volume
+              mountPath: /var/run/secrets/postgres-secret
+              readOnly: true
+            - name: postgres-config-volume
+              mountPath: /var/run/configs/postgres-config
+              readOnly: true
       volumes:
       - name: cloud-data-volume
         persistentVolumeClaim:
@@ -47,6 +53,15 @@ spec:
       - name: cloud-secret-volume
         secret:
           secretName: cloud-secret
+      - name: postgres-secret-volume
+        secret:
+          secretName: postgres-secret
+      - name: postgres-config-volume
+        configMap:
+          name: postgres-config
+          items:
+            - key: postgres-db
+              path: postgres-db
       - name: backup-secret-volume
         secret:
           secretName: backup-secret

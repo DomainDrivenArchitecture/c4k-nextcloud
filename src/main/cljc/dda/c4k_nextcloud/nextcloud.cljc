@@ -3,12 +3,16 @@
   [clojure.spec.alpha :as s]
   #?(:cljs [shadow.resource :as rc])
   [dda.c4k-common.yaml :as yaml]
+  [dda.c4k-common.base64 :as b64]
+  [dda.c4k-common.prefixes :as cp]
   [dda.c4k-common.common :as cm]))
 
-(s/def ::fqdn cm/fqdn-string?)
-(s/def ::issuer cm/letsencrypt-issuer?)
+(s/def ::fqdn cp/fqdn-string?)
+(s/def ::issuer cp/letsencrypt-issuer?)
 (s/def ::restic-repository string?)
 (s/def ::nextcloud-data-volume-path string?)
+(s/def ::nextcloud-admin-user cp/bash-env-string?)
+(s/def ::nextcloud-admin-password cp/bash-env-string?)
 
 #?(:cljs
    (defmethod yaml/load-resource :nextcloud [resource-name]
@@ -19,6 +23,7 @@
        "nextcloud/persistent-volume.yaml" (rc/inline "nextcloud/persistent-volume.yaml")
        "nextcloud/pvc.yaml" (rc/inline "nextcloud/pvc.yaml")
        "nextcloud/service.yaml" (rc/inline "nextcloud/service.yaml")
+       "nextcloud/secret.yaml" (rc/inline "nextcloud/secret.yaml")
        (throw (js/Error. "Undefined Resource!")))))
 
 (defn generate-certificate [config]
@@ -57,3 +62,10 @@
 
 (defn generate-service []
   (yaml/from-string (yaml/load-resource "nextcloud/service.yaml")))
+
+(defn generate-secret [config]
+  (let [{:keys [nextcloud-admin-user nextcloud-admin-password]} config]
+    (->
+     (yaml/from-string (yaml/load-resource "nextcloud/secret.yaml"))
+     (cm/replace-key-value :nextcloud-admin-user (b64/encode nextcloud-admin-user))
+     (cm/replace-key-value :nextcloud-admin-password (b64/encode nextcloud-admin-password)))))

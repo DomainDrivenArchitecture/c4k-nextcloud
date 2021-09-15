@@ -9,6 +9,8 @@
          (count (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
                                   :postgres-db-user "nextcloud"
                                   :postgres-db-password "nextcloud-db-password"
+                                  :nextcloud-admin-user "cloudadmin"
+                                  :nextcloud-admin-password "cloudpassword"
                                   :issuer :prod
                                   :nextcloud-data-volume-path "/var/nextcloud"
                                   :postgres-data-volume-path "/var/postgres"
@@ -20,6 +22,8 @@
          (count (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
                                   :postgres-db-user "nextcloud"
                                   :postgres-db-password "nextcloud-db-password"
+                                  :nextcloud-admin-user "cloudadmin"
+                                  :nextcloud-admin-password "cloudpassword"
                                   :issuer :prod
                                   :aws-access-key-id "aws-id"
                                   :aws-secret-access-key "aws-secret"
@@ -29,6 +33,8 @@
          (count (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
                                   :postgres-db-user "nextcloud"
                                   :postgres-db-password "nextcloud-db-password"
+                                  :nextcloud-admin-user "cloudadmin"
+                                  :nextcloud-admin-password "cloudpassword"
                                   :issuer :prod
                                   :aws-access-key-id "aws-id"
                                   :aws-secret-access-key "aws-secret"

@@ -17,6 +17,7 @@
                               ::nextcloud/storage-size]))
 
 (def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
+                            ::nextcloud/nextcloud-admin-user ::nextcloud/nextcloud-admin-password
                             ::aws-access-key-id ::aws-secret-access-key
                             ::restic-password]))
 
@@ -32,12 +33,12 @@
             (yaml/to-string (postgres/generate-service))]
            (when (contains? config :nextcloud-data-volume-path)
              [(yaml/to-string (nextcloud/generate-persistent-volume config))])
-           [(yaml/to-string (nextcloud/generate-pvc))
+           [(yaml/to-string (nextcloud/generate-secret config))
+            (yaml/to-string (nextcloud/generate-pvc))
             (yaml/to-string (nextcloud/generate-deployment config))
             (yaml/to-string (nextcloud/generate-service))
             (yaml/to-string (nextcloud/generate-certificate config))
-            (yaml/to-string (nextcloud/generate-ingress config))
-            (yaml/to-string (nextcloud/generate-service))]
+            (yaml/to-string (nextcloud/generate-ingress config))]
            (when (contains? config :restic-repository)
              [(yaml/to-string (backup/generate-config config))
               (yaml/to-string (backup/generate-secret config))
