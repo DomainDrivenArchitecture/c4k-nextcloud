@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: cloud-pvc
   labels:
-    app: cloud
+    app.kubernetes.io/application: cloud
 spec:
   storageClassName: manual
   accessModes:
@@ -13,4 +13,4 @@ spec:
       storage: 200Gi
   selector:
     matchLabels:
-      app: cloud
+      app.kubernetes.io/application: cloud

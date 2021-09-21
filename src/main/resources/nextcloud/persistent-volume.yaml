@@ -4,7 +4,7 @@ metadata:
   name: cloud-pv-volume
   labels:
     type: local
-    app: cloud
+    app.kubernetes.io/application: cloud
 spec:
   storageClassName: manual
   accessModes:

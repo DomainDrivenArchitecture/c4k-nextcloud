@@ -1,4 +1,4 @@
-{:fqdn "cloud-neu.prod.meissa-gmbh.de"
+{:fqdn "cloud.test.meissa-gmbh.de"
  :issuer :staging
  :nextcloud-data-volume-path "/var/cloud"
  :postgres-data-volume-path "/var/postgres"
