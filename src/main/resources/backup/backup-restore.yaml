@@ -12,12 +12,21 @@ spec:
     imagePullPolicy: IfNotPresent
     command: ["/entrypoint-start-and-wait.sh"]
     env:
-    - name: POSTGRES_USER_FILE
-      value: /var/run/secrets/cloud-secrets/postgres-user
-    - name: POSTGRES_DB_FILE
-      value: /var/run/secrets/cloud-secrets/postgres-db
-    - name: POSTGRES_PASSWORD_FILE
-      value: /var/run/secrets/cloud-secrets/postgres-password
+    - name: POSTGRES_USER
+      valueFrom:
+        secretKeyRef:
+          name: postgres-secret
+          key: postgres-user
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgres-secret
+          key: postgres-password
+    - name: POSTGRES_DB
+      valueFrom:
+        configMapKeyRef:
+          name: postgres-config
+          key: postgres-db
     - name: POSTGRES_HOST
       value: "postgresql-service:5432"
     - name: POSTGRES_SERVICE
