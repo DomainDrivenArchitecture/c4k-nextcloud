@@ -68,7 +68,7 @@ with the following config.edn:
 
 ```
 {:fqdn "the-fqdn-from aws_route53_record.v4_neu"
- :cloud-data-volume-path "/var/cloud"                 ;; Volume was configured at dda-k8s-crate, results in a PersistentVolume definition.
+ :nextcloud-data-volume-path "/var/cloud"                 ;; Volume was configured at dda-k8s-crate, results in a PersistentVolume definition.
  :postgres-data-volume-path "/var/postgres"         ;; Volume was configured at dda-k8s-crate, results in a PersistentVolume definition.
  :restic-repository "s3:s3.amazonaws.com/your-bucket/your-folder"}
 ```
