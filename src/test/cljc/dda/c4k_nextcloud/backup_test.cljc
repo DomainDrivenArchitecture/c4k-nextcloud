@@ -10,7 +10,7 @@
           :kind "Secret"
           :metadata {:name "backup-secret"}
           :type "Opaque"
-          :stringData
+          :data
           {:aws-access-key-id "YXdzLWlk", :aws-secret-access-key "YXdzLXNlY3JldA==", :restic-password "cmVzdGljLXB3"}}
          (cut/generate-secret {:aws-access-key-id "aws-id" :aws-secret-access-key "aws-secret" :restic-password "restic-pw"}))))
 
@@ -38,7 +38,7 @@
              {:spec
               {:containers
                [{:name "backup-app"
-                 :image "domaindrivenarchitecture/meissa-cloud-backup"
+                 :image "domaindrivenarchitecture/c4k-cloud-backup"
                  :imagePullPolicy "IfNotPresent"
                  :command ["/entrypoint.sh"]
                  :env
