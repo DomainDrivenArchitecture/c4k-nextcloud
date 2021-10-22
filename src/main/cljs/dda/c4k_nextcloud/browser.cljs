@@ -6,6 +6,34 @@
    [dda.c4k-common.browser :as br]
    [dda.c4k-common.postgres :as pgc]))
 
+(defn generate-content
+  []
+  (into [] (concat [(assoc (br/generate-needs-validation) :content
+                           (into [] (concat (br/generate-input-field "fqdn" "Your fqdn:" "nextcloud-neu.prod.meissa-gmbh.de")
+                                            (br/generate-input-field "nextcloud-data-volume-path" "(Optional) Your nextcloud-data-volume-path:" "/var/nextcloud")
+                                            (br/generate-input-field "postgres-data-volume-path" "(Optional) Your postgres-data-volume-path:" "/var/postgres")
+                                            (br/generate-input-field "restic-repository" "(Optional) Your restic-repository:" "restic-repository")
+                                            (br/generate-input-field "issuer" "(Optional) Your issuer prod/staging:" "")
+                                            [(br/generate-br)]
+                                            (br/generate-text-area "auth" "Your auth.edn:" "{:postgres-db-user \"nextcloud\"
+         :postgres-db-password \"nextcloud-db-password\"
+         :nextcloud-admin-password \"nextcloud-admin-password\"
+         :nextcloud-admin-user \"nextcloud-admin-user\"                                                                                  
+         :aws-access-key-id \"aws-id\"
+         :aws-secret-access-key \"aws-secret\"
+         :restic-password \"restic-password\"}"
+                                                                   "5")
+                                            [(br/generate-br)]
+                                            (br/generate-button "generate-button" "Generate c4k yaml"))))]
+                   (br/generate-output "c4k-nextcloud-output" "Your c4k deployment.yaml:" "25"))))
+
+(defn generate-content-div
+  []
+  {:type :element
+   :tag :div
+   :content
+   (generate-content)})
+
 (defn config-from-document []
   (let [nextcloud-data-volume-path (br/get-content-from-element "nextcloud-data-volume-path" :optional true)
         postgres-data-volume-path (br/get-content-from-element "postgres-data-volume-path" :optional true)
@@ -32,7 +60,12 @@
   (br/validate! "auth" core/auth? :deserializer edn/read-string)
   (br/set-validated!))
 
+(defn add-validate-listener [name]
+  (-> (br/get-element-by-id name)
+      (.addEventListener "blur" #(do (validate-all!)))))
+
 (defn init []
+  (br/append-hickory (generate-content-div))
   (-> js/document
       (.getElementById "generate-button")
       (.addEventListener "click"
@@ -41,22 +74,10 @@
                                    (config-from-document) 
                                    (br/get-content-from-element "auth" :deserializer edn/read-string))
                                   (br/set-output!)))))
-  (-> (br/get-element-by-id "fqdn")
-      (.addEventListener "blur"
-                         #(do (validate-all!))))
-  (-> (br/get-element-by-id "nextcloud-data-volume-path")
-      (.addEventListener "blur"
-                         #(do (validate-all!))))
-  (-> (br/get-element-by-id "postgres-data-volume-path")
-      (.addEventListener "blur"
-                         #(do (validate-all!))))
-  (-> (br/get-element-by-id "restic-repository")
-      (.addEventListener "blur"
-                         #(do (validate-all!))))
-  (-> (br/get-element-by-id "issuer")
-      (.addEventListener "blur"
-                         #(do (validate-all!))))
-  (-> (br/get-element-by-id "auth")
-      (.addEventListener "blur"
-                         #(do (validate-all!))))
+  (add-validate-listener "fqdn")
+  (add-validate-listener "nextcloud-data-volume-path")
+  (add-validate-listener "postgres-data-volume-path")
+  (add-validate-listener "restic-repository")
+  (add-validate-listener "issuer")
+  (add-validate-listener "auth")
   )

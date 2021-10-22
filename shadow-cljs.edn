@@ -4,7 +4,8 @@
                 "src/test/cljc"
                 "src/test/cljs"
                 "src/test/resources"]
- :dependencies [[org.domaindrivenarchitecture/c4k-common-cljs "0.3.2-SNAPSHOT"]]
+ :dependencies [[org.domaindrivenarchitecture/c4k-common-cljs "0.4.2"]
+                [hickory "0.7.1"]]
  :builds {:frontend {:target :browser
                      :modules {:main {:init-fn dda.c4k-nextcloud.browser/init}}
                      :release {}
