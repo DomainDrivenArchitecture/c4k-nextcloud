@@ -1,6 +1,8 @@
 #!/bin/bash
 set -Eeo pipefail
 
+apt update && apt -qqy install postgresql-client > /dev/null
+
 mkdir /var/data
 
 install -m 0700 /tmp/install-debug.sh /usr/local/bin/
