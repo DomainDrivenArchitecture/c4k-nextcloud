@@ -25,7 +25,7 @@
          (cut/generate-config {:restic-repository "s3:restic-repository"}))))
 
 (deftest should-generate-cron
-  (is (= {:apiVersion "batch/v1beta1"
+  (is (= {:apiVersion "batch/v1"
           :kind "CronJob"
           :metadata {:name "cloud-backup", :labels {:app.kubernetes.part-of "cloud"}}
           :spec

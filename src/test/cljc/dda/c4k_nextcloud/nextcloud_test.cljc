@@ -16,7 +16,7 @@
                                :nextcloud-admin-password "cloudpassword"}))))
 
 (deftest should-generate-certificate
-  (is (= {:apiVersion "cert-manager.io/v1alpha2"
+  (is (= {:apiVersion "cert-manager.io/v1"
           :kind "Certificate"
           :metadata {:name "cloud-cert", :namespace "default"}
           :spec
@@ -81,6 +81,14 @@
                :name "cloud-app"
                :imagePullPolicy "IfNotPresent"
                :ports [{:containerPort 80}]
+               :livenessProbe
+               {:exec
+                {:command
+                 ["/bin/sh"
+                  "-c"
+                  "PGPASSWORD=$POSTGRES_PASSWORD psql -h postgresql-service -U $POSTGRES_USER $POSTGRES_DB"]}
+                :initialDelaySeconds 1
+                :periodSeconds 5}
                :env
                [{:name "NEXTCLOUD_ADMIN_USER", :valueFrom {:secretKeyRef {:name "cloud-secret", :key "nextcloud-admin-user"}}}
                 {:name "NEXTCLOUD_ADMIN_PASSWORD"
