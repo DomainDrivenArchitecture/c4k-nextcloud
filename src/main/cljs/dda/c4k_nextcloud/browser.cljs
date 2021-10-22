@@ -79,5 +79,4 @@
   (add-validate-listener "postgres-data-volume-path")
   (add-validate-listener "restic-repository")
   (add-validate-listener "issuer")
-  (add-validate-listener "auth")
-  )
+  (add-validate-listener "auth"))
