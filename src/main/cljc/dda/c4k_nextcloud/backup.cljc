@@ -17,6 +17,7 @@
        "backup/config.yaml" (rc/inline "backup/config.yaml")
        "backup/cron.yaml" (rc/inline "backup/cron.yaml")
        "backup/secret.yaml" (rc/inline "backup/secret.yaml")
+       "backup/backup-restore-deployment.yaml" (rc/inline "backup/backup-restore-deployment.yaml")
        (throw (js/Error. "Undefined Resource!")))))
 
 (defn generate-config [my-conf]
@@ -27,6 +28,9 @@
 
 (defn generate-cron []
    (yaml/from-string (yaml/load-resource "backup/cron.yaml")))
+
+(defn generate-backup-restore-deployment []
+  (yaml/from-string (yaml/load-resource "backup/backup-restore-deployment.yaml")))
 
 (defn generate-secret [my-auth]
   (let [{:keys [aws-access-key-id aws-secret-access-key restic-password]} my-auth]
