@@ -75,4 +75,3 @@ spec:
       - name: backup-secret-volume
         secret:
           secretName: backup-secret
-      restartPolicy: OnFailure
