@@ -13,6 +13,8 @@
 - saves the self-signed certificate as ca.crt
 - uses the certificate to initialize a restic repo at `https://localhost/BUCKET_NAME`
 
+Note: In case of not being able to connect to "localhost/health", you might need to ensure that the ip of localhost matches with the ingress' ip. (See file /etc/hosts). With `sudo k3s kubectl get ingress` you can show the ingress' ip.
+
 `start-k3s.sh`:
 - creates and starts a k3s instance
 
