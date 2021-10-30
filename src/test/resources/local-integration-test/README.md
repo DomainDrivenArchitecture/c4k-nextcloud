@@ -50,6 +50,8 @@ Note: In case of not being able to connect to "k3stesthost/health", you might ne
 * Create and deploy the k8s yaml:
 `java -jar target/uberjar/c4k-nextcloud-standalone.jar valid-config.edn valid-auth.edn | sudo k3s kubectl apply -f -`
 
+Some of the steps may take some min to be effective, but eventually nextcloud should be available at: https://cloudhost
+
 # TODO
 
 * add possibility to use local certificate in dda-backup backup function
