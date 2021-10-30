@@ -5,9 +5,9 @@ metadata:
   namespace: default
 spec:
   secretName: localstack-secret
-  commonName: localhost
+  commonName: k3stesthost
   dnsNames:
-  - localhost
+  - k3stesthost
   issuerRef:
     name: selfsigning-issuer
     kind: ClusterIssuer

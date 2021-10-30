@@ -50,10 +50,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - localhost
+    - k3stesthost
     secretName: localstack-secret
   rules:
-    - host: localhost
+    - host: k3stesthost
       http:
         paths:
           - path: /

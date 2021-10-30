@@ -10,13 +10,14 @@ function main()
 
   until sudo k3s kubectl apply -f certificate.yaml
   do
+    echo "*** Waiting for certificate ... ***"
     sleep 10
   done
   echo
 
   echo
   echo "[INFO] Waiting for localstack health endpoint"
-  until curl --connect-timeout 3 -s -f -o /dev/null "localhost/health"
+  until curl --connect-timeout 3 -s -f -o /dev/null "k3stesthost/health"
   do
     sleep 5
   done
@@ -25,8 +26,8 @@ function main()
   sudo k3s kubectl get secret localstack-secret -o jsonpath="{.data.ca\.crt}" | base64 --decode > ca.crt
 
   #aws --endpoint-url=http://localhost s3 mb s3://$bucket_name
-  export RESTIC_PASSWORD="temporary-test-password"
-  restic init --cacert ca.crt -r s3://localhost/$bucket_name
+  export RESTIC_PASSWORD="test-password"
+  restic init --cacert ca.crt -r s3://k3stesthost/$bucket_name
 
 }
 
