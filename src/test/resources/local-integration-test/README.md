@@ -60,6 +60,11 @@ k3d is a k3s system which is running inside of a container. To install k3d run `
 
 Some of the steps may take some min to be effective, but eventually nextcloud should be available at: https://cloudhost
 
+#### Remove k3d cluster
+
+`k3d cluster delete nextcloud`
+
+
 # TODO
 
 * add possibility to use local certificate in dda-backup backup function
