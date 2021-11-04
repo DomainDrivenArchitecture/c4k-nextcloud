@@ -1,0 +1,1 @@
+k3d cluster create nextcloud --k3s-arg '--tls-san cloudhost@loadbalancer' --port 8080:80@loadbalancer --port 8443:443@loadbalancer --api-port 6443

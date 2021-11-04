@@ -34,21 +34,29 @@ Note: In case of not being able to connect to "k3stesthost/health", you might ne
 - check files `aws --endpoint-url=http://k3stesthost s3 ls s3://mybucket`
 
 
-## Deploy nextcloud
+## Deploy nextcloud 
 
 ### Requirements
 
 * leiningen (install with: `sudo apt install leiningen` )
-
-### Deploy
-
-* In the project's root execute: 
-`lein uberjar`
-
+* In the project's root execute: `lein uberjar`
 * Change file "valid-config.edn" according to your settings (e.g. `:fqdn "cloudhost"` and `:restic-repository "s3://k3stesthost:mybucket"`).
+
+### Deploy to k3s
 
 * Create and deploy the k8s yaml:
 `java -jar target/uberjar/c4k-nextcloud-standalone.jar valid-config.edn valid-auth.edn | sudo k3s kubectl apply -f -`
+
+Some of the steps may take some min to be effective, but eventually nextcloud should be available at: https://cloudhost
+
+### Deploy to k3d
+
+k3d is a k3s system which is running inside of a container. To install k3d run `curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash` or have a look at https://k3d.io/v5.0.3/ .
+
+* Start a k3d cluster and deploy s3 on it: `./setup-local-s3-on-k3d.sh`
+* Create and deploy the c4k yaml for nextcloud (incl. postgres etc):
+`java -jar target/uberjar/c4k-nextcloud-standalone.jar valid-config.edn valid-auth.edn | kubectl apply -f -`
+* With `kubectl get ingress` you can view the ingress' ip (e.g. 10.0.2.15), add (resp. change if already existing) a line to file "/etc/hosts" e.g. `10.0.2.15	k3stesthost cloudhost`
 
 Some of the steps may take some min to be effective, but eventually nextcloud should be available at: https://cloudhost
 
