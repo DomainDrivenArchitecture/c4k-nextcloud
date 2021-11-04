@@ -26,6 +26,8 @@ logs/
 #valid-config.edn
 my-auth.edn
 my-config.edn
+auth-local.edn
+config-local.edn
 auth.edn
 config.edn
 
