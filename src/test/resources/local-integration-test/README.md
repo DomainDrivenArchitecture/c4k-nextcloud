@@ -1,9 +1,3 @@
-# Requirements
-
-* Restic (install with: `sudo apt install restic` )
-* (optional) AWS-CLI
-
-
 # Usage
 
 `setup-local-s3.sh [BUCKET_NAME]`:

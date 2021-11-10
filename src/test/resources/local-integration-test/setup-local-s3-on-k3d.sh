@@ -4,6 +4,9 @@ function main()
 
   ./start-k3d.sh
 
+  source kubectl.sh
+  kubectl config use-context k3d-nextcloud
+
   kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
 
   kubectl apply -f localstack.yaml
@@ -17,15 +20,14 @@ function main()
 
   echo
   echo "[INFO] Waiting for localstack health endpoint"
-  until curl --connect-timeout 3 -s -f -o /dev/null "k3stesthost/health"
+  until curl --connect-timeout 3 -s -f -o /dev/null --insecure "https://k3stesthost/health"
   do
-    sleep 5
+    sleep 1
   done
   echo
 
   kubectl get secret localstack-secret -o jsonpath="{.data.ca\.crt}" | base64 --decode > ca.crt
 
-  #aws --endpoint-url=http://localhost s3 mb s3://$bucket_name
   export RESTIC_PASSWORD="test-password"
   restic init --cacert ca.crt -r s3://k3stesthost/$bucket_name
 
