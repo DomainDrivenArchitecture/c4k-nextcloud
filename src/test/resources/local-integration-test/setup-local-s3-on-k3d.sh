@@ -20,7 +20,7 @@ function main()
 
   echo
   echo "[INFO] Waiting for localstack health endpoint"
-  until curl --connect-timeout 3 -s -f -o /dev/null --insecure "https://k3stesthost/health"
+  until curl --connect-timeout 3 -s -f -o /dev/null "k3stesthost/health"
   do
     sleep 1
   done
