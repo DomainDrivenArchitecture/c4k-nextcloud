@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "backup" {
   }
 }
 
-resource "hcloud_server" "jira_09_2021" {
+resource "hcloud_server" "cloud_09_2021" {
   name        = "the name"
   image       = "ubuntu-20.04"
   server_type = "cx31"
@@ -31,14 +31,14 @@ resource "hcloud_server" "jira_09_2021" {
 
 resource "aws_route53_record" "v4_neu" {
   zone_id = the_dns_zone
-  name    = "jira-neu"
+  name    = "cloud-neu"
   type    = "A"
   ttl     = "300"
-  records = [hcloud_server.jira_09_2021.ipv4_address]
+  records = [hcloud_server.cloud_09_2021.ipv4_address]
 }
 
 output "ipv4" {
-  value = hcloud_server.jira_09_2021.ipv4_address
+  value = hcloud_server.cloud_09_2021.ipv4_address
 }
 
 ```
@@ -52,23 +52,23 @@ For k8s installation we use our [dda-k8s-crate](https://github.com/DomainDrivenA
 {:user :k8s
  :k8s {:external-ip "ip-from-above"}
  :cert-manager :letsencrypt-prod-issuer
- :persistent-dirs ["jira", "postgres"]
+ :persistent-dirs ["cloud", "postgres"]
  }
 ```
 
-## kubectl apply c4k-jira
+## kubectl apply c4k-nextcloud
 
-The last step for applying the jira deployment is
+The last step for applying the nextcloud deployment is
 
 ```
-c4k-jira config.edn auth.edn | kubectl apply -f -
+c4k-nextcloud config.edn auth.edn | kubectl apply -f -
 ```
 
 with the following config.edn:
 
 ```
 {:fqdn "the-fqdn-from aws_route53_record.v4_neu"
- :jira-data-volume-path "/var/jira"                 ;; Volume was configured at dda-k8s-crate, results in a PersistentVolume definition.
+ :nextcloud-data-volume-path "/var/cloud"                 ;; Volume was configured at dda-k8s-crate, results in a PersistentVolume definition.
  :postgres-data-volume-path "/var/postgres"         ;; Volume was configured at dda-k8s-crate, results in a PersistentVolume definition.
  :restic-repository "s3:s3.amazonaws.com/your-bucket/your-folder"}
 ```

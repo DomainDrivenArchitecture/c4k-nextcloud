@@ -9,14 +9,14 @@
           :kind "Secret"
           :metadata {:name "cloud-secret"}
           :type "Opaque"
-          :stringData
+          :data
           {:nextcloud-admin-user "Y2xvdWRhZG1pbg=="
            :nextcloud-admin-password "Y2xvdWRwYXNzd29yZA=="}}
          (cut/generate-secret {:nextcloud-admin-user "cloudadmin"
                                :nextcloud-admin-password "cloudpassword"}))))
 
 (deftest should-generate-certificate
-  (is (= {:apiVersion "cert-manager.io/v1alpha2"
+  (is (= {:apiVersion "cert-manager.io/v1"
           :kind "Certificate"
           :metadata {:name "cloud-cert", :namespace "default"}
           :spec
@@ -58,71 +58,46 @@
 (deftest should-generate-persistent-volume
   (is (= {:kind "PersistentVolume"
           :apiVersion "v1"
-          :metadata {:name "cloud-pv-volume", :labels {:type "local" :app "cloud"}}
-          :spec
-          {:storageClassName "manual"
-           :accessModes ["ReadWriteOnce"]
-           :capacity {:storage "200Gi"}
-           :hostPath {:path "xx"}}}
+          :metadata {:name "cloud-pv-volume"
+                     :labels {:type "local", :app.kubernetes.io/application "cloud"}}
+          :spec {:storageClassName "manual"
+                 :accessModes ["ReadWriteOnce"]
+                 :capacity {:storage "200Gi"}
+                 :hostPath {:path "xx"}}}
          (cut/generate-persistent-volume {:nextcloud-data-volume-path "xx"}))))
 
 (deftest should-generate-deployment
   (is (= {:apiVersion "apps/v1"
           :kind "Deployment"
-          :metadata {:name "cloud"}
+          :metadata {:name "cloud-deployment"}
           :spec
-          {:selector {:matchLabels {:app "cloud"}}
+          {:selector {:matchLabels #:app.kubernetes.io{:name "cloud-pod", :application "cloud"}}
            :strategy {:type "Recreate"}
            :template
-           {:metadata {:labels {:app "cloud"}}
+           {:metadata {:labels {:app.kubernetes.io/name "cloud-pod", :app.kubernetes.io/application "cloud", :redeploy "v3"}}
             :spec
             {:containers
-             [{:image "domaindrivenarchitecture/meissa-cloud-app"
+             [{:image "domaindrivenarchitecture/c4k-cloud"
                :name "cloud-app"
                :imagePullPolicy "IfNotPresent"
                :ports [{:containerPort 80}]
+               :livenessProbe
+               {:exec
+                {:command
+                 ["/bin/sh"
+                  "-c"
+                  "PGPASSWORD=$POSTGRES_PASSWORD psql -h postgresql-service -U $POSTGRES_USER $POSTGRES_DB"]}
+                :initialDelaySeconds 1
+                :periodSeconds 5}
                :env
-               [{:name "NEXTCLOUD_ADMIN_USER_FILE"
-                 :value
-                 "/var/run/secrets/cloud-secrets/nextcloud-admin-user"}
-                {:name "NEXTCLOUD_ADMIN_PASSWORD_FILE"
-                 :value
-                 "/var/run/secrets/cloud-secrets/nextcloud-admin-password"}
+               [{:name "NEXTCLOUD_ADMIN_USER", :valueFrom {:secretKeyRef {:name "cloud-secret", :key "nextcloud-admin-user"}}}
+                {:name "NEXTCLOUD_ADMIN_PASSWORD"
+                 :valueFrom {:secretKeyRef {:name "cloud-secret", :key "nextcloud-admin-password"}}}
                 {:name "NEXTCLOUD_TRUSTED_DOMAINS", :value "xx"}
-                {:name "POSTGRES_USER_FILE"
-                 :value
-                 "/var/run/secrets/postgres-secret/postgres-user"}
-                {:name "POSTGRES_PASSWORD_FILE"
-                 :value
-                 "/var/run/secrets/postgres-secret/postgres-password"}
-                {:name "POSTGRES_DB_FILE"
-                 :value
-                 "/var/run/configs/postgres-config/postgres-db"}
-                {:name "POSTGRES_HOST"
-                 :value "postgresql-service:5432"}]
-               :volumeMounts
-               [{:name "cloud-data-volume"
-                 :mountPath "/var/www/html"}
-                {:name "cloud-secret-volume"
-                 :mountPath "/var/run/secrets/cloud-secrets"
-                 :readOnly true}
-                {:name "postgres-secret-volume"
-                 :mountPath "/var/run/secrets/postgres-secret"
-                 :readOnly true}
-                {:name "postgres-config-volume"
-                 :mountPath "/var/run/configs/postgres-config"
-                 :readOnly true}]}]
-             :volumes
-             [{:name "cloud-data-volume"
-               :persistentVolumeClaim {:claimName "cloud-pvc"}}
-              {:name "cloud-secret-volume"
-               :secret {:secretName "cloud-secret"}}
-              {:name "postgres-secret-volume"
-               :secret {:secretName "postgres-secret"}}
-              {:name "postgres-config-volume"
-               :configMap
-               {:name "postgres-config"
-                :items [{:key "postgres-db", :path "postgres-db"}]}}
-              {:name "backup-secret-volume"
-               :secret {:secretName "backup-secret"}}]}}}}
+                {:name "POSTGRES_USER", :valueFrom {:secretKeyRef {:name "postgres-secret", :key "postgres-user"}}}
+                {:name "POSTGRES_PASSWORD", :valueFrom {:secretKeyRef {:name "postgres-secret", :key "postgres-password"}}}
+                {:name "POSTGRES_DB", :valueFrom {:configMapKeyRef {:name "postgres-config", :key "postgres-db"}}}
+                {:name "POSTGRES_HOST", :value "postgresql-service:5432"}]
+               :volumeMounts [{:name "cloud-data-volume", :mountPath "/var/www/html"}]}]
+             :volumes [{:name "cloud-data-volume", :persistentVolumeClaim {:claimName "cloud-pvc"}}]}}}}
          (cut/generate-deployment {:fqdn "xx"}))))
