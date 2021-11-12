@@ -2,7 +2,9 @@
   (:require
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
-   [dda.c4k-nextcloud.core :as cut]))
+   [clojure.string :as st]
+   [dda.c4k-nextcloud.core :as cut]
+   ))
 
 (deftest should-k8s-objects
   (is (= 16
@@ -38,4 +40,16 @@
                                   :issuer :prod
                                   :aws-access-key-id "aws-id"
                                   :aws-secret-access-key "aws-secret"
-                                  :restic-password "restic-pw"})))))
+                                  :restic-password "restic-pw"}))))
+  (is (st/includes? 
+       (get-in (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
+                                 :postgres-db-user "nextcloud"
+                                 :postgres-db-password "nextcloud-db-password"
+                                 :nextcloud-admin-user "cloudadmin"
+                                 :nextcloud-admin-password "cloudpassword"
+                                 :issuer :prod
+                                 :aws-access-key-id "aws-id"
+                                 :aws-secret-access-key "aws-secret"
+                                 :restic-password "restic-pw"})
+               [0])
+       "max_connections = 700")))
