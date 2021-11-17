@@ -13,16 +13,22 @@ function main()
 
   until kubectl apply -f certificate.yaml
   do
-    echo "*** Waiting for certificate ... ***"
+    echo "[INFO] Waiting for certificate ..."
     sleep 10
   done
+  
   echo
+  bash -c 'external_ip=""; while [ -z $external_ip ]; do echo "[INFO] Waiting for end point..."; external_ip=$(kubectl get ingress -o jsonpath="{$.items[*].status.loadBalancer.ingress[*].ip}"); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready - $external_ip"; export endpoint=$external_ip'
 
   echo
-  echo "[INFO] Waiting for localstack health endpoint"
-  until curl --connect-timeout 3 -s -f -o /dev/null "k3stesthost/health"
+  echo "Found endpoint: $endpoint"
+
+  echo
+  until curl --silent --fail --resolve k3stesthost:80:$endpoint k3stesthost/health | grep -o '"s3": "running"'
   do
-    sleep 1
+    curl --fail --resolve k3stesthost:80:$endpoint k3stesthost/health
+    echo "[INFO] Waiting for s3 running"
+    sleep 3
   done
   echo
 
@@ -30,7 +36,7 @@ function main()
 
   export RESTIC_PASSWORD="test-password"
   restic init --cacert ca.crt -r s3://k3stesthost/$bucket_name
-
+  
 }
 
 main $@
