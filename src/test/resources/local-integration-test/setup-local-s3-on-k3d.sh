@@ -18,15 +18,16 @@ function main()
   done
   
   echo
-  bash -c 'external_ip=""; while [ -z $external_ip ]; do echo "[INFO] Waiting for end point..."; external_ip=$(kubectl get ingress -o jsonpath="{$.items[*].status.loadBalancer.ingress[*].ip}"); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready - $external_ip"; export endpoint=$external_ip'
+  bash -c 'external_ip=""; while [ -z $external_ip ]; do echo "[INFO] Waiting for end point..."; external_ip=$(kubectl get ingress -o jsonpath="{$.items[*].status.loadBalancer.ingress[*].ip}"); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready - $external_ip";'
+
+  echo 
+  export ENDPOINT=$(kubectl get ingress -o jsonpath="{$.items[*].status.loadBalancer.ingress[*].ip}")
+  sudo bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts"
 
   echo
-  echo "Found endpoint: $endpoint"
-
-  echo
-  until curl --silent --fail --resolve k3stesthost:80:$endpoint k3stesthost/health | grep -o '"s3": "running"'
+  until curl --silent --fail k3stesthost:80 k3stesthost/health | grep -o '"s3": "available"'
   do
-    curl --fail --resolve k3stesthost:80:$endpoint k3stesthost/health
+    curl --fail k3stesthost:80 k3stesthost/health
     echo "[INFO] Waiting for s3 running"
     sleep 3
   done
