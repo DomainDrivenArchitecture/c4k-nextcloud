@@ -29,8 +29,11 @@
 (defn generate-cron []
    (yaml/from-string (yaml/load-resource "backup/cron.yaml")))
 
-(defn generate-backup-restore-deployment []
-  (yaml/from-string (yaml/load-resource "backup/backup-restore-deployment.yaml")))
+(defn generate-backup-restore-deployment [my-conf]
+  (let [backup-restore-yaml (yaml/from-string (yaml/load-resource "backup/backup-restore-deployment.yaml"))]
+    (if (and (contains? my-conf :local-integration-test) (= true (:local-integration-test my-conf)))
+      (cm/replace-named-value backup-restore-yaml "CERTIFICATE_FILE" "/var/run/secrets/localstack-secrets/ca.crt")
+      backup-restore-yaml)))
 
 (defn generate-secret [my-auth]
   (let [{:keys [aws-access-key-id aws-secret-access-key restic-password]} my-auth]

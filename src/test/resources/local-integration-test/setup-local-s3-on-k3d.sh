@@ -22,7 +22,7 @@ function main()
 
   echo 
   export ENDPOINT=$(kubectl get ingress -o jsonpath="{$.items[*].status.loadBalancer.ingress[*].ip}")
-  sudo bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts"
+  sudo bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts" # Remove this, works for testing, but fills your /etc/hosts
 
   echo
   until curl --silent --fail k3stesthost:80 k3stesthost/health | grep -o '"s3": "available"'

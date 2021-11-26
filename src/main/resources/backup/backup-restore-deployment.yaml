@@ -56,6 +56,8 @@ spec:
               key: restic-repository
         - name: RESTIC_PASSWORD_FILE
           value: /var/run/secrets/backup-secrets/restic-password
+        - name: CERTIFICATE_FILE
+          value: ""
         volumeMounts:
         - name: cloud-data-volume
           mountPath: /var/backups
@@ -64,6 +66,9 @@ spec:
           readOnly: true
         - name: cloud-secret-volume
           mountPath: /var/run/secrets/cloud-secrets
+          readOnly: true
+        - name: localstack-secret-volume
+          mountPath: /var/run/secrets/localstack-secrets
           readOnly: true
       volumes:
       - name: cloud-data-volume
@@ -75,3 +80,6 @@ spec:
       - name: backup-secret-volume
         secret:
           secretName: backup-secret
+      - name: localstack-secret-volume
+        secret:
+          secretName: localstack-secret
