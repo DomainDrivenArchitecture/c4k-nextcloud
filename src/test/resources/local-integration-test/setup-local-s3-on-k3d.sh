@@ -38,11 +38,11 @@ function main()
   echo
 
   POD=$(kubectl get pod -l app=backup-restore -o name)
-  kubectl wait $POD --for=condition=Ready
+  kubectl wait $POD --for=condition=Ready --timeout=120s
   kubectl exec -t $POD -- bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts"
   kubectl exec -t $POD -- /usr/local/bin/init.sh
   kubectl exec -t $POD -- /usr/local/bin/backup.sh
-  
+  kubectl exec -t $POD -- /usr/local/bin/restore.sh
 }
 
 main $@

@@ -47,16 +47,7 @@ Some of the steps may take some min to be effective, but eventually nextcloud sh
 
 k3d is a k3s system which is running inside of a container. To install k3d run `curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash` or have a look at https://k3d.io/v5.0.3/ .
 
-* Start a k3d cluster and deploy s3 on it: `./setup-local-s3-on-k3d.sh`
-* Create and deploy the c4k yaml for nextcloud (incl. postgres etc):
-`java -jar target/uberjar/c4k-nextcloud-standalone.jar valid-config.edn valid-auth.edn | kubectl apply -f -`
-* With `kubectl get ingress` you can view the ingress' ip (e.g. 10.0.2.15), add (resp. change if already existing) a line to file "/etc/hosts" e.g. `10.0.2.15	k3stesthost cloudhost`
-* you can also use `kubectl get ingress ingress-localstack -o jsonpath="{.status.loadBalancer.ingress[0].ip}"`
-* Scale the backup-restore pod to one replica with `kubectl scale deployment backup-restore --replicas 1`
-* connect onto the newly created pod with `kubectl exec -it backup-restore<hash> -- bash`
-* add the ingress ip to /etc/hosts on the pod
-* copy the certificate file `ca.crt` to the pod and set the environment variable `$CERTIFICATE_FILE` to its path
-* test the scripts in /usr/local/bin first `init.sh` then `backup.sh` and `restore.sh`
+* Start a k3d cluster to deploy s3, nextcloud and test backup and restore on it: `./setup-local-s3-on-k3d.sh`
 
 Some of the steps may take some min to be effective, but eventually nextcloud should be available at: https://cloudhost
 
