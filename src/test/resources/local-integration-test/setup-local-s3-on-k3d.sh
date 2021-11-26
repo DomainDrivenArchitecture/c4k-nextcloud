@@ -21,9 +21,13 @@ function main()
   bash -c 'external_ip=""; while [ -z $external_ip ]; do echo "[INFO] Waiting for end point..."; external_ip=$(kubectl get ingress -o jsonpath="{$.items[*].status.loadBalancer.ingress[*].ip}"); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready - $external_ip";'
 
   echo 
-  export ENDPOINT=$(kubectl get ingress -o jsonpath="{$.items[*].status.loadBalancer.ingress[*].ip}")
+  export ENDPOINT=$(kubectl get ingress ingress-localstack -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
   sudo bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts" # Remove this, works for testing, but fills your /etc/hosts
 
+  lein uberjar
+  java -jar ../../../../target/uberjar/c4k-nextcloud-standalone.jar ../../../../config-local.edn ../../../../auth-local.edn | kubectl apply -f -
+  kubectl scale deployment backup-restore --replicas 1
+  
   echo
   until curl --silent --fail k3stesthost:80 k3stesthost/health | grep -o '"s3": "available"'
   do
@@ -33,10 +37,11 @@ function main()
   done
   echo
 
-  kubectl get secret localstack-secret -o jsonpath="{.data.ca\.crt}" | base64 --decode > ca.crt
-
-  export RESTIC_PASSWORD="test-password"
-  restic init --cacert ca.crt -r s3://k3stesthost/$bucket_name
+  POD=$(kubectl get pod -l app=backup-restore -o name)
+  kubectl wait $POD --for=condition=Ready
+  kubectl exec -t $POD -- bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts"
+  kubectl exec -t $POD -- /usr/local/bin/init.sh
+  kubectl exec -t $POD -- /usr/local/bin/backup.sh
   
 }
 
