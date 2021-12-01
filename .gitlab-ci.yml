@@ -156,7 +156,7 @@ nextcloud-integrationtest:
   stage: integrationtest
   image: docker:latest
   rules:
-    - if: '$CI_COMMIT_BRANCH == "integration-local"'
+    - if: '$CI_COMMIT_BRANCH == "local-integration-test"'
   services:
     - docker:dind
   before_script:
