@@ -2,10 +2,10 @@ function main()
 {
   local bucket_name="${1:-mybucket}"; shift
 
-  ./start-k3d.sh
+  # ./start-k3d.sh
 
-  source kubectl.sh
-  kubectl config use-context k3d-nextcloud
+  # source kubectl.sh
+  # kubectl config use-context k3d-nextcloud
 
   kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
 

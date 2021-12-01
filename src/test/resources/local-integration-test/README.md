@@ -27,6 +27,22 @@ Note: In case of not being able to connect to "k3stesthost/health", you might ne
 - upload something `aws --endpoint-url=http://k3stesthost s3 cp test.txt s3://mybucket`
 - check files `aws --endpoint-url=http://k3stesthost s3 ls s3://mybucket`
 
+## Run docker locally
+`docker pull docker:19.03.12-dind`
+`docker run --name integration-test docker:19.03.12-dind`
+`docker exec -it integration-test sh`
+`./setup-docker.sh`
+`setup-local-s3-on-k3d.sh`
+
+`apk add git curl bash sudo openjdk8 wget`
+`wget -P /etc/apk/keys/ https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub`
+`apk add --no-cache --repository=https://apkproxy.herokuapp.com/sgerrand/alpine-pkg-leiningen leiningen`
+`git pull https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud.git`
+`cd c4k-nextcloud`
+Solange die Skripte nicht auf Main sind: `git checkout local-integration-test`
+`cd src/test/resources/local-integration-test`
+`./setup-local-s3-on-k3d.sh`
+
 
 ## Deploy nextcloud 
 
