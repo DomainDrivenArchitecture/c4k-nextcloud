@@ -15,7 +15,8 @@ function main() {
 
     backup-roles 'oc_'
     backup-db-dump
-    backup-directory '/var/backups/'
+g    touch "/var/tmpfile123"
+    backup-directory '/var/tmpfile123'
 
     end-maintenance.sh
 }
