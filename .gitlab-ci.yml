@@ -169,5 +169,7 @@ nextcloud-integrationtest:
 #    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
 #    - docker run --privileged -dit --name provs_test -v /var/run/docker.sock:/var/run/docker.sock $CI_REGISTRY_IMAGE
 #    - docker inspect -f '{{.State.Running}}' provs_test
-    - bash /src/test/resources/local-integration-test/setup-docker.sh
+    - ls -l
+    - pwd 
+    - bash ./src/test/resources/local-integration-test/setup-docker.sh
   
