@@ -31,20 +31,29 @@ services:
     - mkdir -p /root/.lein
     - echo "{:auth {:repository-auth {#\"clojars\" {:username \"${CLOJARS_USER}\" :password \"${CLOJARS_TOKEN_DOMAINDRIVENARCHITECTURE}\" }}}}" > ~/.lein/profiles.clj
 
+.only-master: &only-master
+  rules:
+      - if: '$CI_COMMIT_REF_NAME == "master"'
+        when: always
+    - when: never
+
 test-cljs:
   <<: *cljs
+  <<: *only-master
   stage: build_and_test
   script:
     - shadow-cljs compile test
 
 test-clj:
   <<: *clj
+  <<: *only-master
   stage: build_and_test
   script:
     - lein test
 
 test-schema:
   <<: *clj
+  <<: *only-master
   stage: build_and_test
   script:
     - lein uberjar
@@ -78,6 +87,7 @@ test-schema:
 
 package-uberjar:
   <<: *clj
+  <<: *only-master
   stage: package
   script:
     - sha256sum target/uberjar/c4k-nextcloud-standalone.jar > target/uberjar/c4k-nextcloud-standalone.jar.sha256
@@ -87,6 +97,7 @@ package-uberjar:
       - target/uberjar
 
 sast:
+  <<: *only-master
   variables:
     SAST_EXCLUDED_ANALYZERS:
       bandit, brakeman, flawfinder, gosec, kubesec, phpcs-security-audit,
@@ -109,7 +120,7 @@ release:
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   stage: upload
   rules:
-    - if: '$CI_COMMIT_TAG != null'
+    - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG == null'
   artifacts:
     paths:
       - target/uberjar
@@ -129,7 +140,7 @@ nextcloud-image-test-publish:
   image: domaindrivenarchitecture/devops-build:latest
   stage: image
   rules:
-    - if: '$CI_COMMIT_TAG != null'
+    - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG != null'
   script:
     - cd infrastructure/docker-nextcloud && pyb image test publish
 
@@ -137,13 +148,15 @@ backup-image-test-publish:
   image: domaindrivenarchitecture/devops-build:latest
   stage: image
   rules:
-    - if: '$CI_COMMIT_TAG != null'
+    - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG != null'
   script:
     - cd infrastructure/docker-backup && pyb image test publish
 
 nextcloud-integrationtest:
   stage: integrationtest
   image: docker:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "integration-local"'
   services:
     - docker:dind
   dependencies:
