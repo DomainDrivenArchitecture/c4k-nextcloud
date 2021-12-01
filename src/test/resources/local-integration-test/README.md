@@ -28,14 +28,22 @@ Note: In case of not being able to connect to "k3stesthost/health", you might ne
 - check files `aws --endpoint-url=http://k3stesthost s3 ls s3://mybucket`
 
 ## Run docker locally
-`docker pull docker:19.03.12-dind`
-`docker run -d --privileged --name integration-test docker:19.03.12-dind`
+
+
+```
+docker pull docker:19.03.12-dind
+docker run -d --privileged --name integration-test docker:19.03.12-dind
+docker exec integration-test sh -c "apk add bash"
+
+```
 
 Set up docker container integration-test:
-`docker cp setup-docker.sh integration-test:/`
-`docker exec -it integration-test sh`
-`chmod +x setup-docker.sh`
-`./setup-docker.sh`
+
+```
+docker cp setup-docker.sh integration-test:/
+docker exec -it integration-test sh
+./setup-docker.sh
+```
 
 ## Deploy nextcloud 
 
