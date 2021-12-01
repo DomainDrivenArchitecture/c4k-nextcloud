@@ -6,12 +6,12 @@ docker volume create k3s-server
 
 docker run -d --privileged --tmpfs /run  --tmpfs /var/run --restart always -e K3S_TOKEN=12345678901234 -e K3S_KUBECONFIG_OUTPUT=./kubeconfig.yaml -e  K3S_KUBECONFIG_MODE=666 -v k3s-server:/var/lib/rancher/k3s:z -v $(pwd):/output:z -p 6443:6443 -p 80:80 -p 443:443 rancher/k3s server --cluster-init
 
-export timeout=60; while [ ! -f /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml ]; do if [ "$timeout" == 0 ]; then echo "ERROR: Timeout while waiting for file."; break; fi; sleep 1; ((timeout--)); done
+export timeout=30; while [ ! -f /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml ]; do if [ "$timeout" == 0 ]; then echo "ERROR: Timeout while waiting for file."; break; fi; sleep 1; ((timeout--)); done
 
 if [ "$timeout" == 0 ] 
 then
   echo -------------------------------------------------------
-  find . -name "kubeconfig.yaml"; 
+  find / -name "kubeconfig.yaml"; 
   echo -------------------------------------------------------
   docker ps -a
   echo -------------------------------------------------------
