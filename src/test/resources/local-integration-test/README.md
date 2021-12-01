@@ -29,20 +29,13 @@ Note: In case of not being able to connect to "k3stesthost/health", you might ne
 
 ## Run docker locally
 `docker pull docker:19.03.12-dind`
-`docker run --name integration-test docker:19.03.12-dind`
+`docker run -d --privileged --name integration-test docker:19.03.12-dind`
+
+Set up docker container integration-test:
+`docker cp setup-docker.sh integration-test:/`
 `docker exec -it integration-test sh`
+`chmod +x setup-docker.sh`
 `./setup-docker.sh`
-`setup-local-s3-on-k3d.sh`
-
-`apk add git curl bash sudo openjdk8 wget`
-`wget -P /etc/apk/keys/ https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub`
-`apk add --no-cache --repository=https://apkproxy.herokuapp.com/sgerrand/alpine-pkg-leiningen leiningen`
-`git pull https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud.git`
-`cd c4k-nextcloud`
-Solange die Skripte nicht auf Main sind: `git checkout local-integration-test`
-`cd src/test/resources/local-integration-test`
-`./setup-local-s3-on-k3d.sh`
-
 
 ## Deploy nextcloud 
 
