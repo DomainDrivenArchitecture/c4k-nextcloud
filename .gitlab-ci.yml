@@ -4,6 +4,7 @@ stages:
   - security
   - upload
   - image
+  - integrationtest
 
 services:
   - docker:19.03.12-dind
@@ -139,3 +140,20 @@ backup-image-test-publish:
     - if: '$CI_COMMIT_TAG != null'
   script:
     - cd infrastructure/docker-backup && pyb image test publish
+
+nextcloud-integrationtest:
+  stage: integrationtest
+  image: docker:latest
+  services:
+    - docker:dind
+  dependencies:
+    - package
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - echo "---------- Integration test -------------"
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+#    - docker run --privileged -dit --name provs_test -v /var/run/docker.sock:/var/run/docker.sock $CI_REGISTRY_IMAGE
+#    - docker inspect -f '{{.State.Running}}' provs_test
+    - ./src/test/resources/local-integration-test/setup-docker.sh
+  
