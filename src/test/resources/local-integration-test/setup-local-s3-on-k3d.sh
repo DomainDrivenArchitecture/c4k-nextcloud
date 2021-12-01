@@ -24,8 +24,9 @@ function main()
   export ENDPOINT=$(kubectl get ingress ingress-localstack -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
   sudo bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts" # Remove this, works for testing, but fills your /etc/hosts
 
+  cd ../../../../
   lein uberjar
-  java -jar ../../../../target/uberjar/c4k-nextcloud-standalone.jar ../../../../config-local.edn ../../../../auth-local.edn | kubectl apply -f -
+  java -jar target/uberjar/c4k-nextcloud-standalone.jar config-local.edn auth-local.edn | kubectl apply -f -
   kubectl scale deployment backup-restore --replicas 1
   
   echo
