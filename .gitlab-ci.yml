@@ -11,8 +11,8 @@ services:
 
 .only-master: &only-master
   rules:
-      - if: '$CI_COMMIT_REF_NAME == "master"'
-        when: always
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: always
     - when: never
 
 .cljs-job: &cljs
