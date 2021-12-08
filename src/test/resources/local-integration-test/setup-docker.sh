@@ -40,6 +40,12 @@ cat /etc/hosts
 echo ----------------------------------
 cat $HOME/.kube/config
 
+swapoff -a
+
+docker ps -a
+
+netstat -tlpn
+
 #cp /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml $HOME/.kube/config
 
 apk add wget curl bash sudo openjdk8
@@ -50,6 +56,7 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.22.0/bin/l
 chmod +x ./kubectl
 mv ./kubectl /usr/local/bin/kubectl
 
+docker ps -a
 
 #cd /c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
 cd /builds/domaindrivenarchitecture/c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
