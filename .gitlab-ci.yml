@@ -1,7 +1,7 @@
 stages:
   - build_and_test
   - package
-  - security
+  #- security
   - upload
   - image
   - integrationtest
@@ -96,7 +96,7 @@ package-uberjar:
     paths:
       - target/uberjar
 
-sast:
+.sast:
   <<: *only-master
   variables:
     SAST_EXCLUDED_ANALYZERS:
@@ -165,7 +165,7 @@ nextcloud-integrationtest:
     #- docker build --pull -t "$CI_REGISTRY_IMAGE" .
     #- docker run --name "$name" -d --privileged --tmpfs /run  --tmpfs /var/run --restart always -e K3S_TOKEN=12345678901234 -e K3S_KUBECONFIG_OUTPUT=./kubeconfig.yaml -e  K3S_KUBECONFIG_MODE=666 -v k3s-server:/var/lib/rancher/k3s:z -v $(pwd):/output:z -p 6443:6443 -p 80:80 -p 443:443 rancher/k3s server --cluster-init --tls-san k3stesthost --tls-san cloudhost
     #- docker run --privileged -dit --name c4k_test -v /var/run/docker.sock:/var/run/docker.sock $CI_REGISTRY_IMAGE
-    - docker inspect -f '{{.State.Running}}' c4k_test
+    #- docker inspect -f '{{.State.Running}}' c4k_test
   script:
     - echo "---------- Integration test -------------"
     - ls -l
