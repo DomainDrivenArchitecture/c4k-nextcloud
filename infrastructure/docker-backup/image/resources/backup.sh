@@ -14,7 +14,7 @@ function main() {
     file_env RESTIC_DAYS_TO_KEEP 14
 
     backup-roles 'oc_'
-    ;backup-db-dump
+    #backup-db-dump
     echo test-content > /var/backups/tmpfile
     backup-directory '/var/backups/'
 
