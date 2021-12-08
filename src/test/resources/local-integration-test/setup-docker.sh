@@ -4,7 +4,7 @@ set -x
 
 docker volume create k3s-server
 
-container_name='inttst'
+name='inttst'
 
 #[[ $(docker ps -f "name=$name" --format '{{.Names}}') == $name ]] ||
 docker run --name $name -d --privileged --tmpfs /run  --tmpfs /var/run --restart always -e K3S_TOKEN=12345678901234 -e K3S_KUBECONFIG_OUTPUT=./kubeconfig.yaml -e  K3S_KUBECONFIG_MODE=666 -v k3s-server:/var/lib/rancher/k3s:z -v $(pwd):/output:z -p 6443:6443 -p 80:80 -p 443:443 rancher/k3s server --cluster-init --tls-san k3stesthost --tls-san cloudhost
