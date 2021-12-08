@@ -67,12 +67,19 @@ k3d is a k3s system which is running inside of a container. To install k3d run `
 
 * Start a k3d cluster to deploy s3, nextcloud and test backup and restore on it: `./setup-local-s3-on-k3d.sh`
 
-Some of the steps may take some min to be effective, but eventually nextcloud should be available at: https://cloudhost
+Some steps may take a couple of minutes to be effective, but eventually nextcloud should be available at: https://cloudhost
 
 #### Remove k3d cluster
 
 `k3d cluster delete nextcloud`
 
+## Test in local gitlab runner
+
+See https://stackoverflow.com/questions/32933174/use-gitlab-ci-to-run-tests-locally
+
+`docker run -d --name gitlab-runner --restart always -v $PWD:$PWD -v /var/run/docker.sock:/var/run/docker.sock gitlab/gitlab-runner:latest`
+
+`docker exec -it -w $PWD gitlab-runner gitlab-runner exec docker nextcloud-integrationtest`
 
 # TODO
 
