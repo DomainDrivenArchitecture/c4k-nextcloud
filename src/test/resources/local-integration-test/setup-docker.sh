@@ -6,8 +6,8 @@ docker volume create k3s-server
 
 name='inttst'
 
-#[[ $(docker ps -f "name=$name" --format '{{.Names}}') == $name ]] ||
-docker run --name $name -d --privileged --tmpfs /run  --tmpfs /var/run --restart always -e K3S_TOKEN=12345678901234 -e K3S_KUBECONFIG_OUTPUT=./kubeconfig.yaml -e  K3S_KUBECONFIG_MODE=666 -v k3s-server:/var/lib/rancher/k3s:z -v $(pwd):/output:z -p 6443:6443 -p 80:80 -p 443:443 rancher/k3s server --cluster-init --tls-san k3stesthost --tls-san cloudhost --bind-address 127.0.0.1
+[[ $(docker ps -f "name=$name" --format '{{.Names}}') == $name ]] || docker run --name $name -d --privileged --tmpfs /run  --tmpfs /var/run --restart always -e K3S_TOKEN=12345678901234 -e K3S_KUBECONFIG_OUTPUT=./kubeconfig.yaml -e  K3S_KUBECONFIG_MODE=666 -v k3s-server:/var/lib/rancher/k3s:z -v $(pwd):/output:z -p 6443:6443 -p 80:80 -p 443:443 rancher/k3s server --cluster-init --tls-san k3stesthost --tls-san cloudhost
+
 docker ps
 
 #export timeout=30; while [ ! -f /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml ]; do if [ "$timeout" == 0 ]; then echo "ERROR: Timeout while waiting for file."; docker ps -a; ls /var/lib/docker/volumes/k3s-server/_data/; break; fi; sleep 1; ((timeout--)); done
@@ -56,6 +56,7 @@ docker ps -a
 
 swapoff -a
 kubectl config view
+
 echo ========================================================
 kubectl --kubeconfig "$HOME/.kube/config" config view
 
@@ -66,11 +67,13 @@ echo $KUBECONFIG
 export KUBECONFIG=$HOME/.kube/config
 kubectl config view
 
-
 echo ========================================================
 
+sudo netstat -tlpn
 
-netstat -tlpn
+kubectl get pods
+
+echo ========================================================
 
 #cd /c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
 cd /builds/domaindrivenarchitecture/c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
