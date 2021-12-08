@@ -11,6 +11,10 @@ docker run --name $name -d --privileged --tmpfs /run  --tmpfs /var/run --restart
 docker ps
 
 #export timeout=30; while [ ! -f /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml ]; do if [ "$timeout" == 0 ]; then echo "ERROR: Timeout while waiting for file."; docker ps -a; ls /var/lib/docker/volumes/k3s-server/_data/; break; fi; sleep 1; ((timeout--)); done
+export timeout=30; while ! docker exec   $name    sh -c "test -f /var/lib/rancher/k3s/server/kubeconfig.yaml"; do if [ "$timeout" == 0 ]; then echo "ERROR: Timeout while waiting for file."; docker ps -a; ls /var/lib/docker/volumes/k3s-server/_data/; break; fi; sleep 1; ((timeout--)); done
+
+
+
 sleep 60
 
 mkdir -p $HOME/.kube/
@@ -41,4 +45,5 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.22.0/bin/l
 chmod +x ./kubectl
 mv ./kubectl /usr/local/bin/kubectl
 
-cd /c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
+#cd /c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
+cd /builds/domaindrivenarchitecture/c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
