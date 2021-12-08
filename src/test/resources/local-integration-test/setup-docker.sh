@@ -41,9 +41,10 @@ echo ----------------------------------
 cat $HOME/.kube/config
 echo $KUBECONFIG
 
-export KUBECONFIG=$HOME/.kube/
+export KUBECONFIG=$HOME/.kube/config
 
 #swapoff -a
+kubectl config view
 
 docker ps -a
 
