@@ -13,8 +13,12 @@ docker ps
 #export timeout=30; while [ ! -f /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml ]; do if [ "$timeout" == 0 ]; then echo "ERROR: Timeout while waiting for file."; docker ps -a; ls /var/lib/docker/volumes/k3s-server/_data/; break; fi; sleep 1; ((timeout--)); done
 sleep 60
 
-docker cp $name:/var/lib/rancher/k3s/server/kubeconfig.yaml /var/lib/docker/volumes/k3s-server/_data/server/
-ls /var/lib/docker/volumes/k3s-server/_data/server/
+mkdir -p $HOME/.kube/
+
+docker cp $name:/var/lib/rancher/k3s/server/kubeconfig.yaml $HOME/.kube/config
+
+#docker cp $name:/var/lib/rancher/k3s/server/kubeconfig.yaml /var/lib/docker/volumes/k3s-server/_data/server/
+#ls /var/lib/docker/volumes/k3s-server/_data/server/
 
 if [ "$timeout" == 0 ] 
 then
@@ -26,8 +30,8 @@ then
   exit -1
 fi
 
-mkdir -p $HOME/.kube/
-cp /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml $HOME/.kube/config
+
+#cp /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml $HOME/.kube/config
 
 apk add wget curl bash sudo openjdk8
 wget -P /etc/apk/keys/ https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
