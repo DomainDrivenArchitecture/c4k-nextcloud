@@ -15,7 +15,7 @@ export timeout=30; while ! docker exec   $name    sh -c "test -f /var/lib/ranche
 
 
 
-sleep 60
+#sleep 60
 
 mkdir -p $HOME/.kube/
 
@@ -44,6 +44,8 @@ apk add --no-cache --repository=https://apkproxy.herokuapp.com/sgerrand/alpine-p
 curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.22.0/bin/linux/amd64/kubectl
 chmod +x ./kubectl
 mv ./kubectl /usr/local/bin/kubectl
+
+echo "127.0.0.1  kubernetes" >> /etc/hosts
 
 #cd /c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
 cd /builds/domaindrivenarchitecture/c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
