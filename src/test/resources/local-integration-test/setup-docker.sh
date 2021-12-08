@@ -39,16 +39,7 @@ echo "127.0.0.1 kubernetes" >> /etc/hosts
 cat /etc/hosts
 echo ----------------------------------
 cat $HOME/.kube/config
-echo $KUBECONFIG
 
-export KUBECONFIG=$HOME/.kube/config
-
-#swapoff -a
-kubectl config view
-
-docker ps -a
-
-netstat -tlpn
 
 #cp /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml $HOME/.kube/config
 
@@ -60,7 +51,26 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.22.0/bin/l
 chmod +x ./kubectl
 mv ./kubectl /usr/local/bin/kubectl
 
+sleep 20 #allow some time to startup k3s
 docker ps -a
+
+swapoff -a
+kubectl config view
+echo ========================================================
+kubectl --kubeconfig "$HOME/.kube/config" config view
+
+echo ========================================================
+
+echo $KUBECONFIG
+
+export KUBECONFIG=$HOME/.kube/config
+kubectl config view
+
+
+echo ========================================================
+
+
+netstat -tlpn
 
 #cd /c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
 cd /builds/domaindrivenarchitecture/c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
