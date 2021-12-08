@@ -30,9 +30,9 @@ function main()
   kubectl scale deployment backup-restore --replicas 1
   
   echo
-  until curl --silent --fail k3stesthost:80 k3stesthost/health | grep -o '"s3": "available"'
+  until curl --fail --silent k3stesthost/health | grep -oe '"s3": "available"' -oe '"s3": "running"'
   do
-    curl --fail k3stesthost:80 k3stesthost/health
+    curl --fail k3stesthost/health
     echo "[INFO] Waiting for s3 running"
     sleep 3
   done

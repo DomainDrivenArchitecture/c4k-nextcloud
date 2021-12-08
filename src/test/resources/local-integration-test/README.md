@@ -40,8 +40,9 @@ docker exec integration-test sh -c "apk add bash"
 Set up docker container integration-test:
 
 ```
-docker cp setup-docker.sh integration-test:/
+docker cp  ../../../../../c4k-nextcloud/ integration-test:/
 docker exec -it integration-test sh
+cd /c4k-nextcloud/src/test/resources/local-integration-test
 ./setup-docker.sh
 ```
 
