@@ -39,8 +39,11 @@ echo "127.0.0.1 kubernetes" >> /etc/hosts
 cat /etc/hosts
 echo ----------------------------------
 cat $HOME/.kube/config
+echo $KUBECONFIG
 
-swapoff -a
+export KUBECONFIG=$HOME/.kube/
+
+#swapoff -a
 
 docker ps -a
 
