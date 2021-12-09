@@ -34,7 +34,7 @@ function main()
   do
     curl --fail k3stesthost/health
     echo "[INFO] Waiting for s3 running"
-    sleep 3
+    sleep 10
   done
   echo
 
