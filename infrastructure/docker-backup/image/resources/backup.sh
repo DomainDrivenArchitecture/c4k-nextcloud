@@ -16,7 +16,7 @@ function main() {
     #disable for faster testing
     #backup-roles 'oc_'
     #backup-db-dump
-    echo test-content > /var/backups/tmpfile
+    #echo test-content > /var/backups/tmpfile
     backup-directory '/var/backups/'
 
     end-maintenance.sh
