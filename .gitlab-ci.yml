@@ -154,13 +154,16 @@ backup-image-test-publish:
 
 nextcloud-integrationtest:
   stage: integrationtest
-  image: docker:latest
+  image: docker:19.03.12
   rules:
     - if: '$CI_COMMIT_BRANCH == "integration-test-w-o-db-backup"'
   services:
-    - docker:dind
+    - docker:19.03.12-dind
+#  variables:
+#    DOCKER_HOST: tcp://172.17.0.1/
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    #- docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    #- echo -n $CI_REGISTRY_PASSWORD | docker login --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - apk add bash
     #- docker build --pull -t "$CI_REGISTRY_IMAGE" .
     #- docker run --name "$name" -d --privileged --tmpfs /run  --tmpfs /var/run --restart always -e K3S_TOKEN=12345678901234 -e K3S_KUBECONFIG_OUTPUT=./kubeconfig.yaml -e  K3S_KUBECONFIG_MODE=666 -v k3s-server:/var/lib/rancher/k3s:z -v $(pwd):/output:z -p 6443:6443 -p 80:80 -p 443:443 rancher/k3s server --cluster-init --tls-san k3stesthost --tls-san cloudhost
@@ -169,7 +172,7 @@ nextcloud-integrationtest:
     #- docker inspect -f '{{.State.Running}}' c4k_test
   script:
     - echo "---------- Integration test -------------"
-    - ls -l
-    - pwd 
-    - bash ./src/test/resources/local-integration-test/setup-docker.sh
-  
+#    - ls -l
+#    - pwd
+#    - bash ./src/test/resources/local-integration-test/setup-docker.sh
+#
