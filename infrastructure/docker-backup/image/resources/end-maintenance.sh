@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 if test -f "/var/backups/config/config.orig"; then
 
     rm /var/backups/config/config.php

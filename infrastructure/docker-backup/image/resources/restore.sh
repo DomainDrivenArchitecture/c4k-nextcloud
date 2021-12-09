@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -Eeo pipefail
+set -Eeox pipefail
 
 function main() {
 
@@ -15,8 +15,9 @@ function main() {
 
     drop-create-db
 
-    restore-roles
-    restore-db
+    #skip for fast testing
+    #restore-roles
+    #restore-db
     restore-directory '/var/backups/'
 
 }
