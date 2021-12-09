@@ -75,5 +75,7 @@ kubectl get pods
 
 echo ========================================================
 
+pwd
+
 #cd /c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
-cd /builds/domaindrivenarchitecture/c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
+cd ./c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
