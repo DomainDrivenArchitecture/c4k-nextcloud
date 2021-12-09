@@ -1,3 +1,7 @@
+#!/bin/bash
+
+set -x
+
 function main()
 {
   date
@@ -56,4 +60,4 @@ function main()
   kubectl exec -t $POD -- /usr/local/bin/restore.sh
 }
 
-main $@
+main "$@"
