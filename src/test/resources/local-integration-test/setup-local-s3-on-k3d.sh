@@ -1,10 +1,14 @@
 function main()
 {
+  date
+
   local bucket_name="${1:-mybucket}"; shift
 
   kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
 
   kubectl apply -f localstack.yaml
+
+  date
 
   until kubectl apply -f certificate.yaml
   do
@@ -15,7 +19,9 @@ function main()
   echo
   bash -c 'external_ip=""; while [ -z $external_ip ]; do echo "[INFO] Waiting for end point..."; external_ip=$(kubectl get ingress -o jsonpath="{$.items[*].status.loadBalancer.ingress[*].ip}"); [ -z "$external_ip" ] && sleep 10; done; echo "End point ready - $external_ip";'
 
-  echo 
+  date
+
+  echo
   export ENDPOINT=$(kubectl get ingress ingress-localstack -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
   sudo bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts" # Remove this, works for testing, but fills your /etc/hosts
 
@@ -23,7 +29,8 @@ function main()
   lein uberjar
   java -jar target/uberjar/c4k-nextcloud-standalone.jar config-local.edn auth-local.edn | kubectl apply -f -
   kubectl scale deployment backup-restore --replicas 1
-  
+
+  date
   echo
   until curl --fail --silent k3stesthost/health | grep -oe '"s3": "available"' -oe '"s3": "running"'
   do
@@ -40,8 +47,11 @@ function main()
   kubectl exec -t $POD -- bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts"
   kubectl exec -t $POD -- /usr/local/bin/init.sh
 
+  date
   echo ================= BACKUP =================
   kubectl exec -t $POD -- /usr/local/bin/backup.sh
+
+  date
   echo ================= RESTORE =================
   kubectl exec -t $POD -- /usr/local/bin/restore.sh
 }
