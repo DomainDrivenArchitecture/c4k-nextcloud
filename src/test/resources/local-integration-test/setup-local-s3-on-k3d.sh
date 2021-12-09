@@ -2,11 +2,6 @@ function main()
 {
   local bucket_name="${1:-mybucket}"; shift
 
-  # ./start-k3d.sh
-
-  # source kubectl.sh
-  # kubectl config use-context k3d-nextcloud
-
   kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
 
   kubectl apply -f localstack.yaml
@@ -39,10 +34,15 @@ function main()
   echo
 
   POD=$(kubectl get pod -l app=backup-restore -o name)
+
   kubectl wait $POD --for=condition=Ready --timeout=240s
+
   kubectl exec -t $POD -- bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts"
   kubectl exec -t $POD -- /usr/local/bin/init.sh
+
+  echo ================= BACKUP =================
   kubectl exec -t $POD -- /usr/local/bin/backup.sh
+  echo ================= RESTORE =================
   kubectl exec -t $POD -- /usr/local/bin/restore.sh
 }
 
