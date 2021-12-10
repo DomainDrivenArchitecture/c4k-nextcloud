@@ -4,7 +4,7 @@ set -Eeox pipefail
 
 function main() {
 
-#    start-maintenance.sh
+    start-maintenance.sh
 
     file_env AWS_ACCESS_KEY_ID
     file_env AWS_SECRET_ACCESS_KEY
@@ -18,6 +18,8 @@ function main() {
     restore-roles
     restore-db
     restore-directory '/var/backups/'
+
+    end-maintenance.sh
 
 }
 
