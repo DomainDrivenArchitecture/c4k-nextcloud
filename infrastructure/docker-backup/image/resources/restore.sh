@@ -13,13 +13,11 @@ function main() {
     file_env POSTGRES_PASSWORD
     file_env POSTGRES_USER
 
-echo re-add lines !!!
-#    drop-create-db
+    drop-create-db
 
-    #skip for fast testing
-    #restore-roles
-    #restore-db
-#    restore-directory '/var/backups/'
+    restore-roles
+    restore-db
+    restore-directory '/var/backups/'
 
 }
 

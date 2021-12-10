@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o pipefail
+set -xo pipefail
 
 function main() {
 
@@ -13,12 +13,10 @@ function main() {
     file_env POSTGRES_USER
     file_env RESTIC_DAYS_TO_KEEP 14
 
-echo re-add lines !!!
-    #disable for faster testing
-    #backup-roles 'oc_'
-    #backup-db-dump
+    backup-roles 'oc_'
+    backup-db-dump
     ls -l /var/backups/
-#    backup-directory '/var/backups/'
+    backup-directory '/var/backups/'
 
     end-maintenance.sh
 }
