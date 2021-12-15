@@ -1,7 +1,7 @@
 stages:
   - build_and_test
   - package
-  #- security
+  - security
   - upload
   - image
   - integrationtest
@@ -96,17 +96,17 @@ package-uberjar:
     paths:
       - target/uberjar
 
-#.sast:
-#  <<: *only-master
-#  variables:
-#    SAST_EXCLUDED_ANALYZERS:
-#      bandit, brakeman, flawfinder, gosec, kubesec, phpcs-security-audit,
-#      pmd-apex, security-code-scan, sobelow, spotbugs
-#  stage: security
-#  before_script:
-#    - mkdir -p builds && cp -r target/ builds/
-#include:
-#  - template: Security/SAST.gitlab-ci.yml
+sast:
+  <<: *only-master
+  variables:
+    SAST_EXCLUDED_ANALYZERS:
+      bandit, brakeman, flawfinder, gosec, kubesec, phpcs-security-audit,
+      pmd-apex, security-code-scan, sobelow, spotbugs
+  stage: security
+  before_script:
+    - mkdir -p builds && cp -r target/ builds/
+include:
+  - template: Security/SAST.gitlab-ci.yml
 
 upload-clj-prerelease:
   <<: *clj
@@ -154,8 +154,6 @@ backup-image-test-publish:
 
 nextcloud-integrationtest:
   stage: integrationtest
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "integration-test-w-o-db-backup"'
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.7.1-kube-1.20.11-alpine-3.14
   services:
     - name: registry.gitlab.com/gitlab-org/cluster-integration/test-utils/k3s-gitlab-ci/releases/v1.22.2-k3s2

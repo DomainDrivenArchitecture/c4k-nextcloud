@@ -10,40 +10,26 @@ name='inttst'
 
 docker ps
 
-#export timeout=30; while [ ! -f /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml ]; do if [ "$timeout" == 0 ]; then echo "ERROR: Timeout while waiting for file."; docker ps -a; ls /var/lib/docker/volumes/k3s-server/_data/; break; fi; sleep 1; ((timeout--)); done
 export timeout=30; while ! docker exec   $name    sh -c "test -f /var/lib/rancher/k3s/server/kubeconfig.yaml"; do if [ "$timeout" == 0 ]; then echo "ERROR: Timeout while waiting for file."; break; fi; sleep 1; ((timeout--)); done
-
-
-
-#sleep 60
 
 mkdir -p $HOME/.kube/
 
 docker cp $name:/var/lib/rancher/k3s/server/kubeconfig.yaml $HOME/.kube/config
 
-#docker cp $name:/var/lib/rancher/k3s/server/kubeconfig.yaml /var/lib/docker/volumes/k3s-server/_data/server/
-#ls /var/lib/docker/volumes/k3s-server/_data/server/
-
-if [ "$timeout" == 0 ] 
+if [ "$timeout" == 0 ]
 then
   echo -------------------------------------------------------
   find / -name "kubeconfig.yaml"; 
   echo -------------------------------------------------------
   docker ps -a
   echo -------------------------------------------------------
-  exit -1
+  exit 1
 fi
 
-
 echo "127.0.0.1 kubernetes" >> /etc/hosts
-cat /etc/hosts
-echo ----------------------------------
-cat $HOME/.kube/config
-
-
-#cp /var/lib/docker/volumes/k3s-server/_data/server/kubeconfig.yaml $HOME/.kube/config
 
 apk add wget curl bash sudo openjdk8
+
 wget -P /etc/apk/keys/ https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
 apk add --no-cache --repository=https://apkproxy.herokuapp.com/sgerrand/alpine-pkg-leiningen leiningen
 
@@ -54,28 +40,9 @@ mv ./kubectl /usr/local/bin/kubectl
 sleep 20 #allow some time to startup k3s
 docker ps -a
 
-swapoff -a
-kubectl config view
-
-echo ========================================================
-kubectl --kubeconfig "$HOME/.kube/config" config view
-
-echo ========================================================
-
-echo $KUBECONFIG
+swapoff -a   # can this be removed ?
 
 export KUBECONFIG=$HOME/.kube/config
-kubectl config view
-
-echo ========================================================
-
-sudo netstat -tlpn
-
-kubectl get pods
-
-echo ========================================================
 
 pwd
-
-#cd /c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh
 cd ./c4k-nextcloud/src/test/resources/local-integration-test && ./setup-local-s3-on-k3d.sh

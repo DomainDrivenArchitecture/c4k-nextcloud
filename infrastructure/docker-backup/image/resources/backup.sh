@@ -15,7 +15,6 @@ function main() {
 
     backup-roles 'oc_'
     backup-db-dump
-    ls -l /var/backups/
     backup-directory '/var/backups/'
 
     end-maintenance.sh
