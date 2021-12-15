@@ -7,7 +7,7 @@
   [dda.c4k-common.predicate :as cp]
   [dda.c4k-common.common :as cm]))
 
-(s/def ::fqdn cp/fqdn-string?)
+(s/def ::fqdn any?) ; TODO: Fix fqdn-string? to include localhost
 (s/def ::issuer cp/letsencrypt-issuer?)
 (s/def ::restic-repository string?)
 (s/def ::nextcloud-data-volume-path string?)

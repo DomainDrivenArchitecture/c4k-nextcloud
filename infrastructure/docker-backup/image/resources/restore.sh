@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -Eeo pipefail
+set -Eeox pipefail
 
 function main() {
 
@@ -19,10 +19,13 @@ function main() {
     restore-db
     restore-directory '/var/backups/'
 
+    end-maintenance.sh
+
 }
 
 source /usr/local/lib/functions.sh
 source /usr/local/lib/pg-functions.sh
 source /usr/local/lib/file-functions.sh
+
 main
 

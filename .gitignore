@@ -22,8 +22,15 @@ logs/
 *.iml
 .idea/
 
-#valid-auth.edn
-#valid-config.edn
+# config files
 my-auth.edn
+my-config.edn
 auth.edn
 config.edn
+
+# certificate
+ca.crt
+
+# chaches
+.clj-kondo/.cache
+.lsp/.cache/
