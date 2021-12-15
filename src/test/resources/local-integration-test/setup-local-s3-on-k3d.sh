@@ -17,7 +17,7 @@ function main()
   until kubectl apply -f certificate.yaml
   do
     echo "[INFO] Waiting for certificate ..."
-    sleep 10
+    sleep 30
   done
   
   echo
@@ -29,7 +29,7 @@ function main()
   export ENDPOINT=$(kubectl get ingress ingress-localstack -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
   sudo bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts" # Remove this, works for testing, but fills your /etc/hosts
 
-  cd ../../../../
+  cd ../../../../    # c4k-nextcloud project root
   lein uberjar
   java -jar target/uberjar/c4k-nextcloud-standalone.jar config-local.edn auth-local.edn | kubectl apply -f -
   kubectl scale deployment backup-restore --replicas 1
@@ -64,7 +64,11 @@ function main()
   kubectl exec -t $POD -- /usr/local/bin/backup.sh
 
   date
+  sleep 10 # avoid race conditions
+
   echo ================= RESTORE =================
+
+  kubectl exec -t $POD -- ls -l /var/backups/config
   kubectl exec -t $POD -- /usr/local/bin/restore.sh
 }
 
