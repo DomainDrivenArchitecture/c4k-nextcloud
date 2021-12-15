@@ -166,8 +166,7 @@ nextcloud-integrationtest:
     - wget -P /etc/apk/keys/ https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
     - apk add --no-cache --repository=https://apkproxy.herokuapp.com/sgerrand/alpine-pkg-leiningen leiningen
 
-    - curl -f k3s:8081 > k3s.yaml
-    - export KUBECONFIG=$(pwd)/k3s.yaml
+    - curl -f k3s:8081 > ${HOME}/.kube/config
     - kubectl version
     - kubectl cluster-info
     - echo "---------- Integration test -------------"
