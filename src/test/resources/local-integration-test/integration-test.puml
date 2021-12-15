@@ -1,0 +1,44 @@
+@startuml
+
+autonumber
+
+skinparam sequenceBox {
+     borderColor White
+}
+
+participant gitlab_runner
+
+box "outer container" #LightBlue
+
+participant .gitlab_ci
+participant PreparingCommands
+participant test_script
+
+end box
+
+
+box "k3s" #CornSilk
+
+participant k3s_api_server
+participant backup_pod
+
+end box
+
+
+gitlab_runner -> k3s_api_server: run k3s as container
+gitlab_runner -> .gitlab_ci : run
+
+.gitlab_ci -> PreparingCommands : Install packages (curl bash ...)
+.gitlab_ci -> PreparingCommands : get k3s_api_server config for k3s_api_server
+
+.gitlab_ci -> test_script : run
+
+test_script -> k3s_api_server: apply cert-manager
+test_script -> k3s_api_server: apply localstack
+test_script -> k3s_api_server: enable tls / create certificates
+test_script -> k3s_api_server: apply cloud
+test_script -> k3s_api_server: create backup_pod (by scale to 1)
+test_script -> backup_pod: backup
+test_script -> backup_pod: restore
+
+@enduml
