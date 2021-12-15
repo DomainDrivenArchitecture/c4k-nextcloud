@@ -51,6 +51,9 @@ function main()
   kubectl exec -t $POD -- bash -c "echo \"$ENDPOINT k3stesthost cloudhost\" >> /etc/hosts"
   kubectl exec -t $POD -- /usr/local/bin/init.sh
 
+  echo ================= DEBUG =================
+  ls -la /var/cloud
+
   date
   echo ================= BACKUP =================
   kubectl exec -t $POD -- ls -l /var/backups/config
