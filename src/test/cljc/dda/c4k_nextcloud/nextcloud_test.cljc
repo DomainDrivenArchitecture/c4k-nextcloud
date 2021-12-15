@@ -74,7 +74,7 @@
           {:selector {:matchLabels #:app.kubernetes.io{:name "cloud-pod", :application "cloud"}}
            :strategy {:type "Recreate"}
            :template
-           {:metadata {:labels {:app.kubernetes.io/name "cloud-pod", :app.kubernetes.io/application "cloud", :redeploy "v3"}}
+           {:metadata {:labels {:app "cloud-app", :app.kubernetes.io/name "cloud-pod", :app.kubernetes.io/application "cloud", :redeploy "v3"}}
             :spec
             {:containers
              [{:image "domaindrivenarchitecture/c4k-cloud"
