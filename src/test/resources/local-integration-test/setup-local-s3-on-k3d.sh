@@ -52,11 +52,9 @@ function main()
   kubectl exec -t $POD -- /usr/local/bin/init.sh
 
   # debug
-  kubectl exec -t $POD -- bash -c "sudo -u www-data php occ maintenance:mode --on"
-  kubectl exec -t $POD -- bash -c "sudo -u www-data php occ maintenance:mode --off"
-  kubectl exec -t $POD -- bash -c "la -la /var/"
-  kubectl exec -t $POD -- bash -c "la -la /var/backups"
-  kubectl exec -t $POD -- bash -c "la -la /var/backups/config"
+  kubectl exec -t $POD -- bash -c "ls -la /var/"
+  kubectl exec -t $POD -- bash -c "ls -la /var/backups"
+  kubectl exec -t $POD -- bash -c "ls -la /var/backups/config"
   #debug end
 
   date
