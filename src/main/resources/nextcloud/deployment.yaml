@@ -5,7 +5,6 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: cloud-app
       app.kubernetes.io/name: cloud-pod
       app.kubernetes.io/application: cloud
   strategy:
@@ -13,6 +12,7 @@ spec:
   template:
     metadata:
       labels:
+        app: cloud-app
         app.kubernetes.io/name: cloud-pod
         app.kubernetes.io/application: cloud
         redeploy: v3
