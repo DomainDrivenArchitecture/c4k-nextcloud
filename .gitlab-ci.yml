@@ -96,18 +96,6 @@ package-uberjar:
     paths:
       - target/uberjar
 
-sast:
-  <<: *only-master
-  variables:
-    SAST_EXCLUDED_ANALYZERS:
-      bandit, brakeman, flawfinder, gosec, kubesec, phpcs-security-audit,
-      pmd-apex, security-code-scan, sobelow, spotbugs
-  stage: security
-  before_script:
-    - mkdir -p builds && cp -r target/ builds/
-include:
-  - template: Security/SAST.gitlab-ci.yml
-
 upload-clj-prerelease:
   <<: *clj
   stage: upload
