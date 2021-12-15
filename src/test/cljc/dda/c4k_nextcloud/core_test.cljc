@@ -7,7 +7,7 @@
    ))
 
 (deftest should-k8s-objects
-  (is (= 16
+  (is (= 17
          (count (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
                                   :postgres-db-user "nextcloud"
                                   :postgres-db-password "nextcloud-db-password"
@@ -20,7 +20,7 @@
                                   :aws-secret-access-key "aws-secret"
                                   :restic-password "restic-pw"
                                   :restic-repository "restic-repository"}))))
-  (is (= 14
+  (is (= 15
          (count (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
                                   :postgres-db-user "nextcloud"
                                   :postgres-db-password "nextcloud-db-password"

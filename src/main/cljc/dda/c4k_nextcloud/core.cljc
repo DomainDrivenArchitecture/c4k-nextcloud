@@ -45,7 +45,8 @@
            (when (contains? config :restic-repository)
              [(yaml/to-string (backup/generate-config config))
               (yaml/to-string (backup/generate-secret config))
-              (yaml/to-string (backup/generate-cron))]))))
+              (yaml/to-string (backup/generate-cron))
+              (yaml/to-string (backup/generate-backup-restore-deployment config))]))))
 
 (defn-spec generate any?
   [my-config config?

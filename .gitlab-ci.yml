@@ -4,9 +4,16 @@ stages:
   - security
   - upload
   - image
+  - integrationtest
 
 services:
   - docker:19.03.12-dind
+
+.only-master: &only-master
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: always
+    - when: never
 
 .cljs-job: &cljs
   image: domaindrivenarchitecture/shadow-cljs
@@ -32,18 +39,21 @@ services:
 
 test-cljs:
   <<: *cljs
+  <<: *only-master
   stage: build_and_test
   script:
     - shadow-cljs compile test
 
 test-clj:
   <<: *clj
+  <<: *only-master
   stage: build_and_test
   script:
     - lein test
 
 test-schema:
   <<: *clj
+  <<: *only-master
   stage: build_and_test
   script:
     - lein uberjar
@@ -77,6 +87,7 @@ test-schema:
 
 package-uberjar:
   <<: *clj
+  <<: *only-master
   stage: package
   script:
     - sha256sum target/uberjar/c4k-nextcloud-standalone.jar > target/uberjar/c4k-nextcloud-standalone.jar.sha256
@@ -86,6 +97,7 @@ package-uberjar:
       - target/uberjar
 
 sast:
+  <<: *only-master
   variables:
     SAST_EXCLUDED_ANALYZERS:
       bandit, brakeman, flawfinder, gosec, kubesec, phpcs-security-audit,
@@ -139,3 +151,25 @@ backup-image-test-publish:
     - if: '$CI_COMMIT_TAG != null'
   script:
     - cd infrastructure/docker-backup && pyb image test publish
+
+nextcloud-integrationtest:
+  stage: integrationtest
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.7.1-kube-1.20.11-alpine-3.14
+  services:
+    - name: registry.gitlab.com/gitlab-org/cluster-integration/test-utils/k3s-gitlab-ci/releases/v1.22.2-k3s2
+      alias: k3s
+  script:
+    - apk add curl sudo bash
+    - apk add wget curl bash sudo openjdk8
+    - wget -P /etc/apk/keys/ https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
+    - apk add --no-cache --repository=https://apkproxy.herokuapp.com/sgerrand/alpine-pkg-leiningen leiningen
+
+    - mkdir -p ${HOME}/.kube/
+    - curl -f k3s:8081 > ${HOME}/.kube/config
+    - kubectl version
+    - kubectl cluster-info
+    - echo "---------- Integration test -------------"
+    - pwd
+    - cd ./src/test/resources/local-integration-test/ && ./setup-local-s3-on-k3d.sh
+
+
