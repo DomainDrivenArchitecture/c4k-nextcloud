@@ -77,12 +77,8 @@ Some steps may take a couple of minutes to be effective, but eventually nextclou
 
 See https://stackoverflow.com/questions/32933174/use-gitlab-ci-to-run-tests-locally
 
+This needs to be done in the project root
+
 `docker run -d --name gitlab-runner --restart always -v $PWD:$PWD -v /var/run/docker.sock:/var/run/docker.sock gitlab/gitlab-runner:latest`
 
 `docker exec -it -w $PWD gitlab-runner gitlab-runner exec docker nextcloud-integrationtest --docker-privileged --docker-volumes '/var/run/docker.sock:/var/run/docker.sock'`
-
-# TODO
-
-* add possibility to use local certificate in dda-backup backup function
-  * if ENV_VARIABLE set: use certificate
-* get restic password from config
