@@ -32,7 +32,7 @@ function main()
   cd ../../../../    # c4k-nextcloud project root
   lein uberjar
   java -jar target/uberjar/c4k-nextcloud-standalone.jar config-local.edn auth-local.edn | kubectl apply -f -
-  POD=$(kubectl get pod -l app=cloud-pod -o name)
+  POD=$(kubectl get pod -l app=cloud-app -o name)
   kubectl wait $POD --for=condition=Ready --timeout=240s
 
   kubectl scale deployment backup-restore --replicas 1
