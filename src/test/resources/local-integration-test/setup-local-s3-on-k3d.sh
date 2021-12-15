@@ -55,6 +55,8 @@ function main()
   kubectl exec -t $POD -- /usr/local/bin/init.sh
 
   echo ================= DEBUG =================
+  # tmp
+  sleep 180
   ls -la /var/cloud
 
   date
