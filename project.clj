@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture/c4k-nextcloud "1.0.3-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/c4k-nextcloud "3.0.1-SNAPSHOT"
   :description "nextcloud c4k-installation package"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
@@ -12,8 +12,8 @@
   :resource-paths ["src/main/resources"]
   :repositories [["snapshots" :clojars]
                  ["releases" :clojars]]
-  :deploy-repositories [["snapshots" :clojars]
-                        ["releases" :clojars]]
+  :deploy-repositories [["snapshots" {:sign-releases false :url "https://clojars.org/repo"}]
+                        ["releases" {:sign-releases false :url "https://clojars.org/repo"}]]
   :profiles {:test {:test-paths ["src/test/cljc"]
                     :resource-paths ["src/test/resources"]
                     :dependencies [[dda/data-test "0.1.1"]]}
