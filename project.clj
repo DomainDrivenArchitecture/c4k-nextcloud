@@ -12,8 +12,8 @@
   :resource-paths ["src/main/resources"]
   :repositories [["snapshots" :clojars]
                  ["releases" :clojars]]
-  :deploy-repositories [["snapshots" :clojars]
-                        ["releases" :clojars]]
+  :deploy-repositories [["snapshots" {:sign-releases false :url "https://clojars.org/repo"}]
+                        ["releases" {:sign-releases false :url "https://clojars.org/repo"}]]
   :profiles {:test {:test-paths ["src/test/cljc"]
                     :resource-paths ["src/test/resources"]
                     :dependencies [[dda/data-test "0.1.1"]]}
