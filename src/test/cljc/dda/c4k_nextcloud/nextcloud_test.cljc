@@ -66,7 +66,7 @@
                  :hostPath {:path "xx"}}}
          (cut/generate-persistent-volume {:nextcloud-data-volume-path "xx"}))))
 
-(deftest should-generate-persistent-volume-claim
+(deftest should-generate-pvc
   (is (= {:apiVersion "v1"
           :kind "PersistentVolumeClaim"
           :metadata {:name "cloud-pvc"
