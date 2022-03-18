@@ -11,6 +11,4 @@ spec:
   resources:
     requests:
       storage: REPLACEME
-  selector:
-    matchLabels:
-      app.kubernetes.io/application: cloud
+      
