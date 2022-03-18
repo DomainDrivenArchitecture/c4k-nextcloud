@@ -5,7 +5,8 @@
   [dda.c4k-common.yaml :as yaml]
   [dda.c4k-common.base64 :as b64]
   [dda.c4k-common.predicate :as cp]
-  [dda.c4k-common.common :as cm]))
+  [dda.c4k-common.common :as cm]
+  [dda.c4k-common.postgres :as postgres]))
 
 (s/def ::fqdn any?) ; TODO: Fix fqdn-string? to include localhost
 (s/def ::issuer cp/letsencrypt-issuer?)
@@ -13,6 +14,13 @@
 (s/def ::nextcloud-data-volume-path string?)
 (s/def ::nextcloud-admin-user cp/bash-env-string?)
 (s/def ::nextcloud-admin-password cp/bash-env-string?)
+(s/def ::pvc-storage-class-name cp/pvc-storage-class-name?)
+(s/def ::pv-storage-size-gb pos?)
+
+(def config? (s/keys :req-un [::fqdn]
+                     :opt-un [::issuer ::nextcloud-data-volume-path
+                              ::postgres/postgres-data-volume-path ::restic-repository
+                              ::pv-storage-size-gb ::pvc-storage-class-name]))
 
 #?(:cljs
    (defmethod yaml/load-resource :nextcloud [resource-name]
@@ -57,9 +65,15 @@
      ;(assoc-in [:spec :capacity :storage] (str storage-size "Gi"))
      )))
 
-(defn generate-pvc []
-  (let [{:keys [nextcloud-data-volume-path storage-size]} config])
-  (yaml/from-string (yaml/load-resource "nextcloud/pvc.yaml")))
+(defn-spec generate-pvc cp/map-or-seq?
+  [config config?]
+  (let [{:keys [pv-storage-size-gb pvc-storage-class-name]
+         :or {pv-storage-size-gb 50
+              pvc-storage-class-name :manual}} config]
+    (->
+     (yaml/from-string (yaml/load-resource "nextcloud/pvc.yaml"))
+     (assoc-in [:spec :resources :requests :storage] (str pv-storage-size-gb "Gi"))
+     (assoc-in [:spec :storageClassName] (name pvc-storage-class-name)))))
 
 (defn generate-service []
   (yaml/from-string (yaml/load-resource "nextcloud/service.yaml")))

@@ -11,10 +11,7 @@
 
 (def config-defaults {:issuer :staging})
 
-(def config? (s/keys :req-un [::nextcloud/fqdn]
-                     :opt-un [::nextcloud/issuer ::nextcloud/nextcloud-data-volume-path
-                              ::postgres/postgres-data-volume-path ::restic-repository
-                              ::nextcloud/storage-size]))
+
 
 (def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
                             ::nextcloud/nextcloud-admin-user ::nextcloud/nextcloud-admin-password
@@ -24,7 +21,7 @@
 
 
 (defn-spec k8s-objects any?
-  [config (s/merge config? auth?)]
+  [config (s/merge nextcloud/config? auth?)]
   (let [storage-class (if (contains? config :postgres-data-volume-path) :manual :local-path)]
     (into
      []
@@ -51,7 +48,7 @@
                 (yaml/to-string (backup/generate-backup-restore-deployment config))])))))
 
 (defn-spec generate any?
-  [my-config config?
+  [my-config nextcloud/config?
    my-auth auth?]
   (let [resulting-config (merge config-defaults my-config my-auth)]
     (cs/join
