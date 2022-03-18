@@ -5,7 +5,8 @@
    [clojure.string :as cs]
    [clojure.tools.reader.edn :as edn]
    [expound.alpha :as expound]
-   [dda.c4k-nextcloud.core :as core]))
+   [dda.c4k-nextcloud.core :as core]
+   [dda.c4k-nextcloud.nextcloud :as nextcloud]))
 
 (def usage
   "usage:
@@ -22,7 +23,7 @@
 
 (defn expound-config
   [config]
-  (expound/expound ::core/config config))
+  (expound/expound ::nextcloud/config config))
 
 (defn invalid-args-msg 
   [spec args]
@@ -43,14 +44,14 @@
                   auth-str (slurp auth)
                   config-edn (edn/read-string config-str)
                   auth-edn (edn/read-string auth-str)
-                  config-valid? (s/valid? core/config? config-edn)
+                  config-valid? (s/valid? nextcloud/config? config-edn)
                   auth-valid? (s/valid? core/auth? auth-edn)]
               (if (and config-valid? auth-valid?)
                 (println (core/generate config-edn auth-edn))
                 (do
                   (when (not config-valid?) 
                     (println 
-                     (expound/expound-str core/config? config-edn {:print-specs? false})))
+                     (expound/expound-str nextcloud/config? config-edn {:print-specs? false})))
                   (when (not auth-valid?) 
                     (println 
                      (expound/expound-str core/auth? auth-edn {:print-specs? false})))))))))))
