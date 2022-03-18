@@ -52,4 +52,17 @@
                                  :aws-secret-access-key "aws-secret"
                                  :restic-password "restic-pw"})
                [0])
-       "max_connections = 700")))
+       "max_connections = 700"))
+  (is (st/includes? 
+       (get-in (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
+                                 :postgres-db-user "nextcloud"
+                                 :postgres-db-password "nextcloud-db-password"
+                                 :nextcloud-admin-user "cloudadmin"
+                                 :nextcloud-admin-password "cloudpassword"
+                                 :issuer :prod
+                                 :aws-access-key-id "aws-id"
+                                 :aws-secret-access-key "aws-secret"
+                                 :restic-password "restic-pw"})
+               [6])
+       "storageClassName: local-path"))
+)
