@@ -4,7 +4,7 @@ stages:
   - security
   - upload
   - image
-  - integrationtest
+  #- integrationtest
 
 services:
   - docker:19.03.12-dind
@@ -130,7 +130,7 @@ backup-image-test-publish:
   script:
     - cd infrastructure/docker-backup && pyb image test publish
 
-nextcloud-integrationtest:
+.nextcloud-integrationtest:
   stage: integrationtest
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.7.1-kube-1.20.11-alpine-3.14
   services:
