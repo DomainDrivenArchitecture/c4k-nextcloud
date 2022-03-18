@@ -72,8 +72,7 @@
                     :labels {:app.kubernetes.io/application "cloud"}}
           :spec {:storageClassName "local-path"
                   :accessModes ["ReadWriteOnce"]
-                  :resources {:requests {:storage "50Gi"}}
-                  :selector {:matchLabels {:app.kubernetes.io/application "cloud"}}}}
+                  :resources {:requests {:storage "50Gi"}}}}
          (cut/generate-pvc {:pv-storage-size-gb 50 :pvc-storage-class-name "local-path"}))))
  
 (deftest should-generate-deployment
