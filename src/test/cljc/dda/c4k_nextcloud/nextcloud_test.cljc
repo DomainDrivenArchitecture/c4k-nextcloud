@@ -33,14 +33,13 @@
           :metadata
           {:name "ingress-cloud"
            :annotations
-           {:cert-manager.io/cluster-issuer
-            "letsencrypt-staging-issuer"
-            :nginx.ingress.kubernetes.io/proxy-body-size "256m"
-            :nginx.ingress.kubernetes.io/ssl-redirect "true"
-            :nginx.ingress.kubernetes.io/rewrite-target "/"
-            :nginx.ingress.kubernetes.io/proxy-connect-timeout "300"
-            :nginx.ingress.kubernetes.io/proxy-send-timeout "300"
-            :nginx.ingress.kubernetes.io/proxy-read-timeout "300"}
+           {:cert-manager.io/cluster-issuer "letsencrypt-staging-issuer"
+            :ingress.kubernetes.io/proxy-body-size "256m"
+            :ingress.kubernetes.io/ssl-redirect "true"
+            :ingress.kubernetes.io/rewrite-target "/"
+            :ingress.kubernetes.io/proxy-connect-timeout "300"
+            :ingress.kubernetes.io/proxy-send-timeout "300"
+            :ingress.kubernetes.io/proxy-read-timeout "300"}
            :namespace "default"}
           :spec
           {:tls [{:hosts ["xx"], :secretName "cloud-secret"}]

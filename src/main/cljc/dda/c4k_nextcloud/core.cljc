@@ -11,14 +11,10 @@
 
 (def config-defaults {:issuer :staging})
 
-
-
 (def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
                             ::nextcloud/nextcloud-admin-user ::nextcloud/nextcloud-admin-password
                             ::aws-access-key-id ::aws-secret-access-key
                             ::restic-password]))
-
-
 
 (defn-spec k8s-objects any?
   [config (s/merge nextcloud/config? auth?)]
