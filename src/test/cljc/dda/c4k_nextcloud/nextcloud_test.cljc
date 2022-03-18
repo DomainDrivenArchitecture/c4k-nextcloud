@@ -67,12 +67,14 @@
          (cut/generate-persistent-volume {:nextcloud-data-volume-path "xx"}))))
 
 (deftest should-generate-persistent-volume-claim
-  (is (= {([:apiVersion "v1"] 
-           [:kind "PersistentVolumeClaim"] 
-           [:metadata #ordered/map 
-            ([:name "cloud-pvc"] 
-             [:labels #ordered/map 
-              ([:app.kubernetes.io/application "cloud"])])] [:spec #ordered/map ([:storageClassName "manual"] [:accessModes ["ReadWriteOnce"]] [:resources #ordered/map ([:requests #ordered/map ([:storage "50Gi"])])] [:selector #ordered/map ([:matchLabels #ordered/map ([:app.kubernetes.io/application "cloud"])])])])}
+  (is (= {:apiVersion "v1"
+          :kind "PersistentVolumeClaim"
+          :metadata {:name "cloud-pvc"
+                    :labels {:app.kubernetes.io/application "cloud"}}
+          :spec {:storageClassName "manual"
+                  :accessModes ["ReadWriteOnce"]
+                  :resources {:requests {:storage "50Gi"}}
+                  :selector {:matchLabels {:app.kubernetes.io/application "cloud"}}}}
          (cut/generate-pvc {:nextcloud-data-volume-path "xx"}))))
 
 (deftest should-generate-deployment
