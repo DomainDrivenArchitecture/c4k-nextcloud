@@ -74,26 +74,8 @@
                   :accessModes ["ReadWriteOnce"]
                   :resources {:requests {:storage "50Gi"}}
                   :selector {:matchLabels {:app.kubernetes.io/application "cloud"}}}}
-         (cut/generate-pvc {})))
-  (is (= {:apiVersion "v1"
-          :kind "PersistentVolumeClaim"
-          :metadata {:name "cloud-pvc"
-                     :labels {:app.kubernetes.io/application "cloud"}}
-          :spec {:storageClassName "manual"
-                 :accessModes ["ReadWriteOnce"]
-                 :resources {:requests {:storage "50Gi"}}
-                 :selector {:matchLabels {:app.kubernetes.io/application "cloud"}}}}
-         (cut/generate-pvc {:nextcloud-data-volume-path "xx"})))
-  (is (= {:apiVersion "v1"
-          :kind "PersistentVolumeClaim"
-          :metadata {:name "cloud-pvc"
-                     :labels {:app.kubernetes.io/application "cloud"}}
-          :spec {:storageClassName "manual"
-                 :accessModes ["ReadWriteOnce"]
-                 :resources {:requests {:storage "500Gi"}}
-                 :selector {:matchLabels {:app.kubernetes.io/application "cloud"}}}}
-         (cut/generate-pvc {:pv-storage-size-gb 500}))))
-
+         (cut/generate-pvc {:pv-storage-size-gb 50 :pvc-storage-class-name "local-path"}))))
+ 
 (deftest should-generate-deployment
   (is (= {:apiVersion "apps/v1"
           :kind "Deployment"
