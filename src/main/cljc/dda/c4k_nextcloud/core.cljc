@@ -18,7 +18,10 @@
 
 (defn-spec k8s-objects any?
   [config (s/merge nextcloud/config? auth?)]
-  (let [storage-class (if (contains? config :postgres-data-volume-path) :manual :local-path)]
+  (let [postgres-storage-class (if (contains? config :postgres-data-volume-path) :manual :local-path)
+        nextcloud-storage-class (if (contains? config :nextcloud-data-volume-path) :manual :local-path)
+        nextcloud-default-storage-config {:pvc-storage-class-name nextcloud-storage-class :pv-storage-size-gb 200}]
+    
     (into
      []
      (concat [(yaml/to-string (postgres/generate-config {:postgres-size :8gb}))
@@ -26,13 +29,13 @@
              (when (contains? config :postgres-data-volume-path)
                [(yaml/to-string (postgres/generate-persistent-volume config))])
              [(yaml/to-string (postgres/generate-pvc {:pv-storage-size-gb 50
-                                                      :pvc-storage-class-name storage-class}))
+                                                      :pvc-storage-class-name postgres-storage-class}))
               (yaml/to-string (postgres/generate-deployment))
               (yaml/to-string (postgres/generate-service))]
              (when (contains? config :nextcloud-data-volume-path)
-               [(yaml/to-string (nextcloud/generate-persistent-volume config))])
+               [(yaml/to-string (nextcloud/generate-persistent-volume (merge nextcloud-default-storage-config config)))])
              [(yaml/to-string (nextcloud/generate-secret config))
-              (yaml/to-string (nextcloud/generate-pvc config))
+              (yaml/to-string (nextcloud/generate-pvc (merge nextcloud-default-storage-config config)))
               (yaml/to-string (nextcloud/generate-deployment config))
               (yaml/to-string (nextcloud/generate-service))
               (yaml/to-string (nextcloud/generate-certificate config))

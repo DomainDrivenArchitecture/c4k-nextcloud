@@ -69,9 +69,7 @@
 
 (defn-spec generate-pvc cp/map-or-seq?
   [config config?]
-  (let [{:keys [pv-storage-size-gb pvc-storage-class-name]
-         :or {pv-storage-size-gb 50
-              pvc-storage-class-name :manual}} config]
+  (let [{:keys [pv-storage-size-gb pvc-storage-class-name]} config]
     (->
      (yaml/from-string (yaml/load-resource "nextcloud/pvc.yaml"))
      (assoc-in [:spec :resources :requests :storage] (str pv-storage-size-gb "Gi"))
