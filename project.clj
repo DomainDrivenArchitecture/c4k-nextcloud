@@ -38,4 +38,9 @@
                       "-jar" "target/uberjar/c4k-nextcloud-standalone.jar"
                       "-H:ResourceConfigurationFiles=graalvm-resource-config.json"
                       "-H:Log=registerResource"
-                      "-H:Name=target/graalvm/${:name}"]})
+                      "-H:Name=target/graalvm/${:name}"]
+            "install-local" ["shell" "sudo"
+                             "install"
+                             "-m=755"
+                             "target/uberjar/c4k-nextcloud-standalone.jar"
+                             "/usr/local/bin/c4k-nextcloud-standalone.jar"]})
