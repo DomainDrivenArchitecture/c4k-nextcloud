@@ -58,6 +58,7 @@
      )))
 
 (defn generate-pvc []
+  (let [{:keys [nextcloud-data-volume-path storage-size]} config])
   (yaml/from-string (yaml/load-resource "nextcloud/pvc.yaml")))
 
 (defn generate-service []

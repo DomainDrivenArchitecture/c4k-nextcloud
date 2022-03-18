@@ -4,8 +4,8 @@
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
   :dependencies [[org.clojure/clojure "1.10.3"]
-                 [org.clojure/tools.reader "1.3.4"]
-                 [org.domaindrivenarchitecture/c4k-common-clj "1.0.0"]]
+                 [org.clojure/tools.reader "1.3.6"]
+                 [org.domaindrivenarchitecture/c4k-common-clj "1.1.0"]]
   :target-path "target/%s/"
   :source-paths ["src/main/cljc"
                  "src/main/clj"]
