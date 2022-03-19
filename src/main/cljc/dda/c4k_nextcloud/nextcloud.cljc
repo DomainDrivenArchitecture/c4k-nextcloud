@@ -10,7 +10,7 @@
   [dda.c4k-common.common :as cm]
   [dda.c4k-common.postgres :as postgres]))
 
-(s/def ::fqdn any?) ; TODO: Fix fqdn-string? to include localhost
+(s/def ::fqdn cp/fqdn-string?)
 (s/def ::issuer cp/letsencrypt-issuer?)
 (s/def ::restic-repository string?)
 (s/def ::nextcloud-data-volume-path string?)
@@ -38,7 +38,7 @@
 
 (defn generate-certificate [config]
   (let [{:keys [fqdn issuer]} config
-        letsencrypt-issuer (str "letsencrypt-" (name issuer) "-issuer")]
+        letsencrypt-issuer (name issuer)]
     (->
      (yaml/from-string (yaml/load-resource "nextcloud/certificate.yaml"))
      (assoc-in [:spec :commonName] fqdn)
@@ -53,7 +53,7 @@
 (defn generate-ingress [config]
   (let [{:keys [fqdn issuer]
          :or {issuer :staging}} config
-        letsencrypt-issuer (str "letsencrypt-" (name issuer) "-issuer")]
+        letsencrypt-issuer (name issuer)]
     (->
      (yaml/from-string (yaml/load-resource "nextcloud/ingress.yaml"))
      (assoc-in [:metadata :annotations :cert-manager.io/cluster-issuer] letsencrypt-issuer)

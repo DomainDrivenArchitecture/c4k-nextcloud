@@ -9,5 +9,5 @@ spec:
   dnsNames:
   - fqdn
   issuerRef:
-    name: letsencrypt-staging-issuer
+    name: staging
     kind: ClusterIssuer
