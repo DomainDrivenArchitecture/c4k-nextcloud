@@ -21,7 +21,7 @@
 ## Manual backup the restic repository for the first time
 
 1. Scale Cloud deployment down:   
-  `kubectl scale deployment cloud --replicas=0`
+  `kubectl scale deployment cloud-deployment --replicas=0`
 1. Scale backup-restore deployment up:   
    `kubectl scale deployment backup-restore --replicas=1`
 1. exec into pod and execute restore pod   
@@ -29,13 +29,13 @@
 1. Scale backup-restore deployment down:   
   `kubectl scale deployment backup-restore --replicas=0`
 1. Scale Cloud deployment up:   
-   `kubectl scale deployment cloud --replicas=1`
+   `kubectl scale deployment cloud-deployment --replicas=1`
 
 
 ## Manual restore
 
 1. Scale Cloud deployment down:   
-  `kubectl scale deployment cloud --replicas=0`
+  `kubectl scale deployment cloud-deployment --replicas=0`
 1. Scale backup-restore deployment up:   
    `kubectl scale deployment backup-restore --replicas=1`
 1. apply backup-and-restore pod:   
@@ -45,4 +45,4 @@
 1. Scale backup-restore deployment down:   
   `kubectl scale deployment backup-restore --replicas=0`
 1. Scale Cloud deployment up:   
-   `kubectl scale deployment cloud --replicas=1`
+   `kubectl scale deployment cloud-deployment --replicas=1`
