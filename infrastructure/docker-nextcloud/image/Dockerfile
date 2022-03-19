@@ -1,4 +1,4 @@
-FROM nextcloud:22
+FROM nextcloud:19
 
 # Prepare Entrypoint Script
 ADD resources /tmp
