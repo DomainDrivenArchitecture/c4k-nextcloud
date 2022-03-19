@@ -9,8 +9,6 @@
 
 ## Manual init the restic repository for the first time
 
-1. apply backup-and-restore pod:   
-   `kubectl apply -f src/main/resources/backup/backup-restore-deployment.yaml`
 1. Scale backup-restore deployment up:   
    `kubectl scale deployment backup-restore --replicas=1`
 1. exec into pod and execute restore pod   
@@ -24,12 +22,12 @@
 
 1. Scale Cloud deployment down:   
   `kubectl scale deployment cloud --replicas=0`
-1. apply backup-and-restore pod:   
-  `kubectl apply -f src/main/resources/backup/backup-restore-deployment.yaml`
+1. Scale backup-restore deployment up:   
+   `kubectl scale deployment backup-restore --replicas=1`
 1. exec into pod and execute restore pod   
    `kubectl exec -it backup-restore -- /usr/local/bin/backup.sh`
-1. remove backup-and-restore pod:   
-   `kubectl delete pod backup-restore`
+1. Scale backup-restore deployment down:   
+  `kubectl scale deployment backup-restore --replicas=0`
 1. Scale Cloud deployment up:   
    `kubectl scale deployment cloud --replicas=1`
 
@@ -38,13 +36,13 @@
 
 1. Scale Cloud deployment down:   
   `kubectl scale deployment cloud --replicas=0`
+1. Scale backup-restore deployment up:   
+   `kubectl scale deployment backup-restore --replicas=1`
 1. apply backup-and-restore pod:   
   `kubectl apply -f src/main/resources/backup/backup-restore-deployment.yaml`
 1. exec into pod and execute restore pod   
    `kubectl exec -it backup-restore -- /usr/local/bin/restore.sh`
-1. remove backup-and-restore pod:   
-   `kubectl delete pod backup-restore`
+1. Scale backup-restore deployment down:   
+  `kubectl scale deployment backup-restore --replicas=0`
 1. Scale Cloud deployment up:   
    `kubectl scale deployment cloud --replicas=1`
-1. Update index of Cloud:   
-   Cloud > Settings > System > Advanced > Indexing

@@ -67,9 +67,6 @@ spec:
         - name: cloud-secret-volume
           mountPath: /var/run/secrets/cloud-secrets
           readOnly: true
-        - name: localstack-secret-volume
-          mountPath: /var/run/secrets/localstack-secrets
-          readOnly: true
       volumes:
       - name: cloud-data-volume
         persistentVolumeClaim:
@@ -80,6 +77,3 @@ spec:
       - name: backup-secret-volume
         secret:
           secretName: backup-secret
-      - name: localstack-secret-volume
-        secret:
-          secretName: localstack-secret
