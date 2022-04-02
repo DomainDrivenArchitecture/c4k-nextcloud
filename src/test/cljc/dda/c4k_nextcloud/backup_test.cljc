@@ -30,8 +30,8 @@
           :metadata {:name "cloud-backup", :labels {:app.kubernetes.part-of "cloud"}}
           :spec
           {:schedule "10 23 * * *"
-           :successfulJobsHistoryLimit 0
-           :failedJobsHistoryLimit 0
+           :successfulJobsHistoryLimit 1
+           :failedJobsHistoryLimit 1
            :jobTemplate
            {:spec
             {:template
@@ -42,9 +42,20 @@
                  :imagePullPolicy "IfNotPresent"
                  :command ["/entrypoint.sh"]
                  :env
-                 [{:name "POSTGRES_USER_FILE", :value "/var/run/secrets/cloud-secrets/postgres-user"}
-                  {:name "POSTGRES_DB_FILE", :value "/var/run/secrets/cloud-secrets/postgres-db"}
-                  {:name "POSTGRES_PASSWORD_FILE", :value "/var/run/secrets/cloud-secrets/postgres-password"}
+                 [{:valueFrom
+                   {:secretKeyRef
+                    {:name "postgres-secret",
+                     :key "postgres-user"}},
+                   :name "POSTGRES_USER"}
+                  {:valueFrom
+                   {:secretKeyRef
+                    {:name "postgres-secret",
+                     :key "postgres-password"}},
+                   :name "POSTGRES_PASSWORD"}
+                  {:valueFrom
+                   {:configMapKeyRef
+                    {:name "postgres-config", :key "postgres-db"}},
+                   :name "POSTGRES_DB"}
                   {:name "POSTGRES_HOST", :value "postgresql-service:5432"}
                   {:name "POSTGRES_SERVICE", :value "postgresql-service"}
                   {:name "POSTGRES_PORT", :value "5432"}
