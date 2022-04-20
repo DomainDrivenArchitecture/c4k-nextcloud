@@ -9,7 +9,7 @@
   [dda.c4k-nextcloud.nextcloud :as nextcloud]
   [dda.c4k-nextcloud.backup :as backup]))
 
-(def config-defaults {:issuer :staging})
+(def config-defaults {:issuer "staging"})
 
 (def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
                             ::nextcloud/nextcloud-admin-user ::nextcloud/nextcloud-admin-password
