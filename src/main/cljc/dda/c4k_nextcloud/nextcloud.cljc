@@ -10,14 +10,8 @@
   [dda.c4k-common.common :as cm]
   [dda.c4k-common.postgres :as postgres]))
 
-; TODO: Replace method in c4k-common.predicate and update all c4k modules.
-(defn letsencrypt-issuer?
-  [input]
-  (contains? #{"prod" "staging"} input))
-; TODO: Remove (name ...) function calls, when issuer is no longer a keyword (also in c4k-common)
-
 (s/def ::fqdn cp/fqdn-string?)
-(s/def ::issuer letsencrypt-issuer?) ;cp/letsencrypt-issuer?
+(s/def ::issuer cp/letsencrypt-issuer?)
 (s/def ::restic-repository string?)
 (s/def ::nextcloud-data-volume-path string?)
 (s/def ::nextcloud-admin-user cp/bash-env-string?)
@@ -44,7 +38,7 @@
 
 (defn generate-certificate [config]
   (let [{:keys [fqdn issuer]} config
-        letsencrypt-issuer (name issuer)]
+        letsencrypt-issuer issuer]
     (->
      (yaml/from-string (yaml/load-resource "nextcloud/certificate.yaml"))
      (assoc-in [:spec :commonName] fqdn)
@@ -59,7 +53,7 @@
 (defn generate-ingress [config]
   (let [{:keys [fqdn issuer]
          :or {issuer "staging"}} config
-        letsencrypt-issuer (name issuer)]
+        letsencrypt-issuer issuer]
     (->
      (yaml/from-string (yaml/load-resource "nextcloud/ingress.yaml"))
      (assoc-in [:metadata :annotations :cert-manager.io/cluster-issuer] letsencrypt-issuer)
