@@ -5,6 +5,7 @@
    [clojure.string :as cs]
    [clojure.tools.reader.edn :as edn]
    [expound.alpha :as expound]
+   [dda.c4k-common.yaml :as yaml]
    [dda.c4k-nextcloud.core :as core]
    [dda.c4k-nextcloud.nextcloud :as nextcloud]))
 
@@ -42,16 +43,18 @@
             :default
             (let [config-str (slurp config)
                   auth-str (slurp auth)
-                  config-edn (edn/read-string config-str)
-                  auth-edn (edn/read-string auth-str)
-                  config-valid? (s/valid? nextcloud/config? config-edn)
-                  auth-valid? (s/valid? core/auth? auth-edn)]
+                  config-parse-fn (if (yaml/is-yaml? config) yaml/from-string edn/read-string)
+                  auth-parse-fn (if (yaml/is-yaml? auth) yaml/from-string edn/read-string)
+                  parsed-config (config-parse-fn config-str)
+                  parsed-auth (auth-parse-fn auth-str)
+                  config-valid? (s/valid? nextcloud/config? parsed-config)
+                  auth-valid? (s/valid? core/auth? parsed-auth)]
               (if (and config-valid? auth-valid?)
-                (println (core/generate config-edn auth-edn))
+                (println (core/generate parsed-config parsed-auth))
                 (do
                   (when (not config-valid?) 
                     (println 
-                     (expound/expound-str nextcloud/config? config-edn {:print-specs? false})))
+                     (expound/expound-str nextcloud/config? parsed-config {:print-specs? false})))
                   (when (not auth-valid?) 
                     (println 
-                     (expound/expound-str core/auth? auth-edn {:print-specs? false})))))))))))
+                     (expound/expound-str core/auth? parsed-auth {:print-specs? false})))))))))))

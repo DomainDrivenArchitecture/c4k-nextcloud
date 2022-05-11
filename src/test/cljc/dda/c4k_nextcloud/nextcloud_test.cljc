@@ -25,7 +25,7 @@
            :dnsNames ["xx"]
            :issuerRef
            {:name "prod", :kind "ClusterIssuer"}}}
-         (cut/generate-certificate {:fqdn "xx" :issuer :prod}))))
+         (cut/generate-certificate {:fqdn "xx" :issuer "prod"}))))
 
 (deftest should-generate-ingress
   (is (= {:apiVersion "networking.k8s.io/v1"

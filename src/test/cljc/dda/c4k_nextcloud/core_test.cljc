@@ -13,7 +13,7 @@
                                   :postgres-db-password "nextcloud-db-password"
                                   :nextcloud-admin-user "cloudadmin"
                                   :nextcloud-admin-password "cloudpassword"
-                                  :issuer :prod
+                                  :issuer "prod"
                                   :nextcloud-data-volume-path "/var/nextcloud"
                                   :postgres-data-volume-path "/var/postgres"
                                   :aws-access-key-id "aws-id"
@@ -26,7 +26,7 @@
                                   :postgres-db-password "nextcloud-db-password"
                                   :nextcloud-admin-user "cloudadmin"
                                   :nextcloud-admin-password "cloudpassword"
-                                  :issuer :prod
+                                  :issuer "prod"
                                   :aws-access-key-id "aws-id"
                                   :aws-secret-access-key "aws-secret"
                                   :restic-password "restic-pw"
@@ -37,7 +37,7 @@
                                   :postgres-db-password "nextcloud-db-password"
                                   :nextcloud-admin-user "cloudadmin"
                                   :nextcloud-admin-password "cloudpassword"
-                                  :issuer :prod
+                                  :issuer "prod"
                                   :aws-access-key-id "aws-id"
                                   :aws-secret-access-key "aws-secret"
                                   :restic-password "restic-pw"}))))
@@ -47,7 +47,7 @@
                                  :postgres-db-password "nextcloud-db-password"
                                  :nextcloud-admin-user "cloudadmin"
                                  :nextcloud-admin-password "cloudpassword"
-                                 :issuer :prod
+                                 :issuer "prod"
                                  :aws-access-key-id "aws-id"
                                  :aws-secret-access-key "aws-secret"
                                  :restic-password "restic-pw"})
@@ -59,7 +59,7 @@
                                  :postgres-db-password "nextcloud-db-password"
                                  :nextcloud-admin-user "cloudadmin"
                                  :nextcloud-admin-password "cloudpassword"
-                                 :issuer :prod
+                                 :issuer "prod"
                                  :aws-access-key-id "aws-id"
                                  :aws-secret-access-key "aws-secret"
                                  :restic-password "restic-pw"})

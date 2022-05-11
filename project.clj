@@ -1,11 +1,11 @@
-(defproject org.domaindrivenarchitecture/c4k-nextcloud "3.4.2-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/c4k-nextcloud "4.0.0-SNAPSHOT"
   :description "nextcloud c4k-installation package"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [org.clojure/tools.reader "1.3.6"]
-                 [org.domaindrivenarchitecture/c4k-common-clj "1.1.0"]]
+                 [org.domaindrivenarchitecture/c4k-common-clj "2.0.0"]]
   :target-path "target/%s/"
   :source-paths ["src/main/cljc"
                  "src/main/clj"]

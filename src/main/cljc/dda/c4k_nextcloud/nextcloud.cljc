@@ -38,7 +38,7 @@
 
 (defn generate-certificate [config]
   (let [{:keys [fqdn issuer]} config
-        letsencrypt-issuer (name issuer)]
+        letsencrypt-issuer issuer]
     (->
      (yaml/from-string (yaml/load-resource "nextcloud/certificate.yaml"))
      (assoc-in [:spec :commonName] fqdn)
@@ -52,8 +52,8 @@
 
 (defn generate-ingress [config]
   (let [{:keys [fqdn issuer]
-         :or {issuer :staging}} config
-        letsencrypt-issuer (name issuer)]
+         :or {issuer "staging"}} config
+        letsencrypt-issuer issuer]
     (->
      (yaml/from-string (yaml/load-resource "nextcloud/ingress.yaml"))
      (assoc-in [:metadata :annotations :cert-manager.io/cluster-issuer] letsencrypt-issuer)
