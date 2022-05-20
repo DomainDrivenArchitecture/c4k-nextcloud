@@ -7,22 +7,19 @@
   [dda.c4k-common.yaml :as yaml]
   [dda.c4k-common.base64 :as b64]
   [dda.c4k-common.predicate :as cp]
-  [dda.c4k-common.common :as cm]
-  [dda.c4k-common.postgres :as postgres]))
+  [dda.c4k-common.common :as cm]))
 
 (s/def ::fqdn cp/fqdn-string?)
 (s/def ::issuer cp/letsencrypt-issuer?)
 (s/def ::restic-repository string?)
-(s/def ::nextcloud-data-volume-path string?)
 (s/def ::nextcloud-admin-user cp/bash-env-string?)
 (s/def ::nextcloud-admin-password cp/bash-env-string?)
 (s/def ::pvc-storage-class-name cp/pvc-storage-class-name?)
 (s/def ::pv-storage-size-gb pos?)
 
-(def config? (s/keys :req-un [::fqdn]
-                     :opt-un [::issuer ::nextcloud-data-volume-path
-                              ::postgres/postgres-data-volume-path ::restic-repository
-                              ::pv-storage-size-gb ::pvc-storage-class-name]))
+(def strong-config? (s/keys :req-un [::fqdn ::issuer ::pv-storage-size-gb 
+                                       ::pvc-storage-class-name]
+                     :opt-un [::restic-repository]))
 
 #?(:cljs
    (defmethod yaml/load-resource :nextcloud [resource-name]
@@ -30,7 +27,6 @@
        "nextcloud/certificate.yaml" (rc/inline "nextcloud/certificate.yaml")
        "nextcloud/deployment.yaml" (rc/inline "nextcloud/deployment.yaml")
        "nextcloud/ingress.yaml" (rc/inline "nextcloud/ingress.yaml")
-       "nextcloud/persistent-volume.yaml" (rc/inline "nextcloud/persistent-volume.yaml")
        "nextcloud/pvc.yaml" (rc/inline "nextcloud/pvc.yaml")
        "nextcloud/service.yaml" (rc/inline "nextcloud/service.yaml")
        "nextcloud/secret.yaml" (rc/inline "nextcloud/secret.yaml")
@@ -59,16 +55,8 @@
      (assoc-in [:metadata :annotations :cert-manager.io/cluster-issuer] letsencrypt-issuer)
      (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
 
-(defn generate-persistent-volume [config]
-  (let [{:keys [nextcloud-data-volume-path storage-size]} config]
-    (-> 
-     (yaml/from-string (yaml/load-resource "nextcloud/persistent-volume.yaml"))
-     (assoc-in [:spec :hostPath :path] nextcloud-data-volume-path)
-     ;(assoc-in [:spec :capacity :storage] (str storage-size "Gi"))
-     )))
-
 (defn-spec generate-pvc cp/map-or-seq?
-  [config config?]
+  [config (s/keys :req-un [::pv-storage-size-gb ::pvc-storage-class-name])]
   (let [{:keys [pv-storage-size-gb pvc-storage-class-name]} config]
     (->
      (yaml/from-string (yaml/load-resource "nextcloud/pvc.yaml"))

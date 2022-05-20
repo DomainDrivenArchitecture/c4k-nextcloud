@@ -54,17 +54,6 @@
                  {:name "cloud-service", :port {:number 80}}}}]}}]}}
          (cut/generate-ingress {:fqdn "xx"}))))
 
-(deftest should-generate-persistent-volume
-  (is (= {:kind "PersistentVolume"
-          :apiVersion "v1"
-          :metadata {:name "cloud-pv-volume"
-                     :labels {:type "local", :app.kubernetes.io/application "cloud"}}
-          :spec {:storageClassName "manual"
-                 :accessModes ["ReadWriteOnce"]
-                 :capacity {:storage "200Gi"}
-                 :hostPath {:path "xx"}}}
-         (cut/generate-persistent-volume {:nextcloud-data-volume-path "xx"}))))
-
 (deftest should-generate-pvc
   (is (= {:apiVersion "v1"
           :kind "PersistentVolumeClaim"
