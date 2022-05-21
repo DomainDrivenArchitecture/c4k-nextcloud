@@ -24,6 +24,9 @@
                             ::aws-access-key-id ::aws-secret-access-key
                             ::restic-password]))
 
+(s/def ::config config?)
+(s/def ::auth auth?)
+
 (defn-spec k8s-objects any?
   [config (s/merge config? auth?)]
   (let [nextcloud-default-storage-config {:pvc-storage-class-name default-storage-class

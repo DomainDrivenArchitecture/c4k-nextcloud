@@ -21,11 +21,6 @@
                          :args (s/?
                                 (s/cat :config ::filename
                                        :auth ::filename))))
-
-(defn expound-config
-  [config]
-  (expound/expound ::nextcloud/config config))
-
 (defn invalid-args-msg 
   [spec args]
   (s/explain spec args)
@@ -47,14 +42,14 @@
                   auth-parse-fn (if (yaml/is-yaml? auth) yaml/from-string edn/read-string)
                   parsed-config (config-parse-fn config-str)
                   parsed-auth (auth-parse-fn auth-str)
-                  config-valid? (s/valid? nextcloud/config? parsed-config)
-                  auth-valid? (s/valid? core/auth? parsed-auth)]
+                  config-valid? (s/valid? ::core/config parsed-config)
+                  auth-valid? (s/valid? ::core/auth parsed-auth)]
               (if (and config-valid? auth-valid?)
                 (println (core/generate parsed-config parsed-auth))
                 (do
                   (when (not config-valid?) 
                     (println 
-                     (expound/expound-str nextcloud/config? parsed-config {:print-specs? false})))
+                     (expound/expound-str ::core/config parsed-config {:print-specs? false})))
                   (when (not auth-valid?) 
                     (println 
-                     (expound/expound-str core/auth? parsed-auth {:print-specs? false})))))))))))
+                     (expound/expound-str ::core/auth parsed-auth {:print-specs? false})))))))))))
