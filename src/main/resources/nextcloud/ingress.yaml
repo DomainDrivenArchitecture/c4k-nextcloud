@@ -15,7 +15,7 @@ spec:
   tls:
   - hosts:
     - fqdn
-    secretName: cloud-secret
+    secretName: cloud-cert
   rules:
     - host: fqdn
       http:
