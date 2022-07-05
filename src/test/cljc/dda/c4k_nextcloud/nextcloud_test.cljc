@@ -20,8 +20,10 @@
           :kind "Certificate"
           :metadata {:name "cloud-cert", :namespace "default"}
           :spec
-          {:secretName "cloud-secret"
-           :commonName "xx"
+          {:secretName "cloud-cert"
+           :duration "2160h"
+           :renewBefore "360h",
+           :commonName "xx",
            :dnsNames ["xx"]
            :issuerRef
            {:name "prod", :kind "ClusterIssuer"}}}
@@ -42,7 +44,7 @@
             :ingress.kubernetes.io/proxy-read-timeout "300"}
            :namespace "default"}
           :spec
-          {:tls [{:hosts ["xx"], :secretName "cloud-secret"}]
+          {:tls [{:hosts ["xx"], :secretName "cloud-cert"}]
            :rules
            [{:host "xx"
              :http
