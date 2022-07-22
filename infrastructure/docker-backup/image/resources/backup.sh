@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -xo pipefail
+set -o pipefail
 
 function main() {
 
@@ -11,7 +11,8 @@ function main() {
     file_env POSTGRES_DB
     file_env POSTGRES_PASSWORD
     file_env POSTGRES_USER
-    file_env RESTIC_DAYS_TO_KEEP 14
+    file_env RESTIC_DAYS_TO_KEEP 30
+    file_env RESTIC_MONTHS_TO_KEEP 12
 
     backup-roles 'oc_'
     backup-db-dump

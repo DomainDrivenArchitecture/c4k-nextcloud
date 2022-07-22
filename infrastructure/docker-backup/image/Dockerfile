@@ -1,4 +1,4 @@
-FROM domaindrivenarchitecture/dda-backup
+FROM domaindrivenarchitecture/dda-backup:1.0.5
 
 # Prepare Entrypoint Script
 ADD resources /tmp
