@@ -21,6 +21,7 @@ def initialize(project):
     dockerhub_password = environ.get('DOCKERHUB_PASSWORD')
     if not dockerhub_password:
         dockerhub_password = gopass_password_from_path('meissa/web/docker.com')
+    tag = environ.get('CI_COMMIT_TAG')
     if not tag:
         tag = get_tag_from_latest_commit()
     config = create_devops_docker_build_config(
