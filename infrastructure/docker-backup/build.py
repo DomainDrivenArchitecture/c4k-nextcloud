@@ -21,8 +21,10 @@ def initialize(project):
     dockerhub_password = environ.get('DOCKERHUB_PASSWORD')
     if not dockerhub_password:
         dockerhub_password = gopass_password_from_path('meissa/web/docker.com')
+    if not tag:
+        tag = get_tag_from_latest_commit()
     config = create_devops_docker_build_config(
-        stage, PROJECT_ROOT_PATH, MODULE, dockerhub_user, dockerhub_password)
+        stage, PROJECT_ROOT_PATH, MODULE, dockerhub_user, dockerhub_password, docker_publish_tag=tag)
     build = MyBuild(project, config)
     build.initialize_build_dir()
 
