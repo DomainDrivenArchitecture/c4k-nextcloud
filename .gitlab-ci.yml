@@ -36,7 +36,8 @@ test-cljs:
   stage: build_and_test
   script:
     - shadow-cljs compile test
-
+    - node target/node-tests.js
+    
 test-clj:
   <<: *clj
   stage: build_and_test
