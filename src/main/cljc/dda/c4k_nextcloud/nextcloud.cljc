@@ -36,14 +36,14 @@
   (let [{:keys [fqdn issuer]} config
         letsencrypt-issuer issuer]
     (->
-     (yaml/from-string (yaml/load-resource "nextcloud/certificate.yaml"))
+     (yaml/load-as-edn "nextcloud/certificate.yaml")
      (assoc-in [:spec :commonName] fqdn)
      (assoc-in [:spec :dnsNames] [fqdn])
      (assoc-in [:spec :issuerRef :name] letsencrypt-issuer))))
 
 (defn generate-deployment [config]
   (let [{:keys [fqdn]} config]
-    (-> (yaml/from-string (yaml/load-resource "nextcloud/deployment.yaml"))
+    (-> (yaml/load-as-edn "nextcloud/deployment.yaml")
         (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
 
 (defn generate-ingress [config]
@@ -51,7 +51,7 @@
          :or {issuer "staging"}} config
         letsencrypt-issuer issuer]
     (->
-     (yaml/from-string (yaml/load-resource "nextcloud/ingress.yaml"))
+     (yaml/load-as-edn "nextcloud/ingress.yaml")
      (assoc-in [:metadata :annotations :cert-manager.io/cluster-issuer] letsencrypt-issuer)
      (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
 
@@ -59,16 +59,16 @@
   [config (s/keys :req-un [::pv-storage-size-gb ::pvc-storage-class-name])]
   (let [{:keys [pv-storage-size-gb pvc-storage-class-name]} config]
     (->
-     (yaml/from-string (yaml/load-resource "nextcloud/pvc.yaml"))
+     (yaml/load-as-edn "nextcloud/pvc.yaml")
      (assoc-in [:spec :resources :requests :storage] (str pv-storage-size-gb "Gi"))
      (assoc-in [:spec :storageClassName] (name pvc-storage-class-name)))))
 
 (defn generate-service []
-  (yaml/from-string (yaml/load-resource "nextcloud/service.yaml")))
+  (yaml/load-as-edn "nextcloud/service.yaml"))
 
 (defn generate-secret [config]
   (let [{:keys [nextcloud-admin-user nextcloud-admin-password]} config]
     (->
-     (yaml/from-string (yaml/load-resource "nextcloud/secret.yaml"))
+     (yaml/load-as-edn "nextcloud/secret.yaml")
      (cm/replace-key-value :nextcloud-admin-user (b64/encode nextcloud-admin-user))
      (cm/replace-key-value :nextcloud-admin-password (b64/encode nextcloud-admin-password)))))
