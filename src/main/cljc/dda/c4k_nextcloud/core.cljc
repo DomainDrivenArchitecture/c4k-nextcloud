@@ -1,9 +1,9 @@
 (ns dda.c4k-nextcloud.core
  (:require
-  [clojure.string :as cs]
   [clojure.spec.alpha :as s]
   #?(:clj [orchestra.core :refer [defn-spec]]
      :cljs [orchestra.core :refer-macros [defn-spec]])
+  [dda.c4k-common.common :as cm]
   [dda.c4k-common.yaml :as yaml]
   [dda.c4k-common.postgres :as postgres]
   [dda.c4k-nextcloud.nextcloud :as nextcloud]
@@ -13,22 +13,8 @@
 
 (def config-defaults {:issuer "staging"})
 
-(def config? (s/keys :req-un [::nextcloud/fqdn]
-                     :opt-un [::nextcloud/issuer 
-                              ::nextcloud/restic-repository
-                              ::nextcloud/pv-storage-size-gb 
-                              ::nextcloud/pvc-storage-class-name]))
-
-(def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
-                            ::nextcloud/nextcloud-admin-user ::nextcloud/nextcloud-admin-password
-                            ::aws-access-key-id ::aws-secret-access-key
-                            ::restic-password]))
-
-(s/def ::config config?)
-(s/def ::auth auth?)
-
 (defn-spec k8s-objects any?
-  [config (s/merge config? auth?)]
+  [config (s/merge nextcloud/config? nextcloud/auth?)]
   (let [nextcloud-default-storage-config {:pvc-storage-class-name default-storage-class
                                           :pv-storage-size-gb 200}]
     (into
@@ -52,9 +38,9 @@
                 (yaml/to-string (backup/generate-backup-restore-deployment config))])))))
 
 (defn-spec generate any?
-  [my-config config?
-   my-auth auth?]
-  (let [resulting-config (merge config-defaults my-config my-auth)]
-    (cs/join
-     "\n---\n"
-     (k8s-objects resulting-config))))
+  [my-config nextcloud/config?
+   my-auth nextcloud/auth?]
+  (cm/concat-vec
+   (map yaml/to-string
+        (filter #(not (nil? %))
+                (merge config-defaults my-config my-auth)))))

@@ -7,6 +7,7 @@
   [dda.c4k-common.yaml :as yaml]
   [dda.c4k-common.base64 :as b64]
   [dda.c4k-common.predicate :as cp]
+  [dda.c4k-common.postgres :as postgres]
   [dda.c4k-common.common :as cm]))
 
 (s/def ::fqdn cp/fqdn-string?)
@@ -20,6 +21,17 @@
 (def strong-config? (s/keys :req-un [::fqdn ::issuer ::pv-storage-size-gb 
                                        ::pvc-storage-class-name]
                      :opt-un [::restic-repository]))
+
+(def config? (s/keys :req-un [::fqdn]
+                     :opt-un [::issuer
+                              ::restic-repository
+                              ::pv-storage-size-gb
+                              ::pvc-storage-class-name]))
+
+(def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
+                            ::nextcloud-admin-user ::nextcloud-admin-password
+                            ::aws-access-key-id ::aws-secret-access-key
+                            ::restic-password]))
 
 #?(:cljs
    (defmethod yaml/load-resource :nextcloud [resource-name]
