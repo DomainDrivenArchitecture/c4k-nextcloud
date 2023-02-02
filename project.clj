@@ -5,7 +5,7 @@
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/tools.reader "1.3.6"]
-                 [org.domaindrivenarchitecture/c4k-common-clj "2.0.3"]]
+                 [org.domaindrivenarchitecture/c4k-common-clj "6.0.1"]]
   :target-path "target/%s/"
   :source-paths ["src/main/cljc"
                  "src/main/clj"]
