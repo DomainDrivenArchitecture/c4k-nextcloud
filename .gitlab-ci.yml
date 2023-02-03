@@ -49,7 +49,7 @@ test-schema:
   stage: build_and_test
   script:
     - lein uberjar
-    - java -jar target/uberjar/c4k-nextcloud-standalone.jar src/test/resources/nextcloud-test/valid-config.edn src/test/resources/nextcloud-test/valid-auth.edn | kubeconform --kubernetes-version 1.19.0 --strict --skip "Certificate,CronJob" -
+    - java -jar target/uberjar/c4k-nextcloud-standalone.jar src/test/resources/nextcloud-test/valid-config.yaml src/test/resources/nextcloud-test/valid-auth.yaml | kubeconform --kubernetes-version 1.19.0 --strict --skip "Certificate,CronJob" -
   artifacts:
     paths:
       - target/uberjar

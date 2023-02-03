@@ -3,3 +3,7 @@ issuer: "staging"
 nextcloud-data-volume-path: "/var/cloud"
 postgres-data-volume-path: "/var/postgres"
 restic-repository: "s3:s3.amazonaws.com/your-bucket/your-folder"
+mon-cfg:
+  grafana-cloud-url: "url-for-your-prom-remote-write-endpoint"
+  cluster-name: "keycloak"
+  cluster-stage: "test"
