@@ -32,7 +32,11 @@
           :data
           {:nextcloud-admin-user "Y2xvdWRhZG1pbg=="
            :nextcloud-admin-password "Y2xvdWRwYXNzd29yZA=="}}
-         (cut/generate-secret {:fqdn "somefqdn.de"
+         (cut/generate-secret {:postgres-db-user "postgres-user"
+                               :postgres-db-password "postgres-password"
+                               :aws-access-key-id "aws-key"
+                               :aws-secret-access-key "aws-secret-key"
+                               :restic-password "restic-password"
                                :nextcloud-admin-user "cloudadmin"
                                :nextcloud-admin-password "cloudpassword"}))))
 
