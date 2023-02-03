@@ -11,5 +11,5 @@
    nextcloud/config?
    nextcloud/auth?
    core/config-defaults
-   core/generate
+   core/k8s-objects
    cmd-args))

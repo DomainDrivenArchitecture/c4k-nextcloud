@@ -21,21 +21,24 @@
   (let [nextcloud-default-storage-config {:pvc-storage-class-name default-storage-class
                                           :pv-storage-size-gb 200}]
     (map yaml/to-string
-         [(postgres/generate-config {:postgres-size :8gb :db-name "nextcloud"})
-          (postgres/generate-secret auth)
-          (postgres/generate-pvc {:pv-storage-size-gb 50
-                                  :pvc-storage-class-name default-storage-class})
-          (postgres/generate-deployment)
-          (postgres/generate-service)
-          (nextcloud/generate-secret auth)
-          (nextcloud/generate-pvc (merge nextcloud-default-storage-config config))
-          (nextcloud/generate-deployment config)
-          (nextcloud/generate-service)]
-         (nextcloud/generate-ingress-and-cert config)
-         (when (:contains? config :restic-repository)
-           [(backup/generate-config config)
-            (backup/generate-secret auth)
-            (backup/generate-cron)
-            (backup/generate-backup-restore-deployment config)])
-         (when (:contains? config :mon-cfg)
-           (mon/generate (:mon-cfg config) (:mon-auth auth))))))
+         (filter
+          #(not (nil? %))
+          (cm/concat-vec
+           [(postgres/generate-config {:postgres-size :8gb :db-name "nextcloud"})
+            (postgres/generate-secret auth)
+            (postgres/generate-pvc {:pv-storage-size-gb 50
+                                    :pvc-storage-class-name default-storage-class})
+            (postgres/generate-deployment)
+            (postgres/generate-service)
+            (nextcloud/generate-secret auth)
+            (nextcloud/generate-pvc (merge nextcloud-default-storage-config config))
+            (nextcloud/generate-deployment config)
+            (nextcloud/generate-service)]
+           (nextcloud/generate-ingress-and-cert config)
+           (when (:contains? config :restic-repository)
+             [(backup/generate-config config)
+              (backup/generate-secret auth)
+              (backup/generate-cron)
+              (backup/generate-backup-restore-deployment config)])
+           (when (:contains? config :mon-cfg)
+             (mon/generate (:mon-cfg config) (:mon-auth auth))))))))
