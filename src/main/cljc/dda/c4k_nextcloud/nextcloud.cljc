@@ -37,23 +37,11 @@
 #?(:cljs
    (defmethod yaml/load-resource :nextcloud [resource-name]
      (case resource-name
-       "nextcloud/certificate.yaml" (rc/inline "nextcloud/certificate.yaml")
        "nextcloud/deployment.yaml" (rc/inline "nextcloud/deployment.yaml")
-       "nextcloud/ingress.yaml" (rc/inline "nextcloud/ingress.yaml")
        "nextcloud/pvc.yaml" (rc/inline "nextcloud/pvc.yaml")
        "nextcloud/service.yaml" (rc/inline "nextcloud/service.yaml")
        "nextcloud/secret.yaml" (rc/inline "nextcloud/secret.yaml")
        (throw (js/Error. "Undefined Resource!")))))
-
-(defn-spec generate-certificate cp/map-or-seq? 
-  [config config?]
-  (let [{:keys [fqdn issuer]} config
-        letsencrypt-issuer issuer]
-    (->
-     (yaml/load-as-edn "nextcloud/certificate.yaml")
-     (assoc-in [:spec :commonName] fqdn)
-     (assoc-in [:spec :dnsNames] [fqdn])
-     (assoc-in [:spec :issuerRef :name] letsencrypt-issuer))))
 
 (defn-spec generate-deployment cp/map-or-seq? 
   [config config?]
@@ -61,7 +49,7 @@
     (-> (yaml/load-as-edn "nextcloud/deployment.yaml")
         (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
 
-(defn-spec generate-ingress cp/map-or-seq?
+(defn-spec generate-ingress-and-cert cp/map-or-seq?
   [config config?]
   (ing/generate-ingress-and-cert
    (merge
@@ -82,8 +70,8 @@
   (yaml/load-as-edn "nextcloud/service.yaml"))
 
 (defn-spec generate-secret cp/map-or-seq? 
-  [config config?]
-  (let [{:keys [nextcloud-admin-user nextcloud-admin-password]} config]
+  [auth auth?]
+  (let [{:keys [nextcloud-admin-user nextcloud-admin-password]} auth]
     (->
      (yaml/load-as-edn "nextcloud/secret.yaml")
      (cm/replace-key-value :nextcloud-admin-user (b64/encode nextcloud-admin-user))

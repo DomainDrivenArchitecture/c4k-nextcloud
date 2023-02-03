@@ -62,7 +62,7 @@
             :rules
             [{:host "somefqdn.de",
               :http {:paths [{:pathType "Prefix", :path "/", :backend {:service {:name "nextcloud", :port {:number 80}}}}]}}]}}]
-         (cut/generate-ingress {:fqdn "somefqdn.de"}))))
+         (cut/generate-ingress-and-cert {:fqdn "somefqdn.de"}))))
 
 (deftest should-generate-pvc
   (is (= {:apiVersion "v1"
