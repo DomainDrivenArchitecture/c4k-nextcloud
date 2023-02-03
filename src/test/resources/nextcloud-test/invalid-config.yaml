@@ -1,0 +1,5 @@
+fqdns: "cloud.test.meissa-gmbh.de"
+issuer: "none"
+nextcloud-data-volume-path: "/var/cloud"
+postgres-data-volume-path: "/var/postgres"
+restic-repository: "s3:s3.amazonaws.com/your-bucket/your-folder"
