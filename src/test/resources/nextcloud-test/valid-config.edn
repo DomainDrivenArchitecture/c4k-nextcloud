@@ -2,4 +2,7 @@
  :issuer "staging"
  :nextcloud-data-volume-path "/var/cloud"
  :postgres-data-volume-path "/var/postgres"
- :restic-repository "s3:s3.amazonaws.com/your-bucket/your-folder"}
+ :restic-repository "s3:s3.amazonaws.com/your-bucket/your-folder"
+ :mon-cfg {:grafana-cloud-url "url-for-your-prom-remote-write-endpoint"
+           :k3s-cluster-name "jitsi"
+           :k3s-cluster-stage "test"}}

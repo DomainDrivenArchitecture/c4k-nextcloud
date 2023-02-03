@@ -45,15 +45,17 @@ output "ipv4" {
 
 ## k8s minicluster
 
-For k8s installation we use our [dda-k8s-crate](https://github.com/DomainDrivenArchitecture/dda-k8s-crate) with the following configuation:
+For k8s installation we use our [provs](https://repo.prod.meissa.de/meissa/provs) with the following configuation:
 
 
 ```
-{:user :k8s
- :k8s {:external-ip "ip-from-above"}
- :cert-manager :letsencrypt-prod-issuer
- :persistent-dirs ["cloud", "postgres"]
- }
+postgres-db-user: "nextcloud"
+postgres-db-password: "nextcloud-db-password"
+nextcloud-admin-user: "cloudadmin"
+nextcloud-admin-password: "cloudpassword"
+aws-access-key-id: "aws-id"
+aws-secret-access-key: "aws-secret"
+restic-password: "restic-password"
 ```
 
 ## kubectl apply c4k-nextcloud

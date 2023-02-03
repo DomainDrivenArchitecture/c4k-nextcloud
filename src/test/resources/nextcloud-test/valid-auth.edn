@@ -4,4 +4,6 @@
  :nextcloud-admin-password "cloudpassword"
  :aws-access-key-id "aws-id"
  :aws-secret-access-key "aws-secret"
- :restic-password "restic-password"}
+ :restic-password "restic-password"
+ :mon-auth {:grafana-cloud-user "user"
+            :grafana-cloud-password "password"}}

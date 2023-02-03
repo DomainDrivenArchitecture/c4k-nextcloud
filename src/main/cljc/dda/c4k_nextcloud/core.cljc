@@ -8,7 +8,8 @@
   [dda.c4k-common.yaml :as yaml]
   [dda.c4k-common.postgres :as postgres]
   [dda.c4k-nextcloud.nextcloud :as nextcloud]
-  [dda.c4k-nextcloud.backup :as backup]))
+  [dda.c4k-nextcloud.backup :as backup]
+  [dda.c4k-common.monitoring :as mon]))
 
 (def default-storage-class :local-path)
 
@@ -35,4 +36,6 @@
            [(backup/generate-config config)
             (backup/generate-secret auth)
             (backup/generate-cron)
-            (backup/generate-backup-restore-deployment config)]))))
+            (backup/generate-backup-restore-deployment config)])
+         (when (:contains? config :mon-cfg)
+           (mon/generate (:mon-cfg config) (:mon-auth auth))))))
