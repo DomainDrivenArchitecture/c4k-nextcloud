@@ -2,54 +2,21 @@
   (:require
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
-   [clojure.string :as st]
-   [dda.c4k-nextcloud.core :as cut]
-   ))
+   #?(:cljs [shadow-resource :as rc])
+   [clojure.spec.alpha :as s]
+   [dda.c4k-common.yaml :as yaml]
+   [dda.c4k-nextcloud.core :as cut]))
 
-(deftest should-k8s-objects
-  (is (= 15
-         (count (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
-                                  :postgres-db-user "nextcloud"
-                                  :postgres-db-password "nextcloud-db-password"
-                                  :nextcloud-admin-user "cloudadmin"
-                                  :nextcloud-admin-password "cloudpassword"
-                                  :issuer "prod"
-                                  :aws-access-key-id "aws-id"
-                                  :aws-secret-access-key "aws-secret"
-                                  :restic-password "restic-pw"
-                                  :restic-repository "restic-repository"}))))
-  (is (= 11
-         (count (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
-                                  :postgres-db-user "nextcloud"
-                                  :postgres-db-password "nextcloud-db-password"
-                                  :nextcloud-admin-user "cloudadmin"
-                                  :nextcloud-admin-password "cloudpassword"
-                                  :issuer "prod"
-                                  :aws-access-key-id "aws-id"
-                                  :aws-secret-access-key "aws-secret"
-                                  :restic-password "restic-pw"}))))
-  (is (st/includes? 
-       (get-in (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
-                                 :postgres-db-user "nextcloud"
-                                 :postgres-db-password "nextcloud-db-password"
-                                 :nextcloud-admin-user "cloudadmin"
-                                 :nextcloud-admin-password "cloudpassword"
-                                 :issuer "prod"
-                                 :aws-access-key-id "aws-id"
-                                 :aws-secret-access-key "aws-secret"
-                                 :restic-password "restic-pw"})
-               [0])
-       "max_connections = 700"))
-  (is (st/includes? 
-       (get-in (cut/k8s-objects {:fqdn "nextcloud-neu.prod.meissa-gmbh.de"
-                                 :postgres-db-user "nextcloud"
-                                 :postgres-db-password "nextcloud-db-password"
-                                 :nextcloud-admin-user "cloudadmin"
-                                 :nextcloud-admin-password "cloudpassword"
-                                 :issuer "prod"
-                                 :aws-access-key-id "aws-id"
-                                 :aws-secret-access-key "aws-secret"
-                                 :restic-password "restic-pw"})
-               [6])
-       "storageClassName: local-path"))
-)
+#?(:cljs
+   (defmethod yaml/load-resource :nextcloud-test [resource-name]
+     (case resource-name
+       "nextcloud-test/valid-auth.yaml" (rc/inline "nextcloud-test/valid-auth.yaml")
+       "nextcloud-test/valid-config.yaml" (rc/inline "nextcloud-test/valid-config.yaml")
+       "nextcloud-test/invalid-auth.yaml" (rc/inline "nextcloud-test/invalid-auth.yaml")
+       "nextcloud-test/invalid-config.yaml" (rc/inline "nextcloud-test/invalid-config.yaml"))))
+
+(deftest validate-valid-resources
+  (is (s/valid? cut/config? (yaml/load-as-edn "nextcloud-test/valid-config.yaml")))
+  (is (s/valid? cut/auth? (yaml/load-as-edn "nextcloud-test/valid-auth.yaml")))
+  (is (not (s/valid? cut/config? (yaml/load-as-edn "nextcloud-test/invalid-config.yaml"))))
+  (is (not (s/valid? cut/auth? (yaml/load-as-edn "nextcloud-test/invalid-auth.yaml")))))

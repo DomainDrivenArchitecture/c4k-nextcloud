@@ -17,25 +17,24 @@
   [config (s/merge nextcloud/config? nextcloud/auth?)]
   (let [nextcloud-default-storage-config {:pvc-storage-class-name default-storage-class
                                           :pv-storage-size-gb 200}]
-    (into
-     []
-     (concat [(yaml/to-string (postgres/generate-config {:postgres-size :8gb}))
-              (yaml/to-string (postgres/generate-secret config))
-              (yaml/to-string (postgres/generate-pvc {:pv-storage-size-gb 50
-                                                      :pvc-storage-class-name default-storage-class}))
-              (yaml/to-string (postgres/generate-deployment))
-              (yaml/to-string (postgres/generate-service))
-              (yaml/to-string (nextcloud/generate-secret config))
-              (yaml/to-string (nextcloud/generate-pvc (merge nextcloud-default-storage-config config)))
-              (yaml/to-string (nextcloud/generate-deployment config))
-              (yaml/to-string (nextcloud/generate-service))
-              (yaml/to-string (nextcloud/generate-certificate config))
-              (yaml/to-string (nextcloud/generate-ingress config))]
-             (when (contains? config :restic-repository)
-               [(yaml/to-string (backup/generate-config config))
-                (yaml/to-string (backup/generate-secret config))
-                (yaml/to-string (backup/generate-cron))
-                (yaml/to-string (backup/generate-backup-restore-deployment config))])))))
+    (map yaml/to-string
+         [(postgres/generate-config {:postgres-size :8gb})
+          (postgres/generate-secret config)
+          (postgres/generate-pvc {:pv-storage-size-gb 50
+                                                  :pvc-storage-class-name default-storage-class})
+          (postgres/generate-deployment)
+          (postgres/generate-service)
+          (nextcloud/generate-secret config)
+          (nextcloud/generate-pvc (merge nextcloud-default-storage-config config))
+          (nextcloud/generate-deployment config)
+          (nextcloud/generate-service)
+          (nextcloud/generate-certificate config)
+          (nextcloud/generate-ingress config)]
+         (when (:contains? config :restic-repository)
+           [(backup/generate-config config)
+            (backup/generate-secret config)
+            (backup/generate-cron)
+            (backup/generate-backup-restore-deployment config)]))))
 
 (defn-spec generate any?
   [my-config nextcloud/config?
