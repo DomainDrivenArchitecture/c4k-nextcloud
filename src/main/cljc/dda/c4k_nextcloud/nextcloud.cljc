@@ -20,10 +20,6 @@
 (s/def ::pvc-storage-class-name cp/pvc-storage-class-name?)
 (s/def ::pv-storage-size-gb pos?)
 
-(def strong-config? (s/keys :req-un [::fqdn ::issuer ::pv-storage-size-gb 
-                                       ::pvc-storage-class-name]
-                     :opt-un [::restic-repository]))
-
 (def config? (s/keys :req-un [::fqdn]
                      :opt-un [::issuer
                               ::restic-repository
