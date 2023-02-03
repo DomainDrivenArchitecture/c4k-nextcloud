@@ -2,7 +2,7 @@
   (:require
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
-   #?(:cljs [shadow-resource :as rc])
+   #?(:cljs [shadow.resource :as rc])
    [clojure.spec.alpha :as s]
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.yaml :as yaml]
