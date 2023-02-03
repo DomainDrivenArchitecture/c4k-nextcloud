@@ -44,7 +44,8 @@
        "nextcloud/secret.yaml" (rc/inline "nextcloud/secret.yaml")
        (throw (js/Error. "Undefined Resource!")))))
 
-(defn generate-certificate [config]
+(defn-spec generate-certificate cp/map-or-seq? 
+  [config config?]
   (let [{:keys [fqdn issuer]} config
         letsencrypt-issuer issuer]
     (->
@@ -53,12 +54,14 @@
      (assoc-in [:spec :dnsNames] [fqdn])
      (assoc-in [:spec :issuerRef :name] letsencrypt-issuer))))
 
-(defn generate-deployment [config]
+(defn-spec generate-deployment cp/map-or-seq? 
+  [config config?]
   (let [{:keys [fqdn]} config]
     (-> (yaml/load-as-edn "nextcloud/deployment.yaml")
         (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
 
-(defn generate-ingress [config]
+(defn-spec generate-ingress cp/map-or-seq?
+  [config config?]
   (let [{:keys [fqdn issuer]
          :or {issuer "staging"}} config
         letsencrypt-issuer issuer]
@@ -78,7 +81,8 @@
 (defn generate-service []
   (yaml/load-as-edn "nextcloud/service.yaml"))
 
-(defn generate-secret [config]
+(defn-spec generate-secret cp/map-or-seq? 
+  [config config?]
   (let [{:keys [nextcloud-admin-user nextcloud-admin-password]} config]
     (->
      (yaml/load-as-edn "nextcloud/secret.yaml")

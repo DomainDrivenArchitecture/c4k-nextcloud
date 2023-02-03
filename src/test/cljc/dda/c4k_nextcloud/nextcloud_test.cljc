@@ -32,7 +32,8 @@
           :data
           {:nextcloud-admin-user "Y2xvdWRhZG1pbg=="
            :nextcloud-admin-password "Y2xvdWRwYXNzd29yZA=="}}
-         (cut/generate-secret {:nextcloud-admin-user "cloudadmin"
+         (cut/generate-secret {:fqdn "somefqdn.de"
+                               :nextcloud-admin-user "cloudadmin"
                                :nextcloud-admin-password "cloudpassword"}))))
 
 (deftest should-generate-certificate
@@ -43,11 +44,11 @@
           {:secretName "cloud-cert"
            :duration "2160h"
            :renewBefore "360h",
-           :commonName "xx",
-           :dnsNames ["xx"]
+           :commonName "somefqdn.de",
+           :dnsNames ["somefqdn.de"]
            :issuerRef
            {:name "prod", :kind "ClusterIssuer"}}}
-         (cut/generate-certificate {:fqdn "xx" :issuer "prod"}))))
+         (cut/generate-certificate {:fqdn "somefqdn.de" :issuer "prod"}))))
 
 (deftest should-generate-ingress
   (is (= {:apiVersion "networking.k8s.io/v1"
@@ -64,9 +65,9 @@
             :ingress.kubernetes.io/proxy-read-timeout "300"}
            :namespace "default"}
           :spec
-          {:tls [{:hosts ["xx"], :secretName "cloud-cert"}]
+          {:tls [{:hosts ["somefqdn.de"], :secretName "cloud-cert"}]
            :rules
-           [{:host "xx"
+           [{:host "somefqdn.de"
              :http
              {:paths
               [{:path "/"
@@ -74,7 +75,7 @@
                 :backend
                 {:service
                  {:name "cloud-service", :port {:number 80}}}}]}}]}}
-         (cut/generate-ingress {:fqdn "xx"}))))
+         (cut/generate-ingress {:fqdn "somefqdn.de"}))))
 
 (deftest should-generate-pvc
   (is (= {:apiVersion "v1"
@@ -113,11 +114,11 @@
                [{:name "NEXTCLOUD_ADMIN_USER", :valueFrom {:secretKeyRef {:name "cloud-secret", :key "nextcloud-admin-user"}}}
                 {:name "NEXTCLOUD_ADMIN_PASSWORD"
                  :valueFrom {:secretKeyRef {:name "cloud-secret", :key "nextcloud-admin-password"}}}
-                {:name "NEXTCLOUD_TRUSTED_DOMAINS", :value "xx"}
+                {:name "NEXTCLOUD_TRUSTED_DOMAINS", :value "somefqdn.de"}
                 {:name "POSTGRES_USER", :valueFrom {:secretKeyRef {:name "postgres-secret", :key "postgres-user"}}}
                 {:name "POSTGRES_PASSWORD", :valueFrom {:secretKeyRef {:name "postgres-secret", :key "postgres-password"}}}
                 {:name "POSTGRES_DB", :valueFrom {:configMapKeyRef {:name "postgres-config", :key "postgres-db"}}}
                 {:name "POSTGRES_HOST", :value "postgresql-service:5432"}]
                :volumeMounts [{:name "cloud-data-volume", :mountPath "/var/www/html"}]}]
              :volumes [{:name "cloud-data-volume", :persistentVolumeClaim {:claimName "cloud-pvc"}}]}}}}
-         (cut/generate-deployment {:fqdn "xx"}))))
+         (cut/generate-deployment {:fqdn "somefqdn.de"}))))
