@@ -5,6 +5,7 @@
   #?(:clj [orchestra.core :refer [defn-spec]]
      :cljs [orchestra.core :refer-macros [defn-spec]])
   [dda.c4k-common.yaml :as yaml]
+  [dda.c4k-common.ingress :as ing]
   [dda.c4k-common.base64 :as b64]
   [dda.c4k-common.predicate :as cp]
   [dda.c4k-common.postgres :as postgres]
@@ -62,13 +63,12 @@
 
 (defn-spec generate-ingress cp/map-or-seq?
   [config config?]
-  (let [{:keys [fqdn issuer]
-         :or {issuer "staging"}} config
-        letsencrypt-issuer issuer]
-    (->
-     (yaml/load-as-edn "nextcloud/ingress.yaml")
-     (assoc-in [:metadata :annotations :cert-manager.io/cluster-issuer] letsencrypt-issuer)
-     (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
+  (ing/generate-ingress-and-cert
+   (merge
+    {:service-name "nextcloud"
+     :service-port 80
+     :fqdns [(:fqdn config)]}
+    config)))
 
 (defn-spec generate-pvc cp/map-or-seq?
   [config (s/keys :req-un [::pv-storage-size-gb ::pvc-storage-class-name])]

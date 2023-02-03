@@ -21,15 +21,15 @@
          [(postgres/generate-config {:postgres-size :8gb})
           (postgres/generate-secret config)
           (postgres/generate-pvc {:pv-storage-size-gb 50
-                                                  :pvc-storage-class-name default-storage-class})
+                                  :pvc-storage-class-name default-storage-class})
           (postgres/generate-deployment)
           (postgres/generate-service)
           (nextcloud/generate-secret config)
           (nextcloud/generate-pvc (merge nextcloud-default-storage-config config))
           (nextcloud/generate-deployment config)
           (nextcloud/generate-service)
-          (nextcloud/generate-certificate config)
-          (nextcloud/generate-ingress config)]
+          (nextcloud/generate-certificate config)]
+         (nextcloud/generate-ingress config)
          (when (:contains? config :restic-repository)
            [(backup/generate-config config)
             (backup/generate-secret config)

@@ -36,45 +36,32 @@
                                :nextcloud-admin-user "cloudadmin"
                                :nextcloud-admin-password "cloudpassword"}))))
 
-(deftest should-generate-certificate
-  (is (= {:apiVersion "cert-manager.io/v1"
-          :kind "Certificate"
-          :metadata {:name "cloud-cert", :namespace "default"}
-          :spec
-          {:secretName "cloud-cert"
-           :duration "2160h"
-           :renewBefore "360h",
-           :commonName "somefqdn.de",
-           :dnsNames ["somefqdn.de"]
-           :issuerRef
-           {:name "prod", :kind "ClusterIssuer"}}}
-         (cut/generate-certificate {:fqdn "somefqdn.de" :issuer "prod"}))))
-
-(deftest should-generate-ingress
-  (is (= {:apiVersion "networking.k8s.io/v1"
-          :kind "Ingress"
-          :metadata
-          {:name "ingress-cloud"
-           :annotations
-           {:cert-manager.io/cluster-issuer "staging"
-            :ingress.kubernetes.io/proxy-body-size "256m"
-            :ingress.kubernetes.io/ssl-redirect "true"
-            :ingress.kubernetes.io/rewrite-target "/"
-            :ingress.kubernetes.io/proxy-connect-timeout "300"
-            :ingress.kubernetes.io/proxy-send-timeout "300"
-            :ingress.kubernetes.io/proxy-read-timeout "300"}
-           :namespace "default"}
-          :spec
-          {:tls [{:hosts ["somefqdn.de"], :secretName "cloud-cert"}]
-           :rules
-           [{:host "somefqdn.de"
-             :http
-             {:paths
-              [{:path "/"
-                :pathType "Prefix"
-                :backend
-                {:service
-                 {:name "cloud-service", :port {:number 80}}}}]}}]}}
+(deftest should-generate-ingress-and-cert
+  (is (= [{:apiVersion "cert-manager.io/v1",
+           :kind "Certificate",
+           :metadata {:name "nextcloud", :labels {:app.kubernetes.part-of "nextcloud"}, :namespace "default"},
+           :spec
+           {:secretName "nextcloud",
+            :commonName "somefqdn.de",
+            :duration "2160h",
+            :renewBefore "360h",
+            :dnsNames ["somefqdn.de"],
+            :issuerRef {:name "staging", :kind "ClusterIssuer"}}}
+          {:apiVersion "networking.k8s.io/v1",
+           :kind "Ingress",
+           :metadata
+           {:name "nextcloud",
+            :namespace "default",
+            :labels {:app.kubernetes.part-of "nextcloud"},
+            :annotations
+            {:traefik.ingress.kubernetes.io/router.entrypoints "web, websecure",
+             :traefik.ingress.kubernetes.io/router.middlewares "default-redirect-https@kubernetescrd",
+             :metallb.universe.tf/address-pool "public"}},
+           :spec
+           {:tls [{:hosts ["somefqdn.de"], :secretName "nextcloud"}],
+            :rules
+            [{:host "somefqdn.de",
+              :http {:paths [{:pathType "Prefix", :path "/", :backend {:service {:name "nextcloud", :port {:number 80}}}}]}}]}}]
          (cut/generate-ingress {:fqdn "somefqdn.de"}))))
 
 (deftest should-generate-pvc
