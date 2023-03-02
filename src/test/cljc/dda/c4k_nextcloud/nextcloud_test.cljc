@@ -43,9 +43,12 @@
 (deftest should-generate-ingress-and-cert
   (is (= [{:apiVersion "cert-manager.io/v1",
            :kind "Certificate",
-           :metadata {:name "nextcloud", :labels {:app.kubernetes.part-of "nextcloud"}, :namespace "default"},
+           :metadata
+           {:name "cloud-service",
+            :labels {:app.kubernetes.part-of "cloud-service"},
+            :namespace "default"},
            :spec
-           {:secretName "nextcloud",
+           {:secretName "cloud-service",
             :commonName "somefqdn.de",
             :duration "2160h",
             :renewBefore "360h",
@@ -54,18 +57,24 @@
           {:apiVersion "networking.k8s.io/v1",
            :kind "Ingress",
            :metadata
-           {:name "nextcloud",
+           {:name "cloud-service",
             :namespace "default",
-            :labels {:app.kubernetes.part-of "nextcloud"},
+            :labels {:app.kubernetes.part-of "cloud-service"},
             :annotations
             {:traefik.ingress.kubernetes.io/router.entrypoints "web, websecure",
-             :traefik.ingress.kubernetes.io/router.middlewares "default-redirect-https@kubernetescrd",
+             :traefik.ingress.kubernetes.io/router.middlewares
+             "default-redirect-https@kubernetescrd",
              :metallb.universe.tf/address-pool "public"}},
            :spec
-           {:tls [{:hosts ["somefqdn.de"], :secretName "nextcloud"}],
+           {:tls [{:hosts ["somefqdn.de"], :secretName "cloud-service"}],
             :rules
             [{:host "somefqdn.de",
-              :http {:paths [{:pathType "Prefix", :path "/", :backend {:service {:name "nextcloud", :port {:number 80}}}}]}}]}}]
+              :http
+              {:paths
+               [{:pathType "Prefix",
+                 :path "/",
+                 :backend
+                 {:service {:name "cloud-service", :port {:number 80}}}}]}}]}}]
          (cut/generate-ingress-and-cert {:fqdn "somefqdn.de"}))))
 
 (deftest should-generate-pvc
@@ -89,7 +98,7 @@
            {:metadata {:labels {:app "cloud-app", :app.kubernetes.io/name "cloud-pod", :app.kubernetes.io/application "cloud", :redeploy "v3"}}
             :spec
             {:containers
-             [{:image "domaindrivenarchitecture/c4k-cloud"
+             [{:image "domaindrivenarchitecture/c4k-cloud:7.0.0"
                :name "cloud-app"
                :imagePullPolicy "IfNotPresent"
                :ports [{:containerPort 80}]
