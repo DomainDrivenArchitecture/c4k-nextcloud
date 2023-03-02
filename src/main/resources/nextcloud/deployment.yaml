@@ -18,7 +18,7 @@ spec:
         redeploy: v3
     spec:
       containers:
-        - image: domaindrivenarchitecture/c4k-cloud:4.0.3
+        - image: domaindrivenarchitecture/c4k-cloud:7.0.0
           name: cloud-app
           imagePullPolicy: IfNotPresent
           ports:
