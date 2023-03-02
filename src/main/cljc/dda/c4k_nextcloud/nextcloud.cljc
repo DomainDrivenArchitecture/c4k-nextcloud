@@ -52,7 +52,7 @@
   [config config?]
   (ing/generate-ingress-and-cert
    (merge
-    {:service-name "nextcloud"
+    {:service-name "cloud-service"
      :service-port 80
      :fqdns [(:fqdn config)]}
     config)))
