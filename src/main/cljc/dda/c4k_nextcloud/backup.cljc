@@ -23,14 +23,14 @@
 (defn generate-config [my-conf]
   (let [{:keys [restic-repository]} my-conf]
     (->
-     (yaml/from-string (yaml/load-resource "backup/config.yaml"))
+     (yaml/load-as-edn "backup/config.yaml")
      (cm/replace-key-value :restic-repository restic-repository))))
 
 (defn generate-cron []
    (yaml/from-string (yaml/load-resource "backup/cron.yaml")))
 
 (defn generate-backup-restore-deployment [my-conf]
-  (let [backup-restore-yaml (yaml/from-string (yaml/load-resource "backup/backup-restore-deployment.yaml"))]
+  (let [backup-restore-yaml (yaml/load-as-edn "backup/backup-restore-deployment.yaml")]
     (if (and (contains? my-conf :local-integration-test) (= true (:local-integration-test my-conf)))
       (cm/replace-named-value backup-restore-yaml "CERTIFICATE_FILE" "/var/run/secrets/localstack-secrets/ca.crt")
       backup-restore-yaml)))
@@ -38,7 +38,7 @@
 (defn generate-secret [my-auth]
   (let [{:keys [aws-access-key-id aws-secret-access-key restic-password]} my-auth]
     (->
-     (yaml/from-string (yaml/load-resource "backup/secret.yaml"))
+     (yaml/load-as-edn "backup/secret.yaml")
      (cm/replace-key-value :aws-access-key-id (b64/encode aws-access-key-id))
      (cm/replace-key-value :aws-secret-access-key (b64/encode aws-secret-access-key))
      (cm/replace-key-value :restic-password (b64/encode restic-password)))))

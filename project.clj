@@ -1,11 +1,11 @@
-(defproject org.domaindrivenarchitecture/c4k-nextcloud "4.0.4-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/c4k-nextcloud "7.0.1-SNAPSHOT"
   :description "nextcloud c4k-installation package"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/tools.reader "1.3.6"]
-                 [org.domaindrivenarchitecture/c4k-common-clj "2.0.3"]]
+                 [org.domaindrivenarchitecture/c4k-common-clj "6.0.1"]]
   :target-path "target/%s/"
   :source-paths ["src/main/cljc"
                  "src/main/clj"]
@@ -39,8 +39,7 @@
                       "-H:ResourceConfigurationFiles=graalvm-resource-config.json"
                       "-H:Log=registerResource"
                       "-H:Name=target/graalvm/${:name}"]
-            "inst" ["shell" "sudo"
-                    "install"
-                    "-m=755"
-                    "target/uberjar/c4k-nextcloud-standalone.jar"
-                    "/usr/local/bin/c4k-nextcloud-standalone.jar"]})
+            "inst" ["shell" 
+                    "sh"
+                    "-c"
+                    "lein uberjar && sudo install -m=755 target/uberjar/c4k-nextcloud-standalone.jar /usr/local/bin/c4k-nextcloud-standalone.jar"]})

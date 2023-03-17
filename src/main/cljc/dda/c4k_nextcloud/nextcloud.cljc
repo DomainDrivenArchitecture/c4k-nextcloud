@@ -5,9 +5,12 @@
   #?(:clj [orchestra.core :refer [defn-spec]]
      :cljs [orchestra.core :refer-macros [defn-spec]])
   [dda.c4k-common.yaml :as yaml]
+  [dda.c4k-common.ingress :as ing]
   [dda.c4k-common.base64 :as b64]
   [dda.c4k-common.predicate :as cp]
-  [dda.c4k-common.common :as cm]))
+  [dda.c4k-common.postgres :as postgres]
+  [dda.c4k-common.common :as cm]
+  [dda.c4k-common.monitoring :as mon]))
 
 (s/def ::fqdn cp/fqdn-string?)
 (s/def ::issuer cp/letsencrypt-issuer?)
@@ -17,58 +20,58 @@
 (s/def ::pvc-storage-class-name cp/pvc-storage-class-name?)
 (s/def ::pv-storage-size-gb pos?)
 
-(def strong-config? (s/keys :req-un [::fqdn ::issuer ::pv-storage-size-gb 
-                                       ::pvc-storage-class-name]
-                     :opt-un [::restic-repository]))
+(def config? (s/keys :req-un [::fqdn]
+                     :opt-un [::issuer
+                              ::restic-repository
+                              ::pv-storage-size-gb
+                              ::pvc-storage-class-name
+                              ::mon/mon-cfg]))
+
+(def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
+                            ::nextcloud-admin-user ::nextcloud-admin-password
+                            ::aws-access-key-id ::aws-secret-access-key
+                            ::restic-password]
+                   :opt-un [::mon/mon-auth]))
 
 #?(:cljs
    (defmethod yaml/load-resource :nextcloud [resource-name]
      (case resource-name
-       "nextcloud/certificate.yaml" (rc/inline "nextcloud/certificate.yaml")
        "nextcloud/deployment.yaml" (rc/inline "nextcloud/deployment.yaml")
-       "nextcloud/ingress.yaml" (rc/inline "nextcloud/ingress.yaml")
        "nextcloud/pvc.yaml" (rc/inline "nextcloud/pvc.yaml")
        "nextcloud/service.yaml" (rc/inline "nextcloud/service.yaml")
        "nextcloud/secret.yaml" (rc/inline "nextcloud/secret.yaml")
        (throw (js/Error. "Undefined Resource!")))))
 
-(defn generate-certificate [config]
-  (let [{:keys [fqdn issuer]} config
-        letsencrypt-issuer issuer]
-    (->
-     (yaml/from-string (yaml/load-resource "nextcloud/certificate.yaml"))
-     (assoc-in [:spec :commonName] fqdn)
-     (assoc-in [:spec :dnsNames] [fqdn])
-     (assoc-in [:spec :issuerRef :name] letsencrypt-issuer))))
-
-(defn generate-deployment [config]
+(defn-spec generate-deployment cp/map-or-seq? 
+  [config config?]
   (let [{:keys [fqdn]} config]
-    (-> (yaml/from-string (yaml/load-resource "nextcloud/deployment.yaml"))
+    (-> (yaml/load-as-edn "nextcloud/deployment.yaml")
         (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
 
-(defn generate-ingress [config]
-  (let [{:keys [fqdn issuer]
-         :or {issuer "staging"}} config
-        letsencrypt-issuer issuer]
-    (->
-     (yaml/from-string (yaml/load-resource "nextcloud/ingress.yaml"))
-     (assoc-in [:metadata :annotations :cert-manager.io/cluster-issuer] letsencrypt-issuer)
-     (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
+(defn-spec generate-ingress-and-cert cp/map-or-seq?
+  [config config?]
+  (ing/generate-ingress-and-cert
+   (merge
+    {:service-name "cloud-service"
+     :service-port 80
+     :fqdns [(:fqdn config)]}
+    config)))
 
 (defn-spec generate-pvc cp/map-or-seq?
   [config (s/keys :req-un [::pv-storage-size-gb ::pvc-storage-class-name])]
   (let [{:keys [pv-storage-size-gb pvc-storage-class-name]} config]
     (->
-     (yaml/from-string (yaml/load-resource "nextcloud/pvc.yaml"))
+     (yaml/load-as-edn "nextcloud/pvc.yaml")
      (assoc-in [:spec :resources :requests :storage] (str pv-storage-size-gb "Gi"))
      (assoc-in [:spec :storageClassName] (name pvc-storage-class-name)))))
 
 (defn generate-service []
-  (yaml/from-string (yaml/load-resource "nextcloud/service.yaml")))
+  (yaml/load-as-edn "nextcloud/service.yaml"))
 
-(defn generate-secret [config]
-  (let [{:keys [nextcloud-admin-user nextcloud-admin-password]} config]
+(defn-spec generate-secret cp/map-or-seq? 
+  [auth auth?]
+  (let [{:keys [nextcloud-admin-user nextcloud-admin-password]} auth]
     (->
-     (yaml/from-string (yaml/load-resource "nextcloud/secret.yaml"))
+     (yaml/load-as-edn "nextcloud/secret.yaml")
      (cm/replace-key-value :nextcloud-admin-user (b64/encode nextcloud-admin-user))
      (cm/replace-key-value :nextcloud-admin-password (b64/encode nextcloud-admin-password)))))
