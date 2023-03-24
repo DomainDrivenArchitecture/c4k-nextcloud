@@ -3,9 +3,9 @@
 set -Eeox pipefail
 
 function main() {
-    local role_snapshot_id="${1:-latest}"; shift
-    local db_snapshot_id="${1:-latest}"; shift
-    local file_snapshot_id="${1:-latest}"; shift
+    local role_snapshot_id="${1:-latest}"
+    local db_snapshot_id="${2:-latest}"
+    local file_snapshot_id="${3:-latest}"
 
 
     start-maintenance.sh
