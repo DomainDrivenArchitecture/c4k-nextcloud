@@ -34,3 +34,5 @@ ca.crt
 # chaches
 .clj-kondo/.cache
 .lsp/.cache/
+
+.eastwood
