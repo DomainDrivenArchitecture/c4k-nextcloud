@@ -3,7 +3,7 @@ from datetime import datetime
 from pybuilder.core import task, init
 from ddadevops import *
 
-name = "c4k-nextcloud"
+name = "c4k-cloud"
 MODULE = "backup"
 PROJECT_ROOT_PATH = "../.."
 version = "7.0.1-SNAPSHOT"

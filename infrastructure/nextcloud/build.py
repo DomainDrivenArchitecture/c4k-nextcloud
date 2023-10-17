@@ -4,7 +4,7 @@ from pybuilder.core import task, init
 from ddadevops import *
 
 name = 'c4k-cloud'
-MODULE = 'nextcloud'
+MODULE = 'not_set'
 PROJECT_ROOT_PATH = '../..'
 version = "7.0.1-SNAPSHOT"
 
@@ -21,7 +21,7 @@ def initialize(project):
         "project_root_path": PROJECT_ROOT_PATH,
         "build_types": ["IMAGE"],
         "mixin_types": [],
-        "image_naming": "NAME_AND_MODULE",
+        "image_naming": "NAME_ONLY",
         "image_tag": f"{image_tag}",
     }
 
