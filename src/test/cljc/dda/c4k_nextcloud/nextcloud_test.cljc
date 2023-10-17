@@ -51,7 +51,7 @@
            {:secretName "cloud-service",
             :commonName "somefqdn.de",
             :duration "2160h",
-            :renewBefore "360h",
+            :renewBefore "720h",
             :dnsNames ["somefqdn.de"],
             :issuerRef {:name "staging", :kind "ClusterIssuer"}}}
           {:apiVersion "networking.k8s.io/v1",
