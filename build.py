@@ -32,6 +32,7 @@ def initialize(project):
             "target/uberjar/c4k-nextcloud-standalone.jar",
             "target/frontend-build/c4k-nextcloud.js",
         ],
+        "release_main_branch": "master",
     }
     
     build = ReleaseMixin(project, input)
