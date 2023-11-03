@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eux pipefail
+
 function main() {
     file_env POSTGRES_DB
     file_env POSTGRES_PASSWORD

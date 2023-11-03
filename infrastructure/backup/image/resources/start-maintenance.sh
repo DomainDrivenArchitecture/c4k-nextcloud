@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -eux pipefail
 
 if [ ! -f "/var/backups/config/config.orig" ]; then
 

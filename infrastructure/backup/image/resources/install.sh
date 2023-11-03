@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eux pipefail
+
 install -m 0700 /tmp/entrypoint.sh /
 install -m 0700 /tmp/entrypoint-start-and-wait.sh /
 

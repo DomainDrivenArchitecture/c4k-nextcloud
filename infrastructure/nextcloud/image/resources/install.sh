@@ -1,5 +1,5 @@
 #!/bin/bash
-set -Eeo pipefail
+set -eux pipefail
 
 apt update && apt -qqy install postgresql-client > /dev/null
 

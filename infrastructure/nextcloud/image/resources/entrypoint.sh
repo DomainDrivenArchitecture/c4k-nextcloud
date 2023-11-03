@@ -1,5 +1,6 @@
 #!/bin/sh
-set -eu
+
+set -eux pipefail
 
 # version_greater A B returns whether A > B
 version_greater() {
