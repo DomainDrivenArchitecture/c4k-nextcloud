@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -exo pipefail
 
 if test -f "/var/backups/config/config.orig"; then
 

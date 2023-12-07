@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -Eeox pipefail
+set -Eexo pipefail
 
 function main() {
     local role_snapshot_id="${1:-latest}"

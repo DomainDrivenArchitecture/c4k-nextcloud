@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o pipefail
+set -Eexo pipefail
 
 function main() {
 

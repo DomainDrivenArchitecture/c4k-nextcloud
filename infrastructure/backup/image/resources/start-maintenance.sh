@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 if [ ! -f "/var/backups/config/config.orig" ]; then
 
     rm -f /var/backups/config/config.orig

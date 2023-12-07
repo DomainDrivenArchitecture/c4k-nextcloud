@@ -1,11 +1,20 @@
 #!/bin/bash
-set -Eeo pipefail
+set -exo pipefail
 
-apt update && apt -qqy install postgresql-client > /dev/null
+function main() {
+    {
+        upgradeSystem
+        apt-get install -qqy ca-certificates curl gnupg postgresql-client
+        mkdir /var/data
+    } > /dev/null
 
-mkdir /var/data
+    install -m 0700 /tmp/install-debug.sh /usr/local/bin/
+    install -m 0544 /tmp/upload-max-limit.ini /usr/local/etc/php/conf.d/
+    install -m 0544 /tmp/memory-limit.ini /usr/local/etc/php/conf.d/
+    install -m 0755 /tmp/entrypoint.sh /
+    
+    cleanupDocker
+}
 
-install -m 0700 /tmp/install-debug.sh /usr/local/bin/
-install -m 0544 /tmp/upload-max-limit.ini /usr/local/etc/php/conf.d/
-install -m 0544 /tmp/memory-limit.ini /usr/local/etc/php/conf.d/
-install -m 0755 /tmp/entrypoint.sh /
+source /tmp/install_functions.sh
+main

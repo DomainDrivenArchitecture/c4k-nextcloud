@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o pipefail
+set -exo pipefail
 
 function list-snapshot-files() {
   if [ -z ${CERTIFICATE_FILE} ];
