@@ -1,5 +1,0 @@
-{:file [{:path "/var/data"}
-        {:path "/usr/local/bin/install-debug.sh" :mod "700"}
-        {:path "/usr/local/etc/php/conf.d/upload-max-limit.ini" :mod "544"}
-        {:path "/usr/local/etc/php/conf.d/memory-limit.ini" :mod "544"}
-        {:path "/entrypoint.sh" :mod "755"}]}

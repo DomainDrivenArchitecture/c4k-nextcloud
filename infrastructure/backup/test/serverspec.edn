@@ -1,7 +1,0 @@
-{:file [{:path "/usr/local/bin/init.sh" :mod "700"}
-        {:path "/usr/local/bin/backup.sh" :mod "700"}
-        {:path "/usr/local/bin/restore.sh" :mod "700"}
-        {:path "/usr/local/bin/start-maintenance.sh" :mod "700"}
-        {:path "/usr/local/bin/end-maintenance.sh" :mod "700"}
-        {:path "/entrypoint.sh" :mod "700"}
-        {:path "/entrypoint-start-and-wait.sh" :mod "700"}]}
