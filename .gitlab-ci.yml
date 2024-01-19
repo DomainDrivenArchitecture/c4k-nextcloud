@@ -7,7 +7,7 @@ stages:
   #- integrationtest
 
 .img: &img
-  image: "domaindrivenarchitecture/ddadevops-dind:4.10.5"
+  image: "domaindrivenarchitecture/ddadevops-dind:4.10.7"
   services:
     - docker:dind
   before_script:
