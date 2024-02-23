@@ -62,8 +62,8 @@ lein native
 
 # execute
 ./target/graalvm/c4k-nextcloud -h
-./target/graalvm/c4k-nextcloud src/test/resources/nextcloud-test/valid-config.edn src/test/resources/nextcloud-test/valid-auth.edn 
-./target/graalvm/c4k-nextcloud src/test/resources/nextcloud-test/invalid-config.edn src/test/resources/nextcloud-test/invalid-auth.edn
+./target/graalvm/c4k-nextcloud src/test/resources/nextcloud-test/valid-config.yaml src/test/resources/nextcloud-test/valid-auth.yaml 
+./target/graalvm/c4k-nextcloud src/test/resources/nextcloud-test/invalid-config.yaml src/test/resources/nextcloud-test/invalid-auth.yaml
 ```
 
 ## c4k-setup
