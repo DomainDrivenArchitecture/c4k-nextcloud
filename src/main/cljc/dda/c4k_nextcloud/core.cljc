@@ -1,6 +1,5 @@
 (ns dda.c4k-nextcloud.core
  (:require
-  [clojure.spec.alpha :as s]
   #?(:clj [orchestra.core :refer [defn-spec]]
      :cljs [orchestra.core :refer-macros [defn-spec]])
   [dda.c4k-common.common :as cm]

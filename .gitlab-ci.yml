@@ -103,7 +103,6 @@ package-native:
     paths:
       - target/graalvm
 
-
 release-to-clojars:
   <<: *clj
   <<: *tag_only

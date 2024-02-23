@@ -1,7 +1,6 @@
 (ns dda.c4k-nextcloud.nextcloud
  (:require
   [clojure.spec.alpha :as s]
-  #?(:cljs [shadow.resource :as rc])
   #?(:clj [orchestra.core :refer [defn-spec]]
      :cljs [orchestra.core :refer-macros [defn-spec]])
   [dda.c4k-common.yaml :as yaml]
@@ -10,7 +9,8 @@
   [dda.c4k-common.predicate :as cp]
   [dda.c4k-common.postgres :as postgres]
   [dda.c4k-common.common :as cm]
-  [dda.c4k-common.monitoring :as mon]))
+  [dda.c4k-common.monitoring :as mon]
+  #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])))
 
 (s/def ::fqdn cp/fqdn-string?)
 (s/def ::issuer cp/letsencrypt-issuer?)
@@ -35,12 +35,7 @@
 
 #?(:cljs
    (defmethod yaml/load-resource :nextcloud [resource-name]
-     (case resource-name
-       "nextcloud/deployment.yaml" (rc/inline "nextcloud/deployment.yaml")
-       "nextcloud/pvc.yaml" (rc/inline "nextcloud/pvc.yaml")
-       "nextcloud/service.yaml" (rc/inline "nextcloud/service.yaml")
-       "nextcloud/secret.yaml" (rc/inline "nextcloud/secret.yaml")
-       (throw (js/Error. "Undefined Resource!")))))
+     (get (inline-resources "nextcloud") resource-name)))
 
 (defn-spec generate-deployment cp/map-or-seq? 
   [config config?]
