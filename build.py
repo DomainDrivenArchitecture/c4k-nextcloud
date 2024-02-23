@@ -29,8 +29,9 @@ def initialize(project):
         "release_organisation": "meissa",
         "release_repository_name": name,
         "release_artifacts": [
-            "target/uberjar/c4k-nextcloud-standalone.jar",
-            "target/frontend-build/c4k-nextcloud.js",
+            f"target/graalvm/{name}",
+            f"target/uberjar/{name}-standalone.jar",
+            f"target/frontend-build/{name}.js",
         ],
         "release_main_branch": "master",
     }
@@ -107,6 +108,37 @@ def package_uberjar(project):
         check=True,
     )
 
+@task
+def package_native(project):
+    run(
+        "mkdir -p target/graalvm",
+        shell=True,
+        check=True,
+    )
+    run(
+        "native-image " +
+        "--native-image-info " +
+        "--report-unsupported-elements-at-runtime " +
+        "--no-server " +
+        "--no-fallback " +
+        "--features=clj_easy.graal_build_time.InitClojureClasses " +
+        f"-jar target/uberjar/{project.name}-standalone.jar " +
+        "-H:IncludeResources=.*.yaml " +
+        "-H:Log=registerResource:verbose " +
+        f"-H:Name=target/graalvm/{project.name}",
+        shell=True,
+        check=True,
+    )
+    run(
+        f"sha256sum target/graalvm/{project.name} > target/graalvm/{project.name}.sha256",
+        shell=True,
+        check=True,
+    )
+    run(
+        f"sha512sum target/graalvm/{project.name} > target/graalvm/{project.name}.sha512",
+        shell=True,
+        check=True,
+    )
 
 @task
 def upload_clj(project):
@@ -122,6 +154,21 @@ def lint(project):
     #)
     run(
         "lein ancient check",
+        shell=True,
+        check=True,
+    )
+
+@task
+def inst(project):
+    package_uberjar(project)
+    package_native(project)
+    run(
+        f"sudo install -m=755 target/uberjar/{project.name}-standalone.jar /usr/local/bin/{project.name}-standalone.jar",
+        shell=True,
+        check=True,
+    )
+    run(
+        f"sudo install -m=755 target/graalvm/{project.name} /usr/local/bin/{project.name}",
         shell=True,
         check=True,
     )

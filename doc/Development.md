@@ -39,34 +39,31 @@ npx shadow-cljs release frontend
 ## graalvm-setup
 
 ```
-curl -LO  https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.0.0.2/graalvm-ce-java11-linux-amd64-21.0.0.2.tar.gz 
+curl -LO  https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
 
 # unpack
-tar -xzf graalvm-ce-java11-linux-amd64-21.0.0.2.tar.gz 
+tar -xzf graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
 
-sudo mv graalvm-ce-java11-21.0.0.2 /usr/lib/jvm/
-sudo ln -s /usr/lib/jvm/graalvm-ce-java11-21.0.0.2 /usr/lib/jvm/graalvm
-sudo ln -s /usr/lib/jvm/graalvm/bin/gu /usr/local/bin
-sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/graalvm/bin/java 2
+sudo mv graalvm-community-openjdk-21.0.2+13.1 /usr/lib/jvm/
+sudo ln -s /usr/lib/jvm/graalvm-community-openjdk-21.0.2+13.1 /usr/lib/jvm/graalvm-21
+sudo ln -s /usr/lib/jvm/graalvm-21/bin/gu /usr/local/bin
+sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/graalvm-21/bin/java 2
 sudo update-alternatives --config java
-
-# install native-image in graalvm-ce-java11-linux-amd64-21.0.0.2/bin
-sudo gu install native-image
-sudo ln -s /usr/lib/jvm/graalvm/bin/native-image /usr/local/bin
+sudo ln -s /usr/lib/jvm/graalvm-21/bin/native-image /usr/local/bin
 
 # deps
 sudo apt-get install build-essential libz-dev zlib1g-dev
 
 # build
-cd ~/repo/dda/c4k-cloud
+cd ~/repo/c4k/c4k-nextcloud
 lein uberjar
 mkdir -p target/graalvm
 lein native
 
 # execute
-./target/graalvm/c4k-cloud -h
-./target/graalvm/c4k-cloud src/test/resources/valid-config.edn src/test/resources/valid-auth.edn 
-./target/graalvm/c4k-cloud src/test/resources/invalid-config.edn src/test/resources/invalid-auth.edn
+./target/graalvm/c4k-nextcloud -h
+./target/graalvm/c4k-nextcloud src/test/resources/nextcloud-test/valid-config.edn src/test/resources/nextcloud-test/valid-auth.edn 
+./target/graalvm/c4k-nextcloud src/test/resources/nextcloud-test/invalid-config.edn src/test/resources/nextcloud-test/invalid-auth.edn
 ```
 
 ## c4k-setup
