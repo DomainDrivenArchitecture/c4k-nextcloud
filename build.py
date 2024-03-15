@@ -97,6 +97,7 @@ def package_frontend(project):
 
 @task
 def package_uberjar(project):
+    run("lein uberjar", shell=True, check=True)
     run(
         "sha256sum target/uberjar/c4k-nextcloud-standalone.jar > target/uberjar/c4k-nextcloud-standalone.jar.sha256",
         shell=True,
