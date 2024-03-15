@@ -23,13 +23,11 @@
          (filter
           #(not (nil? %))
           (cm/concat-vec
-           [(postgres/generate-config {:postgres-size :8gb :db-name "nextcloud"})
-            (postgres/generate-secret auth)
-            (postgres/generate-pvc {:pv-storage-size-gb 50
-                                    :pvc-storage-class-name default-storage-class})
-            (postgres/generate-deployment)
-            (postgres/generate-service)
-            (nextcloud/generate-secret auth)
+           (postgres/generate {:postgres-size :8gb 
+                               :db-name "nextcloud"
+                               :pv-storage-size-gb 50
+                               :pvc-storage-class-name default-storage-class})
+           [(nextcloud/generate-secret auth)
             (nextcloud/generate-pvc (merge nextcloud-default-storage-config config))
             (nextcloud/generate-deployment config)
             (nextcloud/generate-service)]
