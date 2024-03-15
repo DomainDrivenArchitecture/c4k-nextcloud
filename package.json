@@ -2,7 +2,7 @@
     "name": "c4k-nextcloud",
     "description": "Generate c4k yaml for a nextcloud deployment.",
     "author": "meissa GmbH",
-    "version": "8.0.2-SNAPSHOT",
+    "version": "8.0.2",
     "homepage": "https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud#readme",
     "repository": "https://www.npmjs.com/package/c4k-nextcloud",
     "license": "APACHE2",
