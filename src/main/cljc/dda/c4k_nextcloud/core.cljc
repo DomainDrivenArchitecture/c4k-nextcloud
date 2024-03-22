@@ -28,6 +28,7 @@
                                :pv-storage-size-gb 50
                                :pvc-storage-class-name default-storage-class}
                               auth)
+           (ns/generate (merge {:namespace "nextcloud"} config))
            [(nextcloud/generate-secret auth)
             (nextcloud/generate-pvc (merge nextcloud-default-storage-config config))
             (nextcloud/generate-deployment config)
