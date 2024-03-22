@@ -227,7 +227,7 @@ def release(project):
 def linttest(project, release_type):
     build = get_devops_build(project)
     build.update_release_type(release_type)
-    test_clj(project)
-    test_cljs(project)
-    test_schema(project)
+    test_clj()
+    test_cljs()
+    test_schema()
     lint(project)
