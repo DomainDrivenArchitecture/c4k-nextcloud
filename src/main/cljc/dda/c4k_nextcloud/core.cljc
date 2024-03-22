@@ -27,7 +27,8 @@
            (postgres/generate {:postgres-size :8gb 
                                :db-name "nextcloud"
                                :pv-storage-size-gb 50
-                               :pvc-storage-class-name default-storage-class}
+                               :pvc-storage-class-name default-storage-class
+                               :namespace "nextcloud"}
                               auth)
            (ns/generate (merge {:namespace "nextcloud"} config))
            [(nextcloud/generate-secret auth)
