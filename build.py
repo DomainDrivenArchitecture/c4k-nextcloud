@@ -41,18 +41,18 @@ def initialize(project):
 
 
 @task
-def test_clj(project):
+def test_clj():
     run("lein test", shell=True, check=True)
 
 
 @task
-def test_cljs(project):
+def test_cljs():
     run("shadow-cljs compile test", shell=True, check=True)
     run("node target/node-tests.js", shell=True, check=True)
 
 
 @task
-def test_schema(project):
+def test_schema():
     run("lein uberjar", shell=True, check=True)
     run(
         "java -jar target/uberjar/c4k-nextcloud-standalone.jar "
@@ -63,6 +63,11 @@ def test_schema(project):
         check=True,
     )
 
+@task
+def test():
+    test_clj()
+    test_cljs()
+    test_schema()
 
 @task
 def report_frontend(project):
