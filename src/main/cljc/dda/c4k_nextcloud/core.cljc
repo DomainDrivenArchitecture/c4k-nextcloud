@@ -35,7 +35,7 @@
             (nextcloud/generate-pvc (merge nextcloud-default-storage-config config))
             (nextcloud/generate-deployment config)
             (nextcloud/generate-service)]
-           (nextcloud/generate-ingress-and-cert config)
+           (nextcloud/generate-ingress-and-cert (merge {:namespace "nextcloud"} config))
            (when (:contains? config :restic-repository)
              [(backup/generate-config config)
               (backup/generate-secret auth)
