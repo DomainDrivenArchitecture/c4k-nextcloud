@@ -8,7 +8,8 @@
   [dda.c4k-common.postgres :as postgres]
   [dda.c4k-nextcloud.nextcloud :as nextcloud]
   [dda.c4k-nextcloud.backup :as backup]
-  [dda.c4k-common.monitoring :as mon]))
+  [dda.c4k-common.monitoring :as mon]
+  [dda.c4k-common.namespace :as ns]))
 
 (def default-storage-class :local-path)
 
