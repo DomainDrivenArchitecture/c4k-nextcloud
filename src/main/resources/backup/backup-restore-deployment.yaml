@@ -67,6 +67,9 @@ spec:
         - name: cloud-secret-volume
           mountPath: /var/run/secrets/cloud-secrets
           readOnly: true
+        - name: rotation-credential-secret-volume
+          mountPath: /var/run/secrets/rotation-credential-secret
+          readOnly: true
       volumes:
       - name: cloud-data-volume
         persistentVolumeClaim:
@@ -77,3 +80,6 @@ spec:
       - name: backup-secret-volume
         secret:
           secretName: backup-secret
+      - name: rotation-credential-secret-volume
+        secret:
+          secretName: rotation-credential-secret
