@@ -23,7 +23,7 @@
 (deftest should-generate-secret
   (is (= {:apiVersion "v1"
           :kind "Secret"
-          :metadata {:name "cloud-secret"}
+          :metadata {:name "cloud-secret", :namespace "nextcloud"}
           :type "Opaque"
           :data
           {:nextcloud-admin-user "Y2xvdWRhZG1pbg=="
@@ -77,7 +77,8 @@
   (is (= {:apiVersion "v1"
           :kind "PersistentVolumeClaim"
           :metadata {:name "cloud-pvc"
-                    :labels {:app.kubernetes.io/application "cloud"}}
+                     :namespace "nextcloud"
+                     :labels {:app.kubernetes.io/application "cloud"}}
           :spec {:storageClassName "local-path"
                   :accessModes ["ReadWriteOnce"]
                   :resources {:requests {:storage "50Gi"}}}}
@@ -86,7 +87,7 @@
 (deftest should-generate-deployment
   (is (= {:apiVersion "apps/v1"
           :kind "Deployment"
-          :metadata {:name "cloud-deployment"}
+          :metadata {:name "cloud-deployment", :namespace "nextcloud"}
           :spec
           {:selector {:matchLabels #:app.kubernetes.io{:name "cloud-pod", :application "cloud"}}
            :strategy {:type "Recreate"}
@@ -94,7 +95,7 @@
            {:metadata {:labels {:app "cloud-app", :app.kubernetes.io/name "cloud-pod", :app.kubernetes.io/application "cloud", :redeploy "v3"}}
             :spec
             {:containers
-             [{:image "domaindrivenarchitecture/c4k-cloud:7.0.0"
+             [{:image "domaindrivenarchitecture/c4k-cloud:8.0.0"
                :name "cloud-app"
                :imagePullPolicy "IfNotPresent"
                :ports [{:containerPort 80}]

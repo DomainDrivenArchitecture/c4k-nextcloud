@@ -8,7 +8,7 @@
 (deftest should-generate-secret
   (is (= {:apiVersion "v1"
           :kind "Secret"
-          :metadata {:name "backup-secret"}
+          :metadata {:name "backup-secret", :namespace "nextcloud"}
           :type "Opaque"
           :data
           {:aws-access-key-id "YXdzLWlk", :aws-secret-access-key "YXdzLXNlY3JldA==", :restic-password "cmVzdGljLXB3"}}
@@ -18,6 +18,7 @@
   (is (= {:apiVersion "v1"
           :kind "ConfigMap"
           :metadata {:name "backup-config"
+                     :namespace "nextcloud"
                      :labels {:app.kubernetes.io/name "backup"
                               :app.kubernetes.io/part-of "cloud"}}
           :data
@@ -27,7 +28,7 @@
 (deftest should-generate-cron
   (is (= {:apiVersion "batch/v1"
           :kind "CronJob"
-          :metadata {:name "cloud-backup", :labels {:app.kubernetes.part-of "cloud"}}
+          :metadata {:name "cloud-backup", :namespace "nextcloud", :labels {:app.kubernetes.part-of "cloud"}}
           :spec
           {:schedule "10 23 * * *"
            :successfulJobsHistoryLimit 1

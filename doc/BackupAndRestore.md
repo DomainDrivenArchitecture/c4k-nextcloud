@@ -10,37 +10,37 @@
 ## Manual init the restic repository for the first time
 
 1. Scale backup-restore deployment up:   
-   `kubectl scale deployment backup-restore --replicas=1`
+   `kubectl -n nextcloud scale deployment backup-restore --replicas=1`
 1. exec into pod and execute restore pod   
-   `kubectl exec -it backup-restore -- /usr/local/bin/init.sh`
+   `kubectl -n nextcloud exec -it backup-restore -- /usr/local/bin/init.sh`
 1. Scale backup-restore deployment down:   
-  `kubectl scale deployment backup-restore --replicas=0`
+  `kubectl -n nextcloud scale deployment backup-restore --replicas=0`
 
 
 
 ## Manual backup the restic repository for the first time
 
 1. Scale Cloud deployment down:   
-  `kubectl scale deployment cloud-deployment --replicas=0`
+  `kubectl -n nextcloud scale deployment cloud-deployment --replicas=0`
 1. Scale backup-restore deployment up:   
-   `kubectl scale deployment backup-restore --replicas=1`
+   `kubectl -n nextcloud scale deployment backup-restore --replicas=1`
 1. exec into pod and execute restore pod   
-   `kubectl exec -it backup-restore -- /usr/local/bin/backup.sh`
+   `kubectl -n nextcloud exec -it backup-restore -- /usr/local/bin/backup.sh`
 1. Scale backup-restore deployment down:   
-  `kubectl scale deployment backup-restore --replicas=0`
+  `kubectl -n nextcloud scale deployment backup-restore --replicas=0`
 1. Scale Cloud deployment up:   
-   `kubectl scale deployment cloud-deployment --replicas=1`
+   `kubectl -n nextcloud scale deployment cloud-deployment --replicas=1`
 
 
 ## Manual restore
 
 1. Scale Cloud deployment down:   
-  `kubectl scale deployment cloud-deployment --replicas=0`
+  `kubectl -n nextcloud scale deployment cloud-deployment --replicas=0`
 2. Scale backup-restore deployment up:   
-   `kubectl scale deployment backup-restore --replicas=1`
+   `kubectl -n nextcloud scale deployment backup-restore --replicas=1`
 3. exec into pod and execute restore pod   
-   `kubectl exec -it backup-restore -- /usr/local/bin/restore.sh`
+   `kubectl -n nextcloud exec -it backup-restore -- /usr/local/bin/restore.sh`
 4. Scale backup-restore deployment down:   
-  `kubectl scale deployment backup-restore --replicas=0`
+  `kubectl -n nextcloud scale deployment backup-restore --replicas=0`
 5. Scale Cloud deployment up:   
-   `kubectl scale deployment cloud-deployment --replicas=1`
+   `kubectl -n nextcloud scale deployment cloud-deployment --replicas=1`

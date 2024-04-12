@@ -8,7 +8,8 @@
   [dda.c4k-common.postgres :as postgres]
   [dda.c4k-nextcloud.nextcloud :as nextcloud]
   [dda.c4k-nextcloud.backup :as backup]
-  [dda.c4k-common.monitoring :as mon]))
+  [dda.c4k-common.monitoring :as mon]
+  [dda.c4k-common.namespace :as ns]))
 
 (def default-storage-class :local-path)
 
@@ -23,17 +24,18 @@
          (filter
           #(not (nil? %))
           (cm/concat-vec
-           [(postgres/generate-config {:postgres-size :8gb :db-name "nextcloud"})
-            (postgres/generate-secret auth)
-            (postgres/generate-pvc {:pv-storage-size-gb 50
-                                    :pvc-storage-class-name default-storage-class})
-            (postgres/generate-deployment)
-            (postgres/generate-service)
-            (nextcloud/generate-secret auth)
+           (ns/generate (merge {:namespace "nextcloud"} config))
+           (postgres/generate {:postgres-size :8gb
+                               :db-name "nextcloud"
+                               :pv-storage-size-gb 50
+                               :pvc-storage-class-name default-storage-class
+                               :namespace "nextcloud"}
+                              auth)
+           [(nextcloud/generate-secret auth)
             (nextcloud/generate-pvc (merge nextcloud-default-storage-config config))
             (nextcloud/generate-deployment config)
             (nextcloud/generate-service)]
-           (nextcloud/generate-ingress-and-cert config)
+           (nextcloud/generate-ingress-and-cert (merge {:namespace "nextcloud"} config))
            (when (:contains? config :restic-repository)
              [(backup/generate-config config)
               (backup/generate-secret auth)
