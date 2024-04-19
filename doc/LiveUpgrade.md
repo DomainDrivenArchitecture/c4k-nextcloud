@@ -6,6 +6,9 @@
 - 5.0.0: nextcloud 23
 - 6.0.0: nextcloud 24
 - 7.0.0: nextcloud 25
+- 7.1.0: nextcloud 26 (manual publish)
+- 7.2.0: nextcloud 27 (manual publish)
+- 8.0.6: nextcloud 28
 
 ## Uprgrading process
 
