@@ -26,7 +26,7 @@
           (cm/concat-vec
            (ns/generate (merge {:namespace "nextcloud"} config))
            (postgres/generate {:postgres-size :8gb
-                               :db-name "nextcloud"
+                               :db-name "cloud"
                                :pv-storage-size-gb 50
                                :pvc-storage-class-name default-storage-class
                                :namespace "nextcloud"}
