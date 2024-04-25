@@ -167,17 +167,17 @@ def lint(project):
 @task
 def inst(project):
     package_uberjar(project)
-    package_native(project)
+    # package_native(project)
     run(
         f"sudo install -m=755 target/uberjar/{project.name}-standalone.jar /usr/local/bin/{project.name}-standalone.jar",
         shell=True,
         check=True,
     )
-    run(
-        f"sudo install -m=755 target/graalvm/{project.name} /usr/local/bin/{project.name}",
-        shell=True,
-        check=True,
-    )
+    # run(
+    #     f"sudo install -m=755 target/graalvm/{project.name} /usr/local/bin/{project.name}",
+    #     shell=True,
+    #     check=True,
+    # )
 
 
 @task
