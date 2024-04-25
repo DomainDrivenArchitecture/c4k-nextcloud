@@ -84,3 +84,4 @@ spec:
       - name: rotation-credential-secret-volume
         secret:
           secretName: rotation-credential-secret
+          optional: true
