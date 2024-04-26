@@ -1,4 +1,4 @@
-FROM nextcloud:28
+FROM nextcloud:29
 
 # REQUIRES docker >= 2.10.10
 # https://docs.docker.com/engine/release-notes/20.10/#201010
