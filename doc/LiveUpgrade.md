@@ -5,10 +5,12 @@
 - 4.0.3: nextcloud 22
 - 5.0.0: nextcloud 23
 - 6.0.0: nextcloud 24
-- 7.0.0: nextcloud 25
-- 7.1.0: nextcloud 26 (manual publish)
+- 7.0.7: nextcloud 25.0.13
+- 7.1.1: nextcloud 26.0.0 (manual publish) => attention - only upgrade to 26.0.0 is working
+- 7.1.0: nextcloud 26.0.13 (manual publish)
 - 7.2.0: nextcloud 27 (manual publish)
-- 8.0.6: nextcloud 28
+- 10.0.0: nextcloud 28.0.5
+- 10.1.0: nextcloud 29.0.0
 
 ## Uprgrading process
 

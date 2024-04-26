@@ -18,7 +18,7 @@
 
 
 
-## Manual backup the restic repository for the first time
+## Manual backup
 
 1. Scale Cloud deployment down:   
   `kubectl -n nextcloud scale deployment cloud-deployment --replicas=0`
