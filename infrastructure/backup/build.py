@@ -6,7 +6,7 @@ from ddadevops import *
 name = "c4k-cloud"
 MODULE = "backup"
 PROJECT_ROOT_PATH = "../.."
-version = "10.0.1-dev"
+version = "10.1.0"
 
 
 @init
