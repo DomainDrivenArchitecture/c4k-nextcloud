@@ -11,7 +11,7 @@
   [dda.c4k-common.monitoring :as mon]
   [dda.c4k-common.namespace :as ns]))
 
-(def default-storage-class :local-path)
+(def default-storage-class "local-path")
 
 (def config-defaults {:issuer "staging"})
 
