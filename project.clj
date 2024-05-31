@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture/c4k-nextcloud "10.1.1-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/c4k-nextcloud "10.2.0"
   :description "nextcloud c4k-installation package"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
