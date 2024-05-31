@@ -33,7 +33,7 @@ def initialize(project):
             f"target/uberjar/{name}-standalone.jar",
             f"target/frontend-build/{name}.js",
         ],
-        "release_main_branch": "master",
+        "release_main_branch": "main",
     }
     
     build = ReleaseMixin(project, input)
