@@ -41,7 +41,7 @@
   [config config?]
   (let [{:keys [fqdn]} config]
     (-> (yaml/load-as-edn "nextcloud/deployment.yaml")
-        (cm/replace-all-matching-values-by-new-value "fqdn" fqdn))))
+        (cm/replace-all-matching "fqdn" fqdn))))
 
 (defn-spec generate-ingress-and-cert cp/map-or-seq?
   [config config?]
