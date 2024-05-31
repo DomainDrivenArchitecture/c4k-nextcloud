@@ -1,7 +1,0 @@
-{:postgres-db-user "nextcloud"
- :postgres-db-password "dbpass"
- :nextcloud-admin-user "cloudadmin"
- :nextcloud-admin-password "cloudpassword"
- :aws-access-key-id ""
- :aws-secret-access-key ""
- :restic-password "test-password"}

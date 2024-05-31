@@ -1,6 +1,0 @@
-{:fqdn "cloudhost"
- :issuer :staging
- :nextcloud-data-volume-path "/var/cloud"
- :postgres-data-volume-path "/var/postgres"
- :restic-repository "s3://k3stesthost/mybucket"
- :local-integration-test true}

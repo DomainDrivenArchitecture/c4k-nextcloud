@@ -130,23 +130,3 @@ nextcloud-image-publish:
   stage: image
   script:
     - cd infrastructure/nextcloud && pyb image publish
-
-#.nextcloud-integrationtest:
-#  stage: integrationtest
-#  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.7.1-kube-1.20.11-alpine-3.14
-#  services:
-#    - name: registry.gitlab.com/gitlab-org/cluster-integration/test-utils/k3s-gitlab-ci/releases/v1.22.2-k3s2
-#      alias: k3s
-#  script:
-#    - apk add curl sudo bash
-#    - apk add wget curl bash sudo openjdk8
-#    - wget -P /etc/apk/keys/ https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
-#    - apk add --no-cache --repository=https://apkproxy.herokuapp.com/sgerrand/alpine-pkg-leiningen leiningen
-#
-#    - mkdir -p ${HOME}/.kube/
-#    - curl -f k3s:8081 > ${HOME}/.kube/config
-#    - kubectl version
-#    - kubectl cluster-info
-#    - echo "---------- Integration test -------------"
-#    - pwd
-#    - cd ./src/test/resources/local-integration-test/ && ./setup-local-s3-on-k3d.sh
