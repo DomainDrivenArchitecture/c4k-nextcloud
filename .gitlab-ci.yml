@@ -4,7 +4,6 @@ stages:
   - security
   - upload
   - image
-  #- integrationtest
 
 .img: &img
   image: "domaindrivenarchitecture/ddadevops-dind:4.11.3"
