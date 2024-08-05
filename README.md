@@ -41,7 +41,8 @@ Development happens at: https://repo.prod.meissa.de/meissa/c4k-nextcloud
 
 Mirrors are:
 
-* https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud (issues and PR, CI)
+* https://codeberg.org/meissa/c4k-nextcloud (Issues and PR)
+* https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud (CI)
 * https://github.com/DomainDrivenArchitecture/c4k-nextcloud
 
 For more details about our repository model see: https://repo.prod.meissa.de/meissa/federate-your-repos
@@ -49,6 +50,6 @@ For more details about our repository model see: https://repo.prod.meissa.de/mei
 
 ## License
 
-Copyright © 2021 meissa GmbH
+Copyright © 2021, 2022, 2023, 2024 meissa GmbH
 Licensed under the [Apache License, Version 2.0](LICENSE) (the "License")
 Pls. find licenses of our subcomponents [here](doc/SUBCOMPONENT_LICENSE)
