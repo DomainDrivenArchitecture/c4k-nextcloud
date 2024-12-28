@@ -16,7 +16,29 @@
                       :pvc-storage-class-name "hcloud-volumes-encrypted"
                       :pv-storage-size-gb 200})
 
-(defn-spec k8s-objects cp/map-or-seq?
+(defn-spec config-objects cp/map-or-seq?
+  [config nextcloud/config?]
+  (let [resolved-config (merge config-defaults config)]
+    (map yaml/to-string
+         (filter
+          #(not (nil? %))
+          (cm/concat-vec
+           (ns/generate resolved-config)
+           (postgres/generate-config (merge resolved-config {:postgres-size :8gb
+                                                             :db-name "cloud"
+                                                             :pv-storage-size-gb 50}))
+           [(nextcloud/generate-pvc resolved-config)
+            (nextcloud/generate-deployment resolved-config)
+            (nextcloud/generate-service)]
+           (nextcloud/generate-ingress-and-cert resolved-config)
+           (when (:contains? resolved-config :restic-repository)
+             [(backup/generate-config resolved-config)
+              (backup/generate-cron)
+              (backup/generate-backup-restore-deployment resolved-config)])
+           (when (:contains? resolved-config :mon-cfg)
+             (mon/generate-config)))))))
+
+(defn-spec auth-objects cp/map-or-seq?
   [config nextcloud/config?
    auth nextcloud/auth?]
   (let [resolved-config (merge config-defaults config)]
@@ -24,20 +46,12 @@
          (filter
           #(not (nil? %))
           (cm/concat-vec
-           (ns/generate resolved-config)
-           (postgres/generate (merge resolved-config {:postgres-size :8gb
-                                                      :db-name "cloud"
-                                                      :pv-storage-size-gb 50})
-                              auth)
-           [(nextcloud/generate-secret auth)
-            (nextcloud/generate-pvc resolved-config)
-            (nextcloud/generate-deployment resolved-config)
-            (nextcloud/generate-service)]
-           (nextcloud/generate-ingress-and-cert resolved-config)
+           (postgres/generate-auth (merge resolved-config {:postgres-size :8gb
+                                                           :db-name "cloud"
+                                                           :pv-storage-size-gb 50})
+                                   auth)
+           [(nextcloud/generate-secret auth)]
            (when (:contains? resolved-config :restic-repository)
-             [(backup/generate-config resolved-config)
-              (backup/generate-secret auth)
-              (backup/generate-cron)
-              (backup/generate-backup-restore-deployment resolved-config)])
+             [(backup/generate-secret auth)])
            (when (:contains? resolved-config :mon-cfg)
-             (mon/generate (:mon-cfg resolved-config) (:mon-auth auth))))))))
+             (mon/generate-auth (:mon-cfg resolved-config) (:mon-auth auth))))))))
