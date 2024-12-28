@@ -1,0 +1,10 @@
+export ENV_PASSWORD=env-password 
+export RESTIC_PASSWORD_FILE=/tmp/file_password 
+export RESTIC_REPOSITORY=/var/restic-repo 
+export POSTGRES_SERVICE=dummy 
+export POSTGRES_PORT=dummy 
+export POSTGRES_DB=dummy 
+export POSTGRES_USER=dummy 
+export POSTGRES_PASSWORD=dummy 
+export AWS_ACCESS_KEY_ID=dummy 
+export AWS_SECRET_ACCESS_KEY=dummy
