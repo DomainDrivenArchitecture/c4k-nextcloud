@@ -22,8 +22,8 @@
 (defn restic-repo-init!
   []
   (rc/init! cf/file-config)
-  (rc/init! (merge cf/db-config cf/dry-run))
-  (rc/init! (merge cf/db-role-config cf/dry-run)))
+  (rc/init! (merge cf/db-config))
+  (rc/init! (merge cf/db-role-config)))
 
 (defn restic-backup!
   []
@@ -37,12 +37,12 @@
   (rc/list-snapshots! (merge cf/db-role-config cf/dry-run))
   (rc/list-snapshots! (merge cf/db-config cf/dry-run)))
 
-
 (defn restic-restore!
   []
-  (rs/restore-file! (merge {:debug true} cf/file-restore-config))
+  (println "huhu")
+  (rs/restore-file! (merge cf/file-restore-config  {:debug true}))
   (pg/drop-create-db! (merge cf/db-config cf/dry-run))
-  ;(rs/restore-db-roles! (merge cf/db-role-config cf/dry-run))
+  (rs/restore-db-roles! (merge cf/db-role-config cf/dry-run))
   (rs/restore-db! (merge cf/db-config cf/dry-run)))
 
 (prepare!)

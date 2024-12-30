@@ -1,15 +1,12 @@
 #!/usr/bin/env bb
-
 (require
  '[babashka.fs :as fs])
-
-(println (-> "/usr/local/bin/config.clj" fs/file load-file))
 (-> "/usr/local/bin/config.clj" fs/file load-file)
 
 (require
  '[dda.backup.core :as bc]
  '[dda.backup.restic :as rc]
- '[config.clj :as cf])
+ '[config :as cf])
 
 (defn prepare!
   []

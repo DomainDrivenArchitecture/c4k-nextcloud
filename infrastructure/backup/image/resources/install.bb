@@ -5,19 +5,15 @@
  '[dda.image.install :as in])
 
 (ub/upgrade-system!)
-(in/install! "entrypoint.sh")
-(in/install! "entrypoint-start-and-wait.sh")
-
 (in/install! "bb-backup.edn" :target-name "bb.edn" :mod "0440")
 (in/install! "config.clj" :mod "0440")
 (in/install! "init.bb")
 (in/install! "backup.bb")
-(in/install! "restore.sh")
+(in/install! "restore.bb")
 (in/install! "list-snapshots.bb")
 (in/install! "start-maintenance.sh")
 (in/install! "end-maintenance.sh")
-
-#(in/install! "restore.bb")
-#(in/install! "wait.bb")
+(in/install! "restore.bb")
+(in/install! "wait.bb")
 
 (ub/cleanup-container!)
