@@ -41,7 +41,7 @@
                [{:name "backup-app"
                  :image "domaindrivenarchitecture/c4k-cloud-backup"
                  :imagePullPolicy "IfNotPresent"
-                 :command ["/entrypoint.sh"]
+                 :command ["backup.bb"]
                  :env
                  [{:valueFrom
                    {:secretKeyRef
