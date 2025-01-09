@@ -23,11 +23,11 @@
         "url": "https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud/issues"
     },
     "dependencies": {
-        "js-base64": "^3.6.1",
-        "js-yaml": "^4.0.0"
+        "js-base64": "^3.7.7",
+        "js-yaml": "^4.1.0"
     },
     "devDependencies": {
-        "shadow-cljs": "^2.11.18",
-        "source-map-support": "^0.5.19"
+        "shadow-cljs": "^2.28.20",
+        "source-map-support": "^0.5.21"
     }
 }
