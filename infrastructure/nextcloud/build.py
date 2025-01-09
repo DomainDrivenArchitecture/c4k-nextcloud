@@ -6,7 +6,7 @@ from ddadevops import *
 name = 'c4k-cloud'
 MODULE = 'not_set'
 PROJECT_ROOT_PATH = '../..'
-version = "10.4.1"
+version = "10.4.2-dev"
 
 @init
 def initialize(project):
