@@ -4,8 +4,8 @@
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
   :dependencies [[org.clojure/clojure "1.11.3"]
-                 [org.clojure/tools.reader "1.4.2"]
-                 [org.domaindrivenarchitecture/c4k-common-clj "6.3.1"]
+                 [org.clojure/tools.reader "1.5.0"]
+                 [org.domaindrivenarchitecture/c4k-common-clj "9.0.0-SNAPSHOT"]
                  [hickory "0.7.1" :exclusions [viebel/codox-klipse-theme]]]
   :target-path "target/%s/"
   :source-paths ["src/main/cljc"
@@ -23,9 +23,9 @@
                        :main dda.c4k-nextcloud.uberjar
                        :uberjar-name "c4k-nextcloud-standalone.jar"
                        :dependencies [[org.clojure/tools.cli "1.1.230"]
-                                      [ch.qos.logback/logback-classic "1.5.6"
+                                      [ch.qos.logback/logback-classic "1.5.16"
                                        :exclusions [com.sun.mail/javax.mail]]
-                                      [org.slf4j/jcl-over-slf4j "2.0.13"]
+                                      [org.slf4j/jcl-over-slf4j "2.0.16"]
                                       [com.github.clj-easy/graal-build-time "1.0.5"]]}}
   :release-tasks [["test"]
                   ["vcs" "assert-committed"]
