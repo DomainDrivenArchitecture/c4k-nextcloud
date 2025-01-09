@@ -11,7 +11,7 @@
 - 7.2.0: nextcloud 27 (manual publish)
 - 10.0.0: nextcloud 28.0.5
 - 10.1.0: nextcloud 29.0.0
-- 10.3.0: nextcloud 30
+- 10.4.0: nextcloud 30
 
 ## Uprgrading process
 
