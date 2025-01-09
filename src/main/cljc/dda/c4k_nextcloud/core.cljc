@@ -25,7 +25,8 @@
           #(not (nil? %))
           (cm/concat-vec
            (ns/generate resolved-config)
-           (postgres/generate (merge resolved-config {:postgres-size :8gb
+           (postgres/generate (merge resolved-config {:postgres-image "postgres:17"
+                                                      :postgres-size :8gb
                                                       :db-name "cloud"
                                                       :pv-storage-size-gb 50})
                               auth)
