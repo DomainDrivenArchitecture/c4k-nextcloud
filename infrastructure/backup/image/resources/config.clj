@@ -11,7 +11,34 @@
                                      :files ["."]}))
 
 (def file-restore-config (merge restic-repo {:backup-path "files"
-                                     :restore-target-directory "/var/backups/"}))
+                                             :restore-target-directory "/var/backups/"
+                                             :clean-up-elements [".htaccess"
+                                                                 ".reuse/"
+                                                                 ".user.ini"
+                                                                 "3rdparty/"
+                                                                 "apps/"
+                                                                 "composer.json"
+                                                                 "composer.lock"
+                                                                 "console.php"
+                                                                 "core/"
+                                                                 "cron.php"
+                                                                 "custom_apps/"
+                                                                 "data/"
+                                                                 "dist/"
+                                                                 "index.html"
+                                                                 "index.php"
+                                                                 "lib/"
+                                                                 "ocs/"
+                                                                 "ocs-provider/"
+                                                                 "package-lock.json"
+                                                                 "package.json"
+                                                                 "public.php"
+                                                                 "remote.php"
+                                                                 "resources"
+                                                                 "robots.txt"
+                                                                 "status.php"
+                                                                 "themes/"
+                                                                 "version.php"]}))
 
 (def db-config (merge restic-repo {:backup-path "pg-database"
                                    :pg-host (bc/env-or-file "POSTGRES_SERVICE")
