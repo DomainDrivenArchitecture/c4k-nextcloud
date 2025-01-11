@@ -1,4 +1,3 @@
-export ENV_PASSWORD=env-password 
 export RESTIC_PASSWORD_FILE=/tmp/file_password 
 export RESTIC_REPOSITORY=/var/restic-repo 
 export POSTGRES_SERVICE=dummy 
