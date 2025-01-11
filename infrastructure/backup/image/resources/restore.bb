@@ -20,7 +20,7 @@
   (pg/drop-create-db! cf/db-config)
   (rs/restore-db-roles! cf/db-role-config)
   (rs/restore-db! cf/db-config)
-  (rs/restore-file! cf/file-config)
+  (rs/restore-file! cf/file-restore-config)
   )
 
 (t/shell "start-maintenance.sh")
