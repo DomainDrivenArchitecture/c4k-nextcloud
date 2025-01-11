@@ -1,5 +1,6 @@
 (ns dda.c4k-nextcloud.core
   (:require
+   [clojure.spec.alpha :as s]
    #?(:clj [orchestra.core :refer [defn-spec]]
       :cljs [orchestra.core :refer-macros [defn-spec]])
    [dda.c4k-common.common :as cm]
@@ -16,8 +17,15 @@
                       :pvc-storage-class-name "hcloud-volumes-encrypted"
                       :pv-storage-size-gb 200})
 
+(def config? (s/merge ::nextcloud/config
+                      ::backup/config))
+
+(def auth? (s/merge ::nextcloud/auth
+                    ::backup/auth))
+
+
 (defn-spec config-objects cp/map-or-seq?
-  [config nextcloud/config?]
+  [config config?]
   (let [resolved-config (merge config-defaults config)]
     (map yaml/to-string
          (filter
@@ -40,8 +48,8 @@
              (mon/generate-config)))))))
 
 (defn-spec auth-objects cp/map-or-seq?
-  [config nextcloud/config?
-   auth nextcloud/auth?]
+  [config config?
+   auth auth?]
   (let [resolved-config (merge config-defaults config)]
     (map yaml/to-string
          (filter

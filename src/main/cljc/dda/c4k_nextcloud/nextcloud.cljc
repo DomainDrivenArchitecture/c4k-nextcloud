@@ -14,23 +14,20 @@
 
 (s/def ::fqdn cp/fqdn-string?)
 (s/def ::issuer cp/letsencrypt-issuer?)
-(s/def ::restic-repository string?)
 (s/def ::nextcloud-admin-user cp/bash-env-string?)
 (s/def ::nextcloud-admin-password cp/bash-env-string?)
 (s/def ::pvc-storage-class-name cp/pvc-storage-class-name?)
 (s/def ::pv-storage-size-gb pos?)
 
-(def config? (s/keys :req-un [::fqdn]
+(s/def ::config (s/keys :req-un [::fqdn]
                      :opt-un [::issuer
-                              ::restic-repository
                               ::pv-storage-size-gb
                               ::pvc-storage-class-name
                               ::mon/mon-cfg]))
 
-(def auth? (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
+(s/def ::auth (s/keys :req-un [::postgres/postgres-db-user ::postgres/postgres-db-password
                             ::nextcloud-admin-user ::nextcloud-admin-password
-                            ::aws-access-key-id ::aws-secret-access-key
-                            ::restic-password]
+                            ::aws-access-key-id ::aws-secret-access-key]
                    :opt-un [::mon/mon-auth]))
 
 #?(:cljs
@@ -38,13 +35,13 @@
      (get (inline-resources "nextcloud") resource-name)))
 
 (defn-spec generate-deployment cp/map-or-seq? 
-  [config config?]
+  [config ::config]
   (let [{:keys [fqdn]} config]
     (-> (yaml/load-as-edn "nextcloud/deployment.yaml")
         (cm/replace-all-matching "fqdn" fqdn))))
 
 (defn-spec generate-ingress-and-cert cp/map-or-seq?
-  [config config?]
+  [config ::config]
   (ing/generate-ingress-and-cert
    (merge
     {:service-name "cloud-service"
@@ -64,7 +61,7 @@
   (yaml/load-as-edn "nextcloud/service.yaml"))
 
 (defn-spec generate-secret cp/map-or-seq? 
-  [auth auth?]
+  [auth ::auth]
   (let [{:keys [nextcloud-admin-user nextcloud-admin-password]} auth]
     (->
      (yaml/load-as-edn "nextcloud/secret.yaml")

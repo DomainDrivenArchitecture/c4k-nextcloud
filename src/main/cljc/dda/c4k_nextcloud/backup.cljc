@@ -1,6 +1,8 @@
 (ns dda.c4k-nextcloud.backup
  (:require
   [clojure.spec.alpha :as s]
+  #?(:clj [orchestra.core :refer [defn-spec]]
+     :cljs [orchestra.core :refer-macros [defn-spec]])
   [dda.c4k-common.yaml :as yaml]
   [dda.c4k-common.base64 :as b64]
   [dda.c4k-common.common :as cm]
@@ -12,26 +14,35 @@
 (s/def ::restic-password cp/bash-env-string?)
 (s/def ::restic-repository cp/bash-env-string?)
 
+(s/def ::config (s/keys :req-un [::restic-repository]))
+
+(s/def ::auth (s/keys :req-un [::restic-password ::aws-access-key-id ::aws-secret-access-key]))
+
+
 #?(:cljs
    (defmethod yaml/load-resource :backup [resource-name]
      (get (inline-resources "backup") resource-name)))
 
-(defn generate-config [my-conf]
+(defn-spec generate-config map?
+  [my-conf ::config]
   (let [{:keys [restic-repository]} my-conf]
     (->
      (yaml/load-as-edn "backup/config.yaml")
      (cm/replace-key-value :restic-repository restic-repository))))
 
-(defn generate-cron []
+(defn-spec generate-cron map?
+  []
    (yaml/from-string (yaml/load-resource "backup/cron.yaml")))
 
-(defn generate-backup-restore-deployment [my-conf]
+(defn-spec generate-backup-restore-deployment map?
+  [my-conf ::config]
   (let [backup-restore-yaml (yaml/load-as-edn "backup/backup-restore-deployment.yaml")]
     (if (and (contains? my-conf :local-integration-test) (= true (:local-integration-test my-conf)))
       (cm/replace-named-value backup-restore-yaml "CERTIFICATE_FILE" "/var/run/secrets/localstack-secrets/ca.crt")
       backup-restore-yaml)))
 
-(defn generate-secret [my-auth]
+(defn-spec generate-secret map?
+  [my-auth ::auth]
   (let [{:keys [aws-access-key-id aws-secret-access-key restic-password]} my-auth]
     (->
      (yaml/load-as-edn "backup/secret.yaml")
