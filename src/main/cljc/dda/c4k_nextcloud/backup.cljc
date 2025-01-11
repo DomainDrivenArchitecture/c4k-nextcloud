@@ -10,6 +10,7 @@
 (s/def ::aws-access-key-id cp/bash-env-string?)
 (s/def ::aws-secret-access-key cp/bash-env-string?)
 (s/def ::restic-password cp/bash-env-string?)
+(s/def ::restic-new-password cp/bash-env-string?)
 (s/def ::restic-repository cp/bash-env-string?)
 
 #?(:cljs
@@ -27,7 +28,8 @@
 
 (defn generate-backup-restore-deployment [my-conf]
   (let [backup-restore-yaml (yaml/load-as-edn "backup/backup-restore-deployment.yaml")]
-    (if (and (contains? my-conf :local-integration-test) (= true (:local-integration-test my-conf)))
+    (if (and (contains? my-conf :local-integration-test) 
+             (= true (:local-integration-test my-conf)))
       (cm/replace-named-value backup-restore-yaml "CERTIFICATE_FILE" "/var/run/secrets/localstack-secrets/ca.crt")
       backup-restore-yaml)))
 
