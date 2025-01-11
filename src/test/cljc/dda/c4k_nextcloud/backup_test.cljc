@@ -15,8 +15,25 @@
           :metadata {:name "backup-secret", :namespace "nextcloud"}
           :type "Opaque"
           :data
-          {:aws-access-key-id "YXdzLWlk", :aws-secret-access-key "YXdzLXNlY3JldA==", :restic-password "cmVzdGljLXB3"}}
-         (cut/generate-secret {:aws-access-key-id "aws-id" :aws-secret-access-key "aws-secret" :restic-password "restic-pw"}))))
+          {:aws-access-key-id "YXdzLWlk", 
+           :aws-secret-access-key "YXdzLXNlY3JldA==", 
+           :restic-password "cmVzdGljLXB3"}}
+         (cut/generate-secret {:aws-access-key-id "aws-id" 
+                               :aws-secret-access-key "aws-secret" 
+                               :restic-password "restic-pw"})))
+  (is (= {:apiVersion "v1"
+          :kind "Secret"
+          :metadata {:name "backup-secret", :namespace "nextcloud"}
+          :type "Opaque"
+          :data
+          {:aws-access-key-id "YXdzLWlk",
+           :aws-secret-access-key "YXdzLXNlY3JldA==",
+           :restic-password "cmVzdGljLXB3"
+           :restic-new-password "bmV3LXJlc3RpYy1wdw=="}}
+         (cut/generate-secret {:aws-access-key-id "aws-id"
+                               :aws-secret-access-key "aws-secret"
+                               :restic-password "restic-pw"
+                               :restic-new-password "new-restic-pw"}))))
 
 (deftest should-generate-config
   (is (= {:apiVersion "v1"
@@ -68,7 +85,8 @@
                   {:name "AWS_ACCESS_KEY_ID_FILE", :value "/var/run/secrets/backup-secrets/aws-access-key-id"}
                   {:name "AWS_SECRET_ACCESS_KEY_FILE", :value "/var/run/secrets/backup-secrets/aws-secret-access-key"}
                   {:name "RESTIC_REPOSITORY", :valueFrom {:configMapKeyRef {:name "backup-config", :key "restic-repository"}}}
-                  {:name "RESTIC_PASSWORD_FILE", :value "/var/run/secrets/backup-secrets/restic-password"}]
+                  {:name "RESTIC_PASSWORD_FILE", :value "/var/run/secrets/backup-secrets/restic-password"}
+                   {:name "RESTIC_NEW_PASSWORD_FILE", :value "/var/run/secrets/backup-secrets/restic-new-password"}]
                  :volumeMounts
                  [{:name "cloud-data-volume", :mountPath "/var/backups"}
                   {:name "backup-secret-volume", :mountPath "/var/run/secrets/backup-secrets", :readOnly true}
