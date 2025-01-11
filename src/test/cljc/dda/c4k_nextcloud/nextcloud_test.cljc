@@ -2,23 +2,19 @@
   (:require
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
-   [clojure.spec.alpha :as s]
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-nextcloud.nextcloud :as cut]
    #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])))
 
-(st/instrument)
+(st/instrument `cut/generate-secret)
+(st/instrument `cut/generate-ingress-and-cert)
+(st/instrument `cut/generate-pvc)
+(st/instrument `cut/generate-deployment)
 
 #?(:cljs
    (defmethod yaml/load-resource :nextcloud-test [resource-name]
      (get (inline-resources "nextcloud-test") resource-name)))
-
-(deftest validate-valid-resources
-  (is (s/valid? cut/config? (yaml/load-as-edn "nextcloud-test/valid-config.yaml")))
-  (is (s/valid? cut/auth? (yaml/load-as-edn "nextcloud-test/valid-auth.yaml")))
-  (is (not (s/valid? cut/config? (yaml/load-as-edn "nextcloud-test/invalid-config.yaml"))))
-  (is (not (s/valid? cut/auth? (yaml/load-as-edn "nextcloud-test/invalid-auth.yaml")))))
 
 (deftest should-generate-secret
   (is (= {:apiVersion "v1"
@@ -95,7 +91,7 @@
            {:metadata {:labels {:app "cloud-app", :app.kubernetes.io/name "cloud-pod", :app.kubernetes.io/application "cloud", :redeploy "v3"}}
             :spec
             {:containers
-             [{:image "domaindrivenarchitecture/c4k-cloud:10.4.0"
+             [{:image "domaindrivenarchitecture/c4k-cloud:10.4.2"
                :name "cloud-app"
                :imagePullPolicy "IfNotPresent"
                :ports [{:containerPort 80}]

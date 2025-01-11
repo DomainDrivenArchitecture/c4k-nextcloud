@@ -2,8 +2,12 @@
   (:require
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
+   [clojure.spec.test.alpha :as st]
    [dda.c4k-nextcloud.backup :as cut]))
 
+(st/instrument `cut/generate-secret)
+(st/instrument `cut/generate-config)
+(st/instrument `cut/generate-cron)
 
 (deftest should-generate-secret
   (is (= {:apiVersion "v1"
