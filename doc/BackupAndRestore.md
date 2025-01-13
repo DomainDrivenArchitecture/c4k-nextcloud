@@ -9,16 +9,12 @@
 
 ## Manual backup
 
-1. Scale Cloud deployment down:   
-  `kubectl -n nextcloud scale deployment cloud-deployment --replicas=0`
 1. Scale backup-restore deployment up:   
    `kubectl -n nextcloud scale deployment backup-restore --replicas=1`
-1. exec into pod and execute restore pod   
+2. exec into pod and execute restore pod   
    `kubectl -n nextcloud exec -it backup-restore -- backup.bb`
-1. Scale backup-restore deployment down:   
+3. Scale backup-restore deployment down:   
   `kubectl -n nextcloud scale deployment backup-restore --replicas=0`
-1. Scale Cloud deployment up:   
-   `kubectl -n nextcloud scale deployment cloud-deployment --replicas=1`
 
 ## Manual restore
 
@@ -32,3 +28,40 @@
   `kubectl -n nextcloud scale deployment backup-restore --replicas=0`
 5. Scale Cloud deployment up:   
    `kubectl -n nextcloud scale deployment cloud-deployment --replicas=1`
+
+## Change Password
+
+1. Apply restic-new-password to secret & backup deployment   
+   ```
+   kind: Deployment
+   metadata:
+     name: backup-restore
+   spec:
+       spec:
+         containers:
+         - name: backup-app
+           env:
+           - name: RESTIC_NEW_PASSWORD_FILE
+             value: /var/run/secrets/backup-secrets/restic-new-password
+   ---
+   kind: Secret
+   metadata:
+     name: backup-secret
+   data:
+     restic-password: old
+     restic-new-password: new
+   ```
+2. Scale backup-restore deployment up:   
+   `kubectl -n nextcloud scale deployment backup-restore --replicas=1`
+3. exec into pod and execute restore pod   
+   `kubectl -n nextcloud exec -it backup-restore -- change-password.bb`
+4. Scale backup-restore deployment down:   
+  `kubectl -n nextcloud scale deployment backup-restore --replicas=0`
+5. Replace restic-password with restic-new-password in secret   
+   ```
+   kind: Secret
+   metadata:
+     name: backup-secret
+   data:
+     restic-password: new
+   ```

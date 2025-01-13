@@ -15,8 +15,25 @@
           :metadata {:name "backup-secret", :namespace "nextcloud"}
           :type "Opaque"
           :data
-          {:aws-access-key-id "YXdzLWlk", :aws-secret-access-key "YXdzLXNlY3JldA==", :restic-password "cmVzdGljLXB3"}}
-         (cut/generate-secret {:aws-access-key-id "aws-id" :aws-secret-access-key "aws-secret" :restic-password "restic-pw"}))))
+          {:aws-access-key-id "YXdzLWlk", 
+           :aws-secret-access-key "YXdzLXNlY3JldA==", 
+           :restic-password "cmVzdGljLXB3"}}
+         (cut/generate-secret {:aws-access-key-id "aws-id" 
+                               :aws-secret-access-key "aws-secret" 
+                               :restic-password "restic-pw"})))
+  (is (= {:apiVersion "v1"
+          :kind "Secret"
+          :metadata {:name "backup-secret", :namespace "nextcloud"}
+          :type "Opaque"
+          :data
+          {:aws-access-key-id "YXdzLWlk",
+           :aws-secret-access-key "YXdzLXNlY3JldA==",
+           :restic-password "cmVzdGljLXB3"
+           :restic-new-password "bmV3LXJlc3RpYy1wdw=="}}
+         (cut/generate-secret {:aws-access-key-id "aws-id"
+                               :aws-secret-access-key "aws-secret"
+                               :restic-password "restic-pw"
+                               :restic-new-password "new-restic-pw"}))))
 
 (deftest should-generate-config
   (is (= {:apiVersion "v1"

@@ -11,6 +11,7 @@
 (in/install! "backup.bb")
 (in/install! "restore.bb")
 (in/install! "list-snapshots.bb")
+(in/install! "change-password.bb")
 (in/install! "start-maintenance.sh")
 (in/install! "end-maintenance.sh")
 (in/install! "restore.bb")
