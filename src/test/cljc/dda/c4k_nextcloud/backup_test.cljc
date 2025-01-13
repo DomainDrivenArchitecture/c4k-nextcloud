@@ -85,8 +85,7 @@
                   {:name "AWS_ACCESS_KEY_ID_FILE", :value "/var/run/secrets/backup-secrets/aws-access-key-id"}
                   {:name "AWS_SECRET_ACCESS_KEY_FILE", :value "/var/run/secrets/backup-secrets/aws-secret-access-key"}
                   {:name "RESTIC_REPOSITORY", :valueFrom {:configMapKeyRef {:name "backup-config", :key "restic-repository"}}}
-                  {:name "RESTIC_PASSWORD_FILE", :value "/var/run/secrets/backup-secrets/restic-password"}
-                   {:name "RESTIC_NEW_PASSWORD_FILE", :value "/var/run/secrets/backup-secrets/restic-new-password"}]
+                  {:name "RESTIC_PASSWORD_FILE", :value "/var/run/secrets/backup-secrets/restic-password"}]
                  :volumeMounts
                  [{:name "cloud-data-volume", :mountPath "/var/backups"}
                   {:name "backup-secret-volume", :mountPath "/var/run/secrets/backup-secrets", :readOnly true}

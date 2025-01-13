@@ -53,8 +53,6 @@ spec:
                   key: restic-repository
             - name: RESTIC_PASSWORD_FILE
               value: /var/run/secrets/backup-secrets/restic-password
-            - name: RESTIC_NEW_PASSWORD_FILE
-              value: /var/run/secrets/backup-secrets/restic-new-password
             volumeMounts:
             - name: cloud-data-volume
               mountPath: /var/backups
