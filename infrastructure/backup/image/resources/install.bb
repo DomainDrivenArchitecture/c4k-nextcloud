@@ -6,7 +6,7 @@
 
 (ub/upgrade-system!)
 (in/install! "bb-backup.edn" :target-name "bb.edn" :mod "0440")
-(in/install! "config.clj" :mod "0440")
+(in/install! "config.edn" :mod "0440")
 (in/install! "init.bb")
 (in/install! "backup.bb")
 (in/install! "restore.bb")

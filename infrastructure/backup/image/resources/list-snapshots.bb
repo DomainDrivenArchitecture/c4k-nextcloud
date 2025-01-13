@@ -1,22 +1,21 @@
 #!/usr/bin/env bb
 (require
- '[babashka.fs :as fs])
-(-> "/usr/local/bin/config.clj" fs/file load-file)
-
-(require
  '[dda.backup.core :as bc]
- '[dda.backup.restic :as rc]
- '[config :as cf])
+ '[dda.backup.config :as cfg]
+ '[dda.backup.restic :as rc])
+
+(def config (cfg/read-config "/usr/local/bin/config.edn"))
+
 
 (defn prepare!
   []
-  (bc/create-aws-credentials! cf/aws-config))
+  (bc/create-aws-credentials! (:aws-config config)))
 
 (defn list-snapshots!
   []
-  (rc/list-snapshots! cf/file-config)
-  (rc/list-snapshots! cf/db-role-config)
-  (rc/list-snapshots! cf/db-config))
+  (rc/list-snapshots! (:file-config config))
+  (rc/list-snapshots! (:db-role-config config))
+  (rc/list-snapshots! (:db-config config)))
 
 (prepare!)
 (list-snapshots!)

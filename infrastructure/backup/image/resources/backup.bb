@@ -1,32 +1,31 @@
 #!/usr/bin/env bb
 (require
- '[babashka.fs :as fs])
-(-> "/usr/local/bin/config.clj" fs/file load-file)
-
-(require
  '[babashka.tasks :as t]
  '[dda.backup.core :as bc]
+ '[dda.backup.config :as cfg]
  '[dda.backup.restic :as rc]
  '[dda.backup.postgresql :as pg]
- '[dda.backup.backup :as bak]
- '[config :as cf])
+ '[dda.backup.backup :as bak])
+
+(def config (cfg/read-config "/usr/local/bin/config.edn"))
+
 
 (defn prepare!
   []
-  (bc/create-aws-credentials! cf/aws-config)
-  (pg/create-pg-pass! cf/db-config))
+  (bc/create-aws-credentials! (:aws-config config))
+  (pg/create-pg-pass! (:db-config config)))
 
 (defn restic-repo-init!
   []
-  (rc/init! cf/file-config)
-  (rc/init! cf/db-role-config)
-  (rc/init! cf/db-config))
+  (rc/init! (:file-config config))
+  (rc/init! (:db-role-config config))
+  (rc/init! (:db-config config)))
 
 (defn restic-backup!
   []
-  (bak/backup-file! cf/file-config)
-  (bak/backup-db-roles! cf/db-role-config)
-  (bak/backup-db! cf/db-config))
+  (bak/backup-file! (:file-config config))
+  (bak/backup-db-roles! (:db-role-config config))
+  (bak/backup-db! (:db-config config)))
 
 (t/shell "start-maintenance.sh")
 (prepare!)

@@ -1,20 +1,21 @@
 #!/usr/bin/env bb
 (require
- '[babashka.fs :as fs])
-(-> "/usr/local/bin/config.clj" fs/file load-file)
-
-(require
  '[dda.backup.core :as bc]
- '[dda.backup.restic :as rc]
- '[config :as cf])
+ '[dda.backup.config :as cfg]
+ '[dda.backup.restic :as rc])
 
-(def file-pw-change-config (merge cf/file-config {:new-password-file (bc/env-or-file "RESTIC_NEW_PASSWORD_FILE")}))
-(def db-pw-change-config (merge cf/db-config {:new-password-file (bc/env-or-file "RESTIC_NEW_PASSWORD_FILE")}))
-(def db-role-pw-change-config (merge cf/db-role-config {:new-password-file (bc/env-or-file "RESTIC_NEW_PASSWORD_FILE")}))
+(def config (cfg/read-config "/usr/local/bin/config.edn"))
+
+(def file-pw-change-config (merge (:file-config config)
+                                  {:new-password-file (bc/env-or-file "RESTIC_NEW_PASSWORD_FILE")}))
+(def db-role-pw-change-config (merge (:db-role-config config)
+                                     {:new-password-file (bc/env-or-file "RESTIC_NEW_PASSWORD_FILE")}))
+(def db-pw-change-config (merge (:db-config config) 
+                                {:new-password-file (bc/env-or-file "RESTIC_NEW_PASSWORD_FILE")}))
 
 (defn prepare!
   []
-  (bc/create-aws-credentials! cf/aws-config))
+  (bc/create-aws-credentials! (:aws-config config)))
 
 (defn change-password!
   []

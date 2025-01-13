@@ -1,17 +1,16 @@
 #!/usr/bin/env bb
-(require
- '[babashka.fs :as fs])
-(-> "/usr/local/bin/config.clj" fs/file load-file)
-
 (require '[babashka.tasks :as tasks]
          '[dda.backup.core :as bc]
+ '[dda.backup.config :as cfg]
          '[dda.backup.restic :as rc]
          '[dda.backup.postgresql :as pg]
          '[dda.backup.backup :as bak]
-         '[dda.backup.restore :as rs]
-         '[config :as cf])
+         '[dda.backup.restore :as rs])
 
-(def file-pw-change-config (merge cf/file-config {:new-password-file (bc/env-or-file "RESTIC_NEW_PASSWORD_FILE")}))
+(def config (cfg/read-config "/usr/local/bin/config.edn"))
+
+(def file-pw-change-config (merge (:file-config config) 
+                                  {:new-password-file (bc/env-or-file "RESTIC_NEW_PASSWORD_FILE")}))
 
 (defn prepare!
   []
@@ -21,29 +20,39 @@
 
 (defn restic-repo-init!
   []
-  (rc/init! cf/file-config)
-  (rc/init! (merge cf/db-role-config cf/dry-run))
-  (rc/init! (merge cf/db-config cf/dry-run)))
+  (rc/init! (:file-config config))
+  (rc/init! (merge (:db-role-config config) 
+                   (:dry-run config)))
+  (rc/init! (merge (:db-config config)
+                   (:dry-run config))))
 
 (defn restic-backup!
   []
-  (bak/backup-file! cf/file-config)
-  (bak/backup-db-roles! (merge cf/db-role-config cf/dry-run))
-  (bak/backup-db! (merge cf/db-config cf/dry-run)))
+  (bak/backup-file! (:file-config config))
+  (bak/backup-db-roles! (merge (:db-role-config config) 
+                               (:dry-run config)))
+  (bak/backup-db! (merge (:db-config config)
+                         (:dry-run config))))
 
 (defn list-snapshots!
   []
-  (rc/list-snapshots! cf/file-config)
-  (rc/list-snapshots! (merge cf/db-role-config cf/dry-run))
-  (rc/list-snapshots! (merge cf/db-config cf/dry-run)))
+  (rc/list-snapshots! (:file-config config))
+  (rc/list-snapshots! (merge (:db-role-config config) 
+                             (:dry-run config)))
+  (rc/list-snapshots! (merge (:db-config config)
+                             (:dry-run config))))
 
 
 (defn restic-restore!
   []
-  (pg/drop-create-db! (merge cf/db-config cf/dry-run))
-  (rs/restore-db-roles! (merge cf/db-role-config cf/dry-run))
-  (rs/restore-db! (merge cf/db-config cf/dry-run))
-  (rs/restore-file! (merge cf/file-restore-config cf/dry-run)))
+  (pg/drop-create-db! (merge (:db-config config)
+                             (:dry-run config)))
+  (rs/restore-db-roles! (merge (:db-role-config config) 
+                               (:dry-run config)))
+  (rs/restore-db! (merge (:db-config config)
+                         (:dry-run config)))
+  (rs/restore-file! (merge (:file-restore-config config)
+                           (:dry-run config))))
 
 (defn change-password!
   []

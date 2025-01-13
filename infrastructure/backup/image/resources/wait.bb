@@ -1,17 +1,15 @@
 #!/usr/bin/env bb
 (require
- '[babashka.fs :as fs])
-(-> "/usr/local/bin/config.clj" fs/file load-file)
-
-(require
  '[dda.backup.core :as bc]
- '[dda.backup.postgresql :as pg]
- '[config :as cf])
+ '[dda.backup.config :as cfg]
+ '[dda.backup.postgresql :as pg])
+
+(def config (cfg/read-config "/usr/local/bin/config.edn"))
 
 (defn prepare!
   []
-  (bc/create-aws-credentials! cf/aws-config)
-  (pg/create-pg-pass! cf/db-config))
+  (bc/create-aws-credentials! (:aws-config config))
+  (pg/create-pg-pass! (:db-config config)))
 
 (defn wait! []
   (while true
