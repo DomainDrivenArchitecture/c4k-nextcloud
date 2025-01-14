@@ -3,7 +3,6 @@
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
    [clojure.spec.test.alpha :as st]
-   [dda.c4k-common.yaml :as yaml]
    [dda.c4k-nextcloud.nextcloud :as cut]
    #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])))
 
