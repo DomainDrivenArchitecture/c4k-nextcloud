@@ -17,10 +17,9 @@
           :pvc-storage-class-name \"local-path\"                                                                                  
           :postgres-data-volume-path \"/var/postgres\"
           :restic-repository \"s3://yourbucket/your-repo\"
-          :restic-password \"restic-password\"}
           :mon-cfg {:cluster-name \"cloud\"
                     :cluster-stage \"test\"
-                    :cloud-url \"https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push\"}"
+                    :cloud-url \"https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push\"}}"
                                                 "5"))
       (br/generate-group "auth"
                          (br/generate-text-area "auth" "Your auth.edn:" "{:postgres-db-user \"nextcloud\"
