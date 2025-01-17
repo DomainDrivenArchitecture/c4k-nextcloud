@@ -1,0 +1,59 @@
+{:restic-repo {:password-file #env-or-file "RESTIC_PASSWORD_FILE"
+               :restic-repository #env-or-file "RESTIC_REPOSITORY"}
+ 
+ :file-config #merge [#ref [:restic-repo]
+                      {:backup-path "files"
+                       :execution-directory "/var/backups"
+                       :restore-target-directory "/var/backups/"
+                       :files ["."]}]
+ 
+ :file-restore-config #merge [#ref [:restic-repo]
+                              {:backup-path "files"
+                               :restore-target-directory "/var/backups/"
+                               :clean-up-elements [".htaccess"
+                                                   ".reuse/"
+                                                   ".user.ini"
+                                                   "3rdparty/"
+                                                   "apps/"
+                                                   "composer.json"
+                                                   "composer.lock"
+                                                   "console.php"
+                                                   "core/"
+                                                   "cron.php"
+                                                   "custom_apps/"
+                                                   "data/"
+                                                   "dist/"
+                                                   "index.html"
+                                                   "index.php"
+                                                   "lib/"
+                                                   "ocs/"
+                                                   "ocs-provider/"
+                                                   "package-lock.json"
+                                                   "package.json"
+                                                   "public.php"
+                                                   "remote.php"
+                                                   "resources"
+                                                   "robots.txt"
+                                                   "status.php"
+                                                   "themes/"
+                                                   "version.php"]}]
+ 
+ :db-config #merge [#ref [:restic-repo] {:backup-path "pg-database"
+                                         :pg-host #env-or-file "POSTGRES_SERVICE"
+                                         :pg-port #env-or-file "POSTGRES_PORT"
+                                         :pg-db #env-or-file "POSTGRES_DB"
+                                         :pg-user #env-or-file "POSTGRES_USER"
+                                         :pg-password #env-or-file "POSTGRES_PASSWORD"}]
+
+ :db-role-config #merge [#ref [:restic-repo] {:backup-path "pg-role"
+                                              :pg-role-prefix "oc_"
+                                              :pg-host #env-or-file "POSTGRES_SERVICE"
+                                              :pg-port #env-or-file "POSTGRES_PORT"
+                                              :pg-db #env-or-file "POSTGRES_DB"
+                                              :pg-user #env-or-file "POSTGRES_USER"
+                                              :pg-password #env-or-file "POSTGRES_PASSWORD"}]
+
+ :aws-config {:aws-access-key-id #env-or-file "AWS_ACCESS_KEY_ID"
+              :aws-secret-access-key #env-or-file "AWS_SECRET_ACCESS_KEY"}
+
+ :dry-run {:dry-run true :debug true}}

@@ -22,12 +22,6 @@ logs/
 *.iml
 .idea/
 
-# config files
-my-auth.edn
-my-config.edn
-auth.edn
-config.edn
-
 # certificate
 ca.crt
 
