@@ -2,9 +2,10 @@
   (:require
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
+   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])
+   [dda.c4k-common.yaml :as yaml]
    [clojure.spec.test.alpha :as st]
-   [dda.c4k-nextcloud.nextcloud :as cut]
-   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])))
+   [dda.c4k-nextcloud.nextcloud :as cut]))
 
 (st/instrument `cut/generate-secret)
 (st/instrument `cut/generate-ingress-and-cert)
@@ -75,10 +76,10 @@
                      :namespace "nextcloud"
                      :labels {:app.kubernetes.io/application "cloud"}}
           :spec {:storageClassName "local-path"
-                  :accessModes ["ReadWriteOnce"]
-                  :resources {:requests {:storage "50Gi"}}}}
+                 :accessModes ["ReadWriteOnce"]
+                 :resources {:requests {:storage "50Gi"}}}}
          (cut/generate-pvc {:pv-storage-size-gb 50 :pvc-storage-class-name "local-path"}))))
- 
+
 (deftest should-generate-deployment
   (is (= {:apiVersion "apps/v1"
           :kind "Deployment"
