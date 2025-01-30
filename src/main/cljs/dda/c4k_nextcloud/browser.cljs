@@ -10,19 +10,21 @@
    [(assoc
      (br/generate-needs-validation) :content
      (cm/concat-vec
-      (br/generate-group "config"
-                         (br/generate-text-area "config" "Your config.edn:" "{:fqdn \"cloud.your.domain\"
+      (br/generate-group
+       "config"
+       (br/generate-text-area "config" "Your config.edn:" "{:fqdn \"cloud.your.domain\"
  :issuer \"staging\"
  :pv-storage-size-gb \"400\"
  :pvc-storage-class-name \"local-path\"                                                                                  
  :postgres-data-volume-path \"/var/postgres\"
  :restic-repository \"s3://yourbucket/your-repo\"
  :mon-cfg {:cluster-name \"cloud\"
-           :cluster-stage \"test\"
-           :grafana-cloud-url \"https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push\"}}"
-                                                "5"))
-      (br/generate-group "auth"
-                         (br/generate-text-area "auth" "Your auth.edn:" "{:postgres-db-user \"nextcloud\"
+                 :cluster-stage \"test\"
+                 :grafana-cloud-url \"https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push\"}}"
+                              "9"))
+      (br/generate-group
+       "auth"
+       (br/generate-text-area "auth" "Your auth.edn:" "{:postgres-db-user \"nextcloud\"
  :postgres-db-password \"nextcloud-db-password\"
  :nextcloud-admin-password \"nextcloud-admin-password\"
  :nextcloud-admin-user \"nextcloud-admin-user\"                                                                                  
@@ -30,8 +32,8 @@
  :aws-secret-access-key \"aws-secret\"
  :restic-password \"restic-password\"}
  :mon-auth {:grafana-cloud-user \"your-user-id\"
-            :grafana-cloud-password \"your-cloud-password\"}"
-                                                "5"))
+                   :grafana-cloud-password \"your-cloud-password\"}"
+                              "9"))
       [(br/generate-br)]
       (br/generate-button "generate-button" "Generate c4k yaml")))]
    (br/generate-output "c4k-nextcloud-output" "Your c4k deployment.yaml:" "25")))
@@ -46,7 +48,7 @@
 (defn validate-all! []
   (br/validate! "config" core/config? :deserializer edn/read-string)
   (br/validate! "auth" core/auth? :deserializer edn/read-string)
-  (br/set-validated!))
+  (br/set-form-validated!))
 
 (defn add-validate-listener [name]
   (-> (br/get-element-by-id name)
