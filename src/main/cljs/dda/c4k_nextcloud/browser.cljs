@@ -12,25 +12,25 @@
      (cm/concat-vec
       (br/generate-group "config"
                          (br/generate-text-area "config" "Your config.edn:" "{:fqdn \"cloud.your.domain\"
-          :issuer \"staging\"
-          :pv-storage-size-gb \"400\"
-          :pvc-storage-class-name \"local-path\"                                                                                  
-          :postgres-data-volume-path \"/var/postgres\"
-          :restic-repository \"s3://yourbucket/your-repo\"
-          :mon-cfg {:cluster-name \"cloud\"
-                    :cluster-stage \"test\"
-                    :cloud-url \"https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push\"}}"
+ :issuer \"staging\"
+ :pv-storage-size-gb \"400\"
+ :pvc-storage-class-name \"local-path\"                                                                                  
+ :postgres-data-volume-path \"/var/postgres\"
+ :restic-repository \"s3://yourbucket/your-repo\"
+ :mon-cfg {:cluster-name \"cloud\"
+           :cluster-stage \"test\"
+           :grafana-cloud-url \"https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push\"}}"
                                                 "5"))
       (br/generate-group "auth"
                          (br/generate-text-area "auth" "Your auth.edn:" "{:postgres-db-user \"nextcloud\"
-         :postgres-db-password \"nextcloud-db-password\"
-         :nextcloud-admin-password \"nextcloud-admin-password\"
-         :nextcloud-admin-user \"nextcloud-admin-user\"                                                                                  
-         :aws-access-key-id \"aws-id\"
-         :aws-secret-access-key \"aws-secret\"
-         :restic-password \"restic-password\"}
-         :mon-auth {:grafana-cloud-user \"your-user-id\"
-                    :grafana-cloud-password \"your-cloud-password\"}"
+ :postgres-db-password \"nextcloud-db-password\"
+ :nextcloud-admin-password \"nextcloud-admin-password\"
+ :nextcloud-admin-user \"nextcloud-admin-user\"                                                                                  
+ :aws-access-key-id \"aws-id\"
+ :aws-secret-access-key \"aws-secret\"
+ :restic-password \"restic-password\"}
+ :mon-auth {:grafana-cloud-user \"your-user-id\"
+            :grafana-cloud-password \"your-cloud-password\"}"
                                                 "5"))
       [(br/generate-br)]
       (br/generate-button "generate-button" "Generate c4k yaml")))]
