@@ -32,7 +32,7 @@
  :aws-secret-access-key \"aws-secret\"
  :restic-password \"restic-password\"}
  :mon-auth {:grafana-cloud-user \"your-user-id\"
-                   :grafana-cloud-password \"your-cloud-password\"}"
+                   :grafana-cloud-password \"your-cloud-password\"}}"
                               "9"))
       [(br/generate-br)]
       (br/generate-button "generate-button" "Generate c4k yaml")))]
