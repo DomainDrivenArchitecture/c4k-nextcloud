@@ -12,7 +12,9 @@
      (cm/concat-vec
       (br/generate-group
        "config"
-       (br/generate-text-area "config" "Your config.edn:" "{:fqdn \"cloud.your.domain\"
+       (br/generate-text-area 
+        "config" "Your config.edn:" 
+        "{:fqdn \"cloud.your.domain\"
  :issuer \"staging\"
  :pv-storage-size-gb \"400\"
  :pvc-storage-class-name \"local-path\"                                                                                  
@@ -24,7 +26,9 @@
                               "9"))
       (br/generate-group
        "auth"
-       (br/generate-text-area "auth" "Your auth.edn:" "{:postgres-db-user \"nextcloud\"
+       (br/generate-text-area 
+        "auth" "Your auth.edn:" 
+        "{:postgres-db-user \"nextcloud\"
  :postgres-db-password \"nextcloud-db-password\"
  :nextcloud-admin-password \"nextcloud-admin-password\"
  :nextcloud-admin-user \"nextcloud-admin-user\"                                                                                  
