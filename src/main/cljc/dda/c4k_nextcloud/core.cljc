@@ -17,10 +17,10 @@
                       :pvc-storage-class-name "hcloud-volumes-encrypted"
                       :pv-storage-size-gb 200})
 
-(def config? (s/merge ::nextcloud/config
+(s/def ::config (s/merge ::nextcloud/config
                       ::backup/config))
 
-(def auth? (s/merge ::nextcloud/auth
+(s/def ::auth (s/merge ::nextcloud/auth
                     ::backup/auth))
 
 (s/def ::config-select (s/* #{"auth" "deployment"}))
@@ -28,7 +28,7 @@
 
 (defn-spec config-objects seq?
   [config-select ::config-select
-   config config?]
+   config ::config]
   (let [resolved-config (merge config-defaults config)
         {:keys [fqdn max-rate max-concurrent-requests namespace]} resolved-config
         config-parts (if (empty? config-select)
@@ -64,8 +64,8 @@
 
 (defn-spec auth-objects cp/map-or-seq?
   [config-select ::config-select
-   config config?
-   auth auth?]
+   config ::config
+   auth ::auth]
   (let [resolved-config (merge config-defaults config)
         config-parts (if (empty? config-select)
                        ["auth" "deployment"]

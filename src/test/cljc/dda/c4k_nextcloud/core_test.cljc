@@ -10,10 +10,10 @@
 (st/instrument `cut/auth-objects)
 
 (deftest validate-valid-resources
-  (is (s/valid? cut/config? (yaml/load-as-edn "nextcloud-test/valid-config.yaml")))
-  (is (s/valid? cut/auth? (yaml/load-as-edn "nextcloud-test/valid-auth.yaml")))
-  (is (not (s/valid? cut/config? (yaml/load-as-edn "nextcloud-test/invalid-config.yaml"))))
-  (is (not (s/valid? cut/auth? (yaml/load-as-edn "nextcloud-test/invalid-auth.yaml")))))
+  (is (s/valid? ::cut/config (yaml/load-as-edn "nextcloud-test/valid-config.yaml")))
+  (is (s/valid? ::cut/auth (yaml/load-as-edn "nextcloud-test/valid-auth.yaml")))
+  (is (not (s/valid? ::cut/config (yaml/load-as-edn "nextcloud-test/invalid-config.yaml"))))
+  (is (not (s/valid? ::cut/auth (yaml/load-as-edn "nextcloud-test/invalid-auth.yaml")))))
 
 (deftest test-whole-generation
   (is (= 34
