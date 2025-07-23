@@ -25,43 +25,6 @@
                                :nextcloud-admin-user "cloudadmin"
                                :nextcloud-admin-password "cloudpassword"}))))
 
-(deftest should-generate-ingress-and-cert
-  (is (= [{:apiVersion "cert-manager.io/v1",
-           :kind "Certificate",
-           :metadata
-           {:name "cloud-service",
-            :labels {:app.kubernetes.part-of "cloud-service"},
-            :namespace "default"},
-           :spec
-           {:secretName "cloud-service",
-            :commonName "somefqdn.de",
-            :duration "2160h",
-            :renewBefore "720h",
-            :dnsNames ["somefqdn.de"],
-            :issuerRef {:name "staging", :kind "ClusterIssuer"}}}
-          {:apiVersion "networking.k8s.io/v1",
-           :kind "Ingress",
-           :metadata
-           {:name "cloud-service",
-            :namespace "default",
-            :labels {:app.kubernetes.part-of "cloud-service"},
-            :annotations
-            {:traefik.ingress.kubernetes.io/router.entrypoints "web, websecure",
-             :traefik.ingress.kubernetes.io/router.middlewares
-             "default-redirect-https@kubernetescrd",
-             :metallb.universe.tf/address-pool "public"}},
-           :spec
-           {:tls [{:hosts ["somefqdn.de"], :secretName "cloud-service"}],
-            :rules
-            [{:host "somefqdn.de",
-              :http
-              {:paths
-               [{:pathType "Prefix",
-                 :path "/",
-                 :backend
-                 {:service {:name "cloud-service", :port {:number 80}}}}]}}]}}]
-         (cut/generate-ingress-and-cert {:fqdn "somefqdn.de"}))))
-
 (deftest should-generate-pvc
   (is (= {:apiVersion "v1"
           :kind "PersistentVolumeClaim"

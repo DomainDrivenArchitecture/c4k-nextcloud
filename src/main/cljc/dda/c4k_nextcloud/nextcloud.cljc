@@ -3,7 +3,6 @@
    [clojure.spec.alpha :as s]
    [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.yaml :as yaml]
-   [dda.c4k-common.ingress :as ing]
    [dda.c4k-common.base64 :as b64]
    [dda.c4k-common.predicate :as cp]
    [dda.c4k-common.postgres :as postgres]
@@ -33,15 +32,6 @@
   (let [{:keys [fqdn]} config]
     (-> (yaml/load-as-edn "nextcloud/deployment.yaml")
         (cm/replace-all-matching "fqdn" fqdn))))
-
-(defn-spec generate-ingress-and-cert cp/map-or-seq?
-  [config ::config]
-  (ing/generate-ingress-and-cert
-   (merge
-    {:service-name "cloud-service"
-     :service-port 80
-     :fqdns [(:fqdn config)]}
-    config)))
 
 (defn-spec generate-pvc cp/map-or-seq?
   [config (s/keys :req-un [::pv-storage-size-gb ::pvc-storage-class-name])]

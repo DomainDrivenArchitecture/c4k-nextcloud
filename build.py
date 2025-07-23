@@ -50,7 +50,7 @@ def test_schema():
         "java -jar target/uberjar/c4k-nextcloud-standalone.jar "
         + "src/test/resources/nextcloud-test/valid-config.yaml "
         + "src/test/resources/nextcloud-test/valid-auth.yaml | "
-        + "kubeconform --kubernetes-version 1.23.0 --strict --skip Certificate -",
+        + """kubeconform --kubernetes-version 1.23.0 --strict --skip "Certificate,Middleware" -""",
         shell=True,
         check=True,
     )
