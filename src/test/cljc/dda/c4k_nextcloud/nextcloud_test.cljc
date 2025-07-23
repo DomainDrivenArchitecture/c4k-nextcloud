@@ -1,9 +1,6 @@
 (ns dda.c4k-nextcloud.nextcloud-test
   (:require
-   #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
-      :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
-   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])
-   [dda.c4k-common.yaml :as yaml]
+   [clojure.test :refer [deftest is are testing run-tests]]
    [clojure.spec.test.alpha :as st]
    [dda.c4k-nextcloud.nextcloud :as cut]))
 
@@ -11,10 +8,6 @@
 (st/instrument `cut/generate-ingress-and-cert)
 (st/instrument `cut/generate-pvc)
 (st/instrument `cut/generate-deployment)
-
-#?(:cljs
-   (defmethod yaml/load-resource :nextcloud-test [resource-name]
-     (get (inline-resources "nextcloud-test") resource-name)))
 
 (deftest should-generate-secret
   (is (= {:apiVersion "v1"

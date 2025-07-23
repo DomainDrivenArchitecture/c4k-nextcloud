@@ -1,16 +1,9 @@
 (ns dda.c4k-nextcloud.core-test
   (:require
-   #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
-      :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
+   [clojure.test :refer [deftest is are testing run-tests]]
    [clojure.spec.alpha :as s]
    [dda.c4k-common.yaml :as yaml]
-   [dda.c4k-nextcloud.core :as cut]
-   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])))
-
-
-#?(:cljs
-   (defmethod yaml/load-resource :nextcloud-test [resource-name]
-     (get (inline-resources "nextcloud-test") resource-name)))
+   [dda.c4k-nextcloud.core :as cut]))
 
 (deftest validate-valid-resources
   (is (s/valid? cut/config? (yaml/load-as-edn "nextcloud-test/valid-config.yaml")))

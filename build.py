@@ -21,7 +21,6 @@ def initialize(project):
         "mixin_types": ["RELEASE"],
         "release_primary_build_file": "project.clj",
         "release_secondary_build_files": [
-            "package.json",
             "infrastructure/backup/build.py",
             "infrastructure/nextcloud/build.py",
             ],
@@ -31,7 +30,6 @@ def initialize(project):
         "release_artifacts": [
             f"target/graalvm/{name}",
             f"target/uberjar/{name}-standalone.jar",
-            f"target/frontend-build/{name}.js",
         ],
         "release_main_branch": "main",
     }
@@ -43,12 +41,6 @@ def initialize(project):
 @task
 def test_clj():
     run("lein test", shell=True, check=True)
-
-
-@task
-def test_cljs():
-    run("shadow-cljs compile test", shell=True, check=True)
-    run("node target/node-tests.js", shell=True, check=True)
 
 
 @task
@@ -66,38 +58,7 @@ def test_schema():
 @task
 def test():
     test_clj()
-    test_cljs()
     test_schema()
-
-@task
-def report_frontend(project):
-    run("mkdir -p target/frontend-build", shell=True, check=True)
-    run(
-        "shadow-cljs run shadow.cljs.build-report frontend target/frontend-build/build-report.html",
-        shell=True,
-        check=True,
-    )
-
-
-@task
-def package_frontend(project):
-    run("mkdir -p target/frontend-build", shell=True, check=True)
-    run("shadow-cljs release frontend", shell=True, check=True)
-    run(
-        "cp public/js/main.js target/frontend-build/c4k-nextcloud.js",
-        shell=True,
-        check=True,
-    )
-    run(
-        "sha256sum target/frontend-build/c4k-nextcloud.js > target/frontend-build/c4k-nextcloud.js.sha256",
-        shell=True,
-        check=True,
-    )
-    run(
-        "sha512sum target/frontend-build/c4k-nextcloud.js > target/frontend-build/c4k-nextcloud.js.sha512",
-        shell=True,
-        check=True,
-    )
 
 
 @task
@@ -146,6 +107,7 @@ def package_native(project):
         check=True,
     )
 
+
 @task
 def upload_clj(project):
     run("lein deploy", shell=True, check=True)
@@ -163,6 +125,7 @@ def lint(project):
         shell=True,
         check=True,
     )
+
 
 @task
 def inst(project):
@@ -214,10 +177,12 @@ def tag(project):
     build = get_devops_build(project)
     build.tag_bump_and_push_release()
 
+
 @task
 def publish_artifacts(project):
     build = get_devops_build(project)
     build.publish_artifacts()
+
 
 def release(project):
     prepare(project)
@@ -228,6 +193,5 @@ def linttest(project, release_type):
     build = get_devops_build(project)
     build.update_release_type(release_type)
     test_clj()
-    test_cljs()
     test_schema()
     lint(project)
