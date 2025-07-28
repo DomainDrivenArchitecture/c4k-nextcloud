@@ -15,7 +15,9 @@
 (def config-defaults {:namespace "nextcloud"
                       :issuer "staging"
                       :pvc-storage-class-name "hcloud-volumes-encrypted"
-                      :pv-storage-size-gb 200})
+                      :pv-storage-size-gb 200
+                      :average-rate 100,
+                      :burst-rate 150})
 
 (s/def ::config (s/merge ::nextcloud/config
                       ::backup/config))
@@ -30,7 +32,7 @@
   [config-select ::config-select
    config ::config]
   (let [resolved-config (merge config-defaults config)
-        {:keys [fqdn max-rate max-concurrent-requests namespace]} resolved-config
+        {:keys [fqdn]} resolved-config
         config-parts (if (empty? config-select)
                        ["auth" "deployment"]
                        config-select)]
@@ -49,17 +51,14 @@
             (ing/config-objects (merge
                                  {:service-name "cloud-service"
                                   :service-port 80
-                                  :fqdns [fqdn]
-                                  :average-rate max-rate
-                                  :burst-rate max-concurrent-requests
-                                  :namespace namespace}
+                                  :fqdns [fqdn]}
                                  resolved-config))
             (when (:contains? resolved-config :restic-repository)
               [(backup/generate-config resolved-config)
                (backup/generate-cron)
                (backup/generate-backup-restore-deployment resolved-config)])
             (when (:contains? resolved-config :mon-cfg)
-              (mon/config-objects resolved-config)))
+              (mon/config-objects (:mon-cfg resolved-config))))
            []))))
 
 (defn-spec auth-objects cp/map-or-seq?
