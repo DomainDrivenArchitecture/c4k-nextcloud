@@ -47,7 +47,7 @@
            {:metadata {:labels {:app "cloud-app", :app.kubernetes.io/name "cloud-pod", :app.kubernetes.io/application "cloud", :redeploy "v3"}}
             :spec
             {:containers
-             [{:image "domaindrivenarchitecture/c4k-cloud:10.4.2"
+             [{:image "domaindrivenarchitecture/c4k-cloud:10.5.3"
                :name "cloud-app"
                :imagePullPolicy "IfNotPresent"
                :ports [{:containerPort 80}]
