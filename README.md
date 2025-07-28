@@ -19,13 +19,7 @@ Stable - we use this setup on production.
 
 ## Try out
 
-Click on the image to try out live in your browser:
-
-[![Try it out](doc/tryItOut.png "Try out yourself")](https://domaindrivenarchitecture.org/pages/dda-provision/c4k-nextcloud/)
-
-Your input will stay in your browser. No server interaction is required.
-
-You will also be able to try out on cli:
+try out on cli:
 ```
 target/graalvm/c4k-nextcloud src/test/resources/valid-config.edn src/test/resources/valid-auth.edn | kubeval -
 target/graalvm/c4k-nextcloud src/test/resources/valid-config.edn src/test/resources/valid-auth.edn | kubectl apply -f -

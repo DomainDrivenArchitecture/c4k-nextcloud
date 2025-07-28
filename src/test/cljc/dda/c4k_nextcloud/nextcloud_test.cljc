@@ -1,9 +1,6 @@
 (ns dda.c4k-nextcloud.nextcloud-test
   (:require
-   #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
-      :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
-   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])
-   [dda.c4k-common.yaml :as yaml]
+   [clojure.test :refer [deftest is are testing run-tests]]
    [clojure.spec.test.alpha :as st]
    [dda.c4k-nextcloud.nextcloud :as cut]))
 
@@ -11,10 +8,6 @@
 (st/instrument `cut/generate-ingress-and-cert)
 (st/instrument `cut/generate-pvc)
 (st/instrument `cut/generate-deployment)
-
-#?(:cljs
-   (defmethod yaml/load-resource :nextcloud-test [resource-name]
-     (get (inline-resources "nextcloud-test") resource-name)))
 
 (deftest should-generate-secret
   (is (= {:apiVersion "v1"
@@ -31,43 +24,6 @@
                                :restic-password "restic-password"
                                :nextcloud-admin-user "cloudadmin"
                                :nextcloud-admin-password "cloudpassword"}))))
-
-(deftest should-generate-ingress-and-cert
-  (is (= [{:apiVersion "cert-manager.io/v1",
-           :kind "Certificate",
-           :metadata
-           {:name "cloud-service",
-            :labels {:app.kubernetes.part-of "cloud-service"},
-            :namespace "default"},
-           :spec
-           {:secretName "cloud-service",
-            :commonName "somefqdn.de",
-            :duration "2160h",
-            :renewBefore "720h",
-            :dnsNames ["somefqdn.de"],
-            :issuerRef {:name "staging", :kind "ClusterIssuer"}}}
-          {:apiVersion "networking.k8s.io/v1",
-           :kind "Ingress",
-           :metadata
-           {:name "cloud-service",
-            :namespace "default",
-            :labels {:app.kubernetes.part-of "cloud-service"},
-            :annotations
-            {:traefik.ingress.kubernetes.io/router.entrypoints "web, websecure",
-             :traefik.ingress.kubernetes.io/router.middlewares
-             "default-redirect-https@kubernetescrd",
-             :metallb.universe.tf/address-pool "public"}},
-           :spec
-           {:tls [{:hosts ["somefqdn.de"], :secretName "cloud-service"}],
-            :rules
-            [{:host "somefqdn.de",
-              :http
-              {:paths
-               [{:pathType "Prefix",
-                 :path "/",
-                 :backend
-                 {:service {:name "cloud-service", :port {:number 80}}}}]}}]}}]
-         (cut/generate-ingress-and-cert {:fqdn "somefqdn.de"}))))
 
 (deftest should-generate-pvc
   (is (= {:apiVersion "v1"

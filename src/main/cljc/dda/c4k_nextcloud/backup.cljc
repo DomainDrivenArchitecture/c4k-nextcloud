@@ -1,13 +1,11 @@
 (ns dda.c4k-nextcloud.backup
   (:require
    [clojure.spec.alpha :as s]
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
+   [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.base64 :as b64]
    [dda.c4k-common.common :as cm]
-   [dda.c4k-common.predicate :as cp]
-   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])))
+   [dda.c4k-common.predicate :as cp]))
 
 (s/def ::aws-access-key-id cp/bash-env-string?)
 (s/def ::aws-secret-access-key cp/bash-env-string?)
@@ -19,10 +17,6 @@
 
 (s/def ::auth (s/keys :req-un [::restic-password ::aws-access-key-id ::aws-secret-access-key]
                       :opt-un [::restic-new-password]))
-
-#?(:cljs
-   (defmethod yaml/load-resource :backup [resource-name]
-     (get (inline-resources "backup") resource-name)))
 
 (defn-spec generate-config map?
   [my-conf ::config]

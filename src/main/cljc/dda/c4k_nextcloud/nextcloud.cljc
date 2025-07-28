@@ -1,16 +1,13 @@
 (ns dda.c4k-nextcloud.nextcloud
- (:require
-  [clojure.spec.alpha :as s]
-  #?(:clj [orchestra.core :refer [defn-spec]]
-     :cljs [orchestra.core :refer-macros [defn-spec]])
-  [dda.c4k-common.yaml :as yaml]
-  [dda.c4k-common.ingress :as ing]
-  [dda.c4k-common.base64 :as b64]
-  [dda.c4k-common.predicate :as cp]
-  [dda.c4k-common.postgres :as postgres]
-  [dda.c4k-common.common :as cm]
-  [dda.c4k-common.monitoring :as mon]
-  #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])))
+  (:require
+   [clojure.spec.alpha :as s]
+   [orchestra.core :refer [defn-spec]]
+   [dda.c4k-common.yaml :as yaml]
+   [dda.c4k-common.base64 :as b64]
+   [dda.c4k-common.predicate :as cp]
+   [dda.c4k-common.postgres :as postgres]
+   [dda.c4k-common.common :as cm]
+   [dda.c4k-common.monitoring :as mon]))
 
 (s/def ::fqdn cp/fqdn-string?)
 (s/def ::issuer cp/letsencrypt-issuer?)
@@ -30,24 +27,11 @@
                             ::aws-access-key-id ::aws-secret-access-key]
                    :opt-un [::mon/mon-auth]))
 
-#?(:cljs
-   (defmethod yaml/load-resource :nextcloud [resource-name]
-     (get (inline-resources "nextcloud") resource-name)))
-
 (defn-spec generate-deployment cp/map-or-seq? 
   [config ::config]
   (let [{:keys [fqdn]} config]
     (-> (yaml/load-as-edn "nextcloud/deployment.yaml")
         (cm/replace-all-matching "fqdn" fqdn))))
-
-(defn-spec generate-ingress-and-cert cp/map-or-seq?
-  [config ::config]
-  (ing/generate-ingress-and-cert
-   (merge
-    {:service-name "cloud-service"
-     :service-port 80
-     :fqdns [(:fqdn config)]}
-    config)))
 
 (defn-spec generate-pvc cp/map-or-seq?
   [config (s/keys :req-un [::pv-storage-size-gb ::pvc-storage-class-name])]
