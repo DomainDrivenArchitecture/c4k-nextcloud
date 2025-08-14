@@ -5,6 +5,7 @@
  '[dda.backup.config :as cfg]
  '[dda.backup.restic :as rc]
  '[dda.backup.postgresql :as pg]
+ '[dda.backup.monitoring :as mon]
  '[dda.backup.backup :as bak])
 
 (def config (cfg/read-config "/usr/local/bin/config.edn"))
@@ -27,8 +28,13 @@
   (bak/backup-db-roles! (:db-role-config config))
   (bak/backup-db! (:db-config config)))
 
-(t/shell "start-maintenance.sh")
-(prepare!)
-(restic-repo-init!)
-(restic-backup!)
-(t/shell "end-maintenance.sh")
+(try
+  (t/shell "start-maintenance.sh")
+  (prepare!)
+  (mon/backup-start-metrics! (:db-config config))
+  (restic-repo-init!)
+  (restic-backup!)
+  (mon/backup-success-metrics! (:db-config config))
+  (t/shell "end-maintenance.sh")
+  (catch Exception e
+    (mon/backup-fail-metrics! (:db-config config))))
